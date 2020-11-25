@@ -35,14 +35,15 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="admin.html">
-                <div class="sidebar-brand-text mx-3">TUP-CAVITE</div>
+                <img src="assets/img/logo.png" alt="" class="rotate">
+                <div class="sidebar-brand-text mx-3"> COMPANY NAME</div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
+            <li class="nav-item">
                 <a class="nav-link" href="admin.html">
                     <i class="fas fa-fw fa-home"></i>
                     <span>Dashboard</span></a>
@@ -59,7 +60,7 @@
             </li>
 
             <!-- Nav Item - User -->
-            <li class="nav-item">   
+            <li class="nav-item active">   
                 <a class="nav-link" href="users.html">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Users</span></a>
@@ -100,7 +101,7 @@
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3" style="background-color: transparent;">
                         <i class="fa fa-bars"></i>
                     </button>
                     <!-- Topbar Navbar -->
@@ -188,7 +189,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">John Anthony Bataller</span>
                                 <img class="img-profile rounded-circle"
-                                    src="assets/img/undraw_profile.svg">
+                                    src="assets/img/JABB.jpg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -222,6 +223,7 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
+                    <h2>Users</h2>
                     <a class="btn mb-3" href="#" role="button"> <i class="fas fa-fw fa-user-plus"></i> Add New User</a>
                  
 
@@ -233,9 +235,9 @@
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
                                         <tr>
+                                            <th>I.D #</th>
                                             <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
+                                            <th>Department</th>
                                             <th>Age</th>
                                             <th>Start date</th>
                                             <th>Salary</th>
@@ -243,9 +245,9 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
+                                            <th>I.D #</th>
                                             <th>Name</th>
-                                            <th>Position</th>
-                                            <th>Office</th>
+                                            <th>Department</th>
                                             <th>Age</th>
                                             <th>Start date</th>
                                             <th>Salary</th>
@@ -774,6 +776,9 @@
     <!-- Page level plugins -->
     <script src="assets/css/datatables/jquery.dataTables.min.js"></script>
     <script src="assets/css/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="assets/js/demo/datatables-demo.js"></script>
 
 
 </body>

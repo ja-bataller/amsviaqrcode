@@ -11268,3 +11268,23 @@ a :hover{
 .btn :hover{
   color: black;
 }
+
+.rotate {
+  animation: rotation 8s infinite linear;
+}
+
+
+.rotate {
+  animation: rotation 8s infinite linear;
+  width: 60px;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
