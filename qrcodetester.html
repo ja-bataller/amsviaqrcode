@@ -9,19 +9,17 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Attendance Monitoring System</title>
+    <title>Attendace Monitoring System</title>
 
     <!-- Custom fonts for this template-->
     <link href="assets/css/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="assets/css/sb-admin-2.css" rel="stylesheet">
-
-    <!-- Custom styles for this page -->
-    <link href="assets/css/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
 
 </head>
 
@@ -53,7 +51,7 @@
             <hr class="sidebar-divider">
 
             <!-- Nav Item - Logs -->
-            <li class="nav-item active">   
+            <li class="nav-item">   
                 <a class="nav-link" href="logs.html">
                     <i class="fas fa-fw fa-clipboard"></i>
                     <span>Logs</span></a>
@@ -68,7 +66,7 @@
 
 
             <!-- Nav Item - QR Code Test -->
-            <li class="nav-item">   
+            <li class="nav-item active">   
                 <a class="nav-link" href="qrcodetester.html">
                     <i class="fas fa-fw fa-qrcode"></i>
                     <span>QR Code Tester</span></a>
@@ -91,6 +89,8 @@
         </ul>
         <!-- End of Sidebar -->
 
+
+        
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -131,15 +131,15 @@
                             </div>
                         </li>
 
-                        
-                        <!-- <li class="nav-item dropdown no-arrow mx-1">
+<!--                         
+                        <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 
                                 <span class="badge badge-danger badge-counter">3+</span>
                             </a>
-                           
+                            
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
@@ -208,83 +208,28 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    
-                    <!-- Page Heading -->
-                    <h2>Logs</h2>
-                 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>   
-                                            <th>ID #</th>
-                                            <th>Name</th>
-                                            <th>Department</th>
-                                            <th>Status</th>
-                                            <th>Time-in</th>
-                                            <th>Time-out</th>
-                                            <th>Late</th>
-                                            <th>Absent</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>ID #</th> 
-                                            <th>Name</th>
-                                            <th>Department</th>
-                                            <th>Status</th>
-                                            <th>Time-in</th>
-                                            <th>Time-out</th>
-                                            <th>Late</th>
-                                            <th>Absent</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr>
-                                            <td>14</td>
-                                            <td>John Anthony Bataller</td>
-                                            <td>Industrial Technology</td>
-                                            <td>Acitve</td>
-                                            <td>5:50 AM</td>
-                                            <td>Active</td>
-                                            <td>N.A</td>
-                                            <td>N.A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>10</td>
-                                            <td>Mary Chris Jasa</td>
-                                            <td>Industrial Technology</td>
-                                            <td>Active</td>
-                                            <td>5:58 AM</td>
-                                            <td>Active</td>
-                                            <td>N.A</td>
-                                            <td>N.A</td>
-                                        </tr>
-                                        <tr>
-                                            <td>33</td>
-                                            <td>Juan Dela Cruz</td>
-                                            <td>Industrial Education</td>
-                                            <td>Active</td>
-                                            <td>6:13 AM</td>
-                                            <td>Active</td>
-                                            <td>13 mins</td>
-                                            <td>N.A</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                
+                <div class="container qrcode">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-6 ">
+                            <div class="card mb-4 py-3 border-bottom-dark">
+                                <div class="card-body">
+                                    <div class="generateqrcode">
+                                        <img src="assets/img/AMS.png" alt="">
+                                        <div class="form-group">
+                                            <input type="text" id="qrcodedecoder">
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+    
                         </div>
+                        
                     </div>
+                    </div>
+                    
 
-                </div>
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
+                <!-- End of Main Content -->
 
             <!-- Footer -->
             <footer class="sticky-footer bg-white">
@@ -308,7 +253,7 @@
     </a>
 
     <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="logoutModal" tabadmin.html="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -321,7 +266,7 @@
                 <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="index.html">Logout</a>
+                    <a class="btn" href="index.html">Logout</a>
                 </div>
             </div>
         </div>
@@ -336,13 +281,6 @@
 
     <!-- Custom scripts for all pages-->
     <script src="assets/js/sb-admin-2.min.js"></script>
-
-    <!-- Page level plugins -->
-    <script src="assets/css/datatables/jquery.dataTables.min.js"></script>
-    <script src="assets/css/datatables/dataTables.bootstrap4.min.js"></script>
-
-    <!-- Page level custom scripts -->
-    <script src="assets/js/demo/datatables-demo.js"></script>
 
 </body>
 

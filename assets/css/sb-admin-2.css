@@ -11288,3 +11288,10 @@ a :hover{
   }
 }
 
+.generateqrcode {
+  text-align: center;
+}
+
+.qrcode {
+  padding-bottom: 18%;
+}
