@@ -8,7 +8,7 @@
 	font-size: 15px;
 	line-height: 1.7;
 	color:#c4c3ca;
-	background-color: #1f2029 !important;
+	background-color: #1f2029 ;
 	overflow-x: hidden;
 }
 a {
@@ -300,4 +300,9 @@ h6 span{
 	height: 26px;
 	width: auto;
 	display: block;
+}
+
+body{
+    background-color: #1f2029 !important;
+    color: #c4c3ca !important;
 }
