@@ -21,6 +21,7 @@
          ATTENDANCE MONITORING SYSTEM 
          </span>
       </div>
+      
       <div class="section">
          <div class="container">
             <div class="row full-height justify-content-center">
@@ -48,7 +49,10 @@
                            <div class="card-back">
                               <div class="center-wrap">
                                  <div class="section text-center">
-                                    <h4 class="mb-4 pb-3">Administrator Log In</h4>
+                                    <div id="erroralert">
+                                     </div>
+                                    <form method="#" id="submitForm">
+                                       <h4 class="mb-4 pb-3">Administrator Log In</h4>
                                     <div class="form-group">
                                        <input type="text" name="logusername" class="form-style" placeholder="Your Username" id="logusername" autocomplete="off">
                                        <i class="input-icon uil uil-user"></i>
@@ -57,7 +61,8 @@
                                        <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off">
                                        <i class="input-icon uil uil-lock-alt"></i>
                                     </div>
-                                    <a href="admin.html" class="btn mt-4">submit</a>
+                                       <input class="btn" type="submit" value="log in">
+                                    </form>                                
                                  </div>
                               </div>
                            </div>
@@ -68,5 +73,6 @@
             </div>
          </div>
       </div>
+      <script src="assets/js/loginvalidation.js"></script>
    </body>
 </html>
