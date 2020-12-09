@@ -150,7 +150,7 @@
             <!-- End of Topbar -->
             <!-- Begin Page Content -->
             <div class="container-fluid">
-               <form>
+               <form id="newuserForm" action="qrcodegenerator.html">
                   <div class="row justify-content-center">
                      <!-- Border Left Utilities -->
                      <div class="col-lg-8">
@@ -164,31 +164,38 @@
                                  <div class="col-lg-6">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">First Name</label>
-                                       <input type="text" class="form-control" id="FirstName" aria-describedby="FirstName" ">
+                                       <input type="text" class="form-control" id="FirstName" aria-describedby="FirstName" autocomplete="off" maxlength="50" required 
+                                       oninvalid="this.setCustomValidity('Please Enter your First Name here')"
+                                       oninput="this.setCustomValidity('')">
                                     </div>
                                     <div class="form-group">
                                        <label>Middle Name</label>
-                                       <input type="text" class="form-control" id="Middlename">
+                                       <input type="text" class="form-control" id="Middlename" autocomplete="off">
                                     </div>
                                     <div class="form-group">
                                        <label>Last Name</label>
-                                       <input type="text" class="form-control" id="Lastname">
+                                       <input type="text" class="form-control" id="Lastname" maxlength="25" autocomplete="off" required
+                                       oninvalid="this.setCustomValidity('Please Enter your Last Name here')"
+                                       oninput="this.setCustomValidity('')">
                                     </div>
                                     <div class="row">
                                        <div class="col-lg-6">
                                           <div class="form-group">
-                                             <label for="exampleInputEmail1">Gender</label>
-                                             <select class="form-control">
-                                                <option>choose</option>
-                                                <option>Male</option>
-                                                <option>Female</option>
-                                             </select>
+                                             <label class="pb-1">Gender</label><br>
+                                             <label class="radio-inline pl-4">
+                                             <input type="radio" name="gender" required
+                                             > Male
+                                             </label>
+                                             <label class="radio-inline pl-4">
+                                             <input type="radio" name="gender" required
+                                             > Female
+                                             </label>
                                           </div>
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label>Age</label>
-                                             <input type="number" class="form-control" id="Age">
+                                             <input type="number" class="form-control" id="Age" min="18" max="60" autocomplete="off" required>
                                           </div>
                                        </div>
                                     </div>
@@ -198,23 +205,25 @@
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label>Birthdate</label>
-                                             <input type="date" class="form-control" id="birthdate">
+                                             <input type="date" class="form-control" id="birthdate" required>
                                           </div>
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label>Contact Number</label>
-                                             <input type="text" class="form-control" id="ContactNumber">
+                                             <input type="number" class="form-control" id="ContactNumber" min="0" minlength="11" maxlength="11" autocomplete="off" required>
                                           </div>
                                        </div>
                                     </div>
                                     <div class="form-group">
                                        <label>Email Address</label>
-                                       <input type="email" class="form-control" id="email">
+                                       <input type="email" class="form-control" id="email" autocomplete="off" required>
                                     </div>
                                     <div class="form-group">
                                        <label>Home Address</label>
-                                       <textarea class="form-control" name="Address" id="homeaddress" rows="4"></textarea>
+                                       <textarea class="form-control" name="Address" id="homeaddress" rows="4" maxlength="150" autocomplete="off" required
+                                          oninvalid="this.setCustomValidity('Please Enter your Address here')"
+                                          oninput="this.setCustomValidity('')"></textarea>
                                     </div>
                                  </div>
                               </div>
@@ -223,34 +232,34 @@
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">ID Number</label>
-                                       <input type="number" class="form-control" id="idnumber" aria-describedby="idnumber" ">
+                                       <input type="number" class="form-control" id="idnumber" aria-describedby="idnumber" required>
                                     </div>
                                  </div>
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">Department</label>
-                                       <select class="form-control">
-                                          <option>choose</option>
-                                          <option>Industrial Technology</option>
-                                          <option>Industrial Education</option>
-                                          <option>Electrical Engineering Technology</option>
-                                          <option>Civil Engineering Technology </option>
+                                       <select class="form-control" required>
+                                          <option value="">choose Department</option>
+                                          <option value="industtech"> Industrial Technology</option>
+                                          <option value="industeduc">Industrial Education</option>
+                                          <option value="electricaleng">Electrical Engineering Technology</option>
+                                          <option value="civileng">Civil Engineering Technology </option>
                                        </select>
                                     </div>
                                  </div>
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">Shift</label>
-                                       <select class="form-control">
-                                          <option>choose</option>
-                                          <option>Day</option>
-                                          <option>Night</option>
+                                       <select class="form-control" required>
+                                          <option value="">choose Shift</option>
+                                          <option value="day">Day</option>
+                                          <option value="night">Night</option>
                                        </select>
                                     </div>
                                  </div>
                                  <div class="col-12">
                                     <div class="form-group mt-3">
-                                       <a class="btn" href="qrcodegenerator.html" role="button"> <i class="fas fa-user-plus"></i> Add New User</a>  
+                                       <input  class="btn" type="submit"  value="Add New User">
                                     </div>
                                  </div>
                               </div>

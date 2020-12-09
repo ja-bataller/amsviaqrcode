@@ -1,5 +1,5 @@
 
-let submitForm = document.getElementById('submitForm')
+let submitForm = document.getElementById('loginForm')
 
 
 submitForm.addEventListener('submit', function(e) {
