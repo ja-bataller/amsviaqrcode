@@ -150,7 +150,7 @@
             <!-- End of Topbar -->
             <!-- Begin Page Content -->
             <div class="container-fluid">
-               <form id="newuserForm" action="qrcodegenerator.html">
+               <form id="newuserForm">
                   <div class="row justify-content-center">
                      <!-- Border Left Utilities -->
                      <div class="col-lg-8">
@@ -164,7 +164,7 @@
                                  <div class="col-lg-6">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">First Name</label>
-                                       <input type="text" class="form-control" id="FirstName" aria-describedby="FirstName" autocomplete="off" maxlength="50" required 
+                                       <input type="text" class="form-control" id="firstname" aria-describedby="FirstName" autocomplete="off" maxlength="50" required 
                                        oninvalid="this.setCustomValidity('Please Enter your First Name here')"
                                        oninput="this.setCustomValidity('')">
                                     </div>
@@ -174,7 +174,7 @@
                                     </div>
                                     <div class="form-group">
                                        <label>Last Name</label>
-                                       <input type="text" class="form-control" id="Lastname" maxlength="25" autocomplete="off" required
+                                       <input type="text" class="form-control" id="lastname" maxlength="25" autocomplete="off" required
                                        oninvalid="this.setCustomValidity('Please Enter your Last Name here')"
                                        oninput="this.setCustomValidity('')">
                                     </div>
@@ -211,7 +211,7 @@
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label>Contact Number</label>
-                                             <input type="number" class="form-control" id="ContactNumber" min="0" minlength="11" maxlength="11" autocomplete="off" required>
+                                             <input type="number" class="form-control" id="contactnumber" min="0" minlength="11" maxlength="11" autocomplete="off" required>
                                           </div>
                                        </div>
                                     </div>
@@ -238,12 +238,12 @@
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">Department</label>
-                                       <select class="form-control" required>
+                                       <select class="form-control" id="department" required>
                                           <option value="">choose Department</option>
-                                          <option value="industtech"> Industrial Technology</option>
-                                          <option value="industeduc">Industrial Education</option>
-                                          <option value="electricaleng">Electrical Engineering Technology</option>
-                                          <option value="civileng">Civil Engineering Technology </option>
+                                          <option value="Industrial Technology"> Industrial Technology</option>
+                                          <option value="Industrial Education">Industrial Education</option>
+                                          <option value="Electrical Engineering Technology">Electrical Engineering Technology</option>
+                                          <option value="Civil Engineering Technology">Civil Engineering Technology</option>
                                        </select>
                                     </div>
                                  </div>
@@ -306,6 +306,9 @@
             </div>
          </div>
       </div>
+
+      <script src="assets/js/addnewuser.js"></script>
+
       <!-- Bootstrap core JavaScript-->
       <script src="assets/js/jquery/jquery.min.js"></script>
       <script src="assets/js/bootstrap/js/bootstrap.bundle.min.js"></script>

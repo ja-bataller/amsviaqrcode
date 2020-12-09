@@ -17,7 +17,8 @@ submitForm.addEventListener('submit', function(e) {
     } else {
         
         document.getElementById('erroralert').innerHTML = '<div class="alert alert-danger" role="alert">Unauthorized Access!</div>' ;
-        document.getElementById('submitForm').reset();
+        document.getElementById("logusername").value = "";
+        document.getElementById("logpass").value = "";
     }
 
 })
