@@ -157,7 +157,7 @@
                            <div class="generateqrcode">
                               <img src="assets/img/AMS.png" alt="">
                               <div class="form-group">
-                                 <a class="btn" href="assets/img/AMS.png" download role="button"> <i class="fas fa-qrcode"></i> Download QR Code</a>  
+                                 <a class="btn" href="assets/img/AMS.png" download role="button" id="downloadBtn"> <i class="fas fa-qrcode"></i> Download QR Code</a>
                               </div>
                            </div>
                         </div>
@@ -202,6 +202,24 @@
             </div>
          </div>
       </div>
+
+      <!-- Alert Modal-->
+      <div class="modal fade" id="alertModal" tabadmin.html="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+         <div class="modal-dialog" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Do you want to add another user?</h5>
+    
+               </div>
+               <div class="modal-body">Select "Yes" below if you want to add another User.</div>
+               <div class="modal-footer">
+                  <a class="btn" href="users.html">No</a>
+                  <a class="btn" href="adduserform.html">Yes</a>
+               </div>
+            </div>
+         </div>
+      </div>
       <!-- Bootstrap core JavaScript-->
       <script src="assets/js/jquery/jquery.min.js"></script>
       <script src="assets/js/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -209,5 +227,9 @@
       <script src="assets/js/jquery-easing/jquery.easing.min.js"></script>
       <!-- Custom scripts for all pages-->
       <script src="assets/js/sb-admin-2.min.js"></script>
+
+      
+      <script src="assets/js/script.js"></script>
+
    </body>
 </html>
