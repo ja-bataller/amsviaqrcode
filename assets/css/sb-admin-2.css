@@ -11306,3 +11306,16 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+.videoContainer{
+  width: 250px;
+  text-align: center;
+  overflow: hidden;
+  margin-left: 110px;
+  height: 250px;
+}
+#qr-video{
+  margin-left: -210px;
+  margin-top: -50px;
+}
