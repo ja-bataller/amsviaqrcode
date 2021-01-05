@@ -96,6 +96,7 @@ if(downloadBtn)
     });
 }
 
-
+// MAXIMUM DATE INPUT IS TODAY
+birthdate.max = new Date().toISOString().split("T")[0];
 
 console.log('EVERYTHING IS RUNNING 100%')

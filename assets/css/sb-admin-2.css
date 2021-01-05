@@ -11319,3 +11319,15 @@ input[type=number] {
   margin-left: -210px;
   margin-top: -50px;
 }
+
+.QRcodeImage{
+  margin: auto;
+  width: 50%;
+  padding: 25px;
+}
+
+.centerStyle{
+  text-align: center;
+  margin: 0%;
+  padding: 0%;
+}
