@@ -1,7 +1,10 @@
 const loginForm = document.querySelector('#loginForm');
 const adduserForm = document.querySelector('#newuserForm');
 const downloadBtn = document.querySelector('#downloadBtn');
-const erroralertizi = document.querySelector("#erroralert")
+const erroralertizi = document.querySelector('#erroralert');
+
+// const qrcode = new QRCode(document.querySelector('#qrcodegenerated'));
+
 
 if(loginForm)
 {
@@ -38,14 +41,23 @@ if(loginForm)
 }
 
 
+// MAXIMUM DATE INPUT IS TODAY
+birthdate.max = new Date().toISOString().split("T")[0];
 
-// QR CODE GENERATOR
+
+// ADD NEW USER
 
 if(adduserForm)
 {
     adduserForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
+    
+        // #idnumber is in adduserform.html to get ID Number input
+            const idinput = document.querySelector('#idnumber').value;
+            console.log(idinput);
+
+            // qrcode.makeCode(idinput);
+
             iziToast.success({
                 title: 'Added new user successfuly',
                 position: "topCenter",
@@ -55,7 +67,6 @@ if(adduserForm)
                 window.location.href = baseURl + '/qrcodegenerator.html'; }, 2000);
     });
 }
-
 
 if(downloadBtn)
 {
@@ -96,7 +107,5 @@ if(downloadBtn)
     });
 }
 
-// MAXIMUM DATE INPUT IS TODAY
-birthdate.max = new Date().toISOString().split("T")[0];
 
 console.log('EVERYTHING IS RUNNING 100%')
