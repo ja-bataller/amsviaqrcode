@@ -11312,7 +11312,7 @@ input[type=number] {
   width: 250px;
   text-align: center;
   overflow: hidden;
-  margin-left: 110px;
+ margin: auto;
   height: 250px;
 }
 #qr-video{
@@ -11336,5 +11336,9 @@ input[type=number] {
   margin-top: 7%;
 }
 .testerfooter{
-  margin-top: 3%;
+  margin-top: 6%;
+}
+
+.marginauto{
+  margin: auto;
 }
