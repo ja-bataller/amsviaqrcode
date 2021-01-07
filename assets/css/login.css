@@ -1,5 +1,3 @@
-/* START OF INDEX HTML */
-
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900');
 
 #mainbody{
@@ -313,6 +311,7 @@ body{
   margin-left: 60px;
   height: 250px;
 }
+
 #qr-video{
   margin-left: -210px;
   margin-top: -50px;

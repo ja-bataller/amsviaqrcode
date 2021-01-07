@@ -41,9 +41,6 @@ if(loginForm)
 }
 
 
-// MAXIMUM DATE INPUT IS TODAY
-birthdate.max = new Date().toISOString().split("T")[0];
-
 
 // ADD NEW USER
 
@@ -51,61 +48,62 @@ if(adduserForm)
 {
     adduserForm.addEventListener('submit', function(e) {
         e.preventDefault();
-    
+        
         // #idnumber is in adduserform.html to get ID Number input
-            const idinput = document.querySelector('#idnumber').value;
-            console.log(idinput);
-
-            // qrcode.makeCode(idinput);
-
-            iziToast.success({
-                title: 'Added new user successfuly',
-                position: "topCenter",
-                timeout:2000,
-            });
-            setTimeout(function(){ let = baseURl = window.location.origin;
-                window.location.href = baseURl + '/qrcodegenerator.html'; }, 2000);
-    });
-}
-
-if(downloadBtn)
-{
-    downloadBtn.addEventListener('click', function() {
-        iziToast.question({
-            timeout: false,
-            close: false,
-            overlay: true,
-            displayMode: 'once',
-            id: 'question',
-            zindex: 999,
-            backgroundColor: '#eeeeee',
-            drag: false,
-            title: 'Do you want to add another user?',
-            message: 'Click Yes if you wish to add another user.',
-            position: 'center',
-            buttons: [
-                ['<button><b>YES</b></button>', function (instance, toast) {
-         
-                    let = baseURl = window.location.origin;
-                    window.location.href = baseURl + '/adduserform.html';({ transitionOut: 'fadeOut' }, toast, 'button');
-         
-                }, true],
-                ['<button>NO</button>', function (instance, toast) {
-         
-                    let = baseURl = window.location.origin;
-                    window.location.href = baseURl + '/users.html';({ transitionOut: 'fadeOut' }, toast, 'button');
-         
-                }],
-            ],
-            onClosing: function(instance, toast, closedBy){
-                console.info('Closing | closedBy: ' + closedBy);
-            },
-            onClosed: function(instance, toast, closedBy){
-                console.info('Closed | closedBy: ' + closedBy);
-            }
+        const idinput = document.querySelector('#idnumber').value;
+        console.log(idinput);
+        
+        // qrcode.makeCode(idinput);
+        
+        iziToast.success({
+            title: 'Added new user successfuly',
+            position: "topCenter",
+            timeout:2000,
         });
-    });
-}
+        setTimeout(function(){ let = baseURl = window.location.origin;
+            window.location.href = baseURl + '/qrcodegenerator.html'; }, 2000);
+        });
+    }
+    
+    if(downloadBtn)
+    {
+        downloadBtn.addEventListener('click', function() {
+            iziToast.question({
+                timeout: false,
+                close: false,
+                overlay: true,
+                displayMode: 'once',
+                id: 'question',
+                zindex: 999,
+                backgroundColor: '#eeeeee',
+                drag: false,
+                title: 'Do you want to add another user?',
+                message: 'Click Yes if you wish to add another user.',
+                position: 'center',
+                buttons: [
+                    ['<button><b>YES</b></button>', function (instance, toast) {
+                        
+                        let = baseURl = window.location.origin;
+                        window.location.href = baseURl + '/adduserform.html';({ transitionOut: 'fadeOut' }, toast, 'button');
+                        
+                    }, true],
+                    ['<button>NO</button>', function (instance, toast) {
+                        
+                        let = baseURl = window.location.origin;
+                        window.location.href = baseURl + '/users.html';({ transitionOut: 'fadeOut' }, toast, 'button');
+                        
+                    }],
+                ],
+                onClosing: function(instance, toast, closedBy){
+                    console.info('Closing | closedBy: ' + closedBy);
+                },
+                onClosed: function(instance, toast, closedBy){
+                    console.info('Closed | closedBy: ' + closedBy);
+                }
+            });
+        });
+    }
+    
 
-
-console.log('EVERYTHING IS RUNNING 100%')
+    
+    console.log('EVERYTHING IS RUNNING 100%')

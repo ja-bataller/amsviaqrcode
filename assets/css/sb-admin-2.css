@@ -165,7 +165,7 @@ a {
 }
 
 a:hover {
-  color: #224abe;
+  color: #fc707e;
   text-decoration: underline;
 }
 
@@ -11330,4 +11330,11 @@ input[type=number] {
   text-align: center;
   margin: 0%;
   padding: 0%;
+}
+
+.aboutfooter{
+  margin-top: 7%;
+}
+.testerfooter{
+  margin-top: 3%;
 }
