@@ -3,12 +3,9 @@ const adduserForm = document.querySelector('#newuserForm');
 const downloadBtn = document.querySelector('#downloadBtn');
 const erroralertizi = document.querySelector('#erroralert');
 
-// const qrcode = new QRCode(document.querySelector('#qrcodegenerated'));
-
-
 if(loginForm)
 {
-    // LOG IN VALIDATION
+    // LOG IN validation
    
     loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
@@ -41,20 +38,12 @@ if(loginForm)
 }
 
 
-
-// ADD NEW USER
-
+// ADD NEW USER to Database
 if(adduserForm)
 {
     adduserForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        
-        // #idnumber is in adduserform.html to get ID Number input
-        const idinput = document.querySelector('#idnumber').value;
-        console.log(idinput);
-        
-        // qrcode.makeCode(idinput);
-        
+
         iziToast.success({
             title: 'Added new user successfuly',
             position: "topCenter",
@@ -63,47 +52,50 @@ if(adduserForm)
         setTimeout(function(){ let = baseURl = window.location.origin;
             window.location.href = baseURl + '/qrcodegenerator.html'; }, 2000);
         });
-    }
-    
-    if(downloadBtn)
-    {
-        downloadBtn.addEventListener('click', function() {
-            iziToast.question({
-                timeout: false,
-                close: false,
-                overlay: true,
-                displayMode: 'once',
-                id: 'question',
-                zindex: 999,
-                backgroundColor: '#eeeeee',
-                drag: false,
-                title: 'Do you want to add another user?',
-                message: 'Click Yes if you wish to add another user.',
-                position: 'center',
-                buttons: [
-                    ['<button><b>YES</b></button>', function (instance, toast) {
-                        
-                        let = baseURl = window.location.origin;
-                        window.location.href = baseURl + '/adduserform.html';({ transitionOut: 'fadeOut' }, toast, 'button');
-                        
-                    }, true],
-                    ['<button>NO</button>', function (instance, toast) {
-                        
-                        let = baseURl = window.location.origin;
-                        window.location.href = baseURl + '/users.html';({ transitionOut: 'fadeOut' }, toast, 'button');
-                        
-                    }],
-                ],
-                onClosing: function(instance, toast, closedBy){
-                    console.info('Closing | closedBy: ' + closedBy);
-                },
-                onClosed: function(instance, toast, closedBy){
-                    console.info('Closed | closedBy: ' + closedBy);
-                }
-            });
+
+}
+
+
+// DOWNLOAD generated QR code image 
+if(downloadBtn)
+{
+    downloadBtn.addEventListener('click', function() {
+        iziToast.question({
+            timeout: false,
+            close: false,
+            overlay: true,
+            displayMode: 'once',
+            id: 'question',
+            zindex: 999,
+            backgroundColor: '#eeeeee',
+            drag: false,
+            title: 'Do you want to add another user?',
+            message: 'Click Yes if you wish to add another user.',
+            position: 'center',
+            buttons: [
+                ['<button><b>YES</b></button>', function (instance, toast) {
+                    
+                    let = baseURl = window.location.origin;
+                    window.location.href = baseURl + '/adduserform.html';({ transitionOut: 'fadeOut' }, toast, 'button');
+                    
+                }, true],
+                ['<button>NO</button>', function (instance, toast) {
+                    
+                    let = baseURl = window.location.origin;
+                    window.location.href = baseURl + '/users.html';({ transitionOut: 'fadeOut' }, toast, 'button');
+                    
+                }],
+            ],
+            onClosing: function(instance, toast, closedBy){
+                console.info('Closing | closedBy: ' + closedBy);
+            },
+            onClosed: function(instance, toast, closedBy){
+                console.info('Closed | closedBy: ' + closedBy);
+            }
         });
-    }
+    });
+}
     
 
-    
-    console.log('EVERYTHING IS RUNNING 100%')
+// just to check if all code is running
+console.log('EVERYTHING IS RUNNING 100%')
