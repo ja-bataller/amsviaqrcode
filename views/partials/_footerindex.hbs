@@ -1,0 +1,59 @@
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+
+<script src="js/script.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous"></script>
+
+<script type="module">
+    import QrScanner from "../js/qr-scanner.min.js";
+    QrScanner.WORKER_PATH = "../js/qr-scanner-worker.min.js";
+    
+    const video = document.getElementById('qr-video');
+    const camHasCamera = document.getElementById('cam-has-camera');
+    const camHasFlash = document.getElementById('cam-has-flash');
+    const flashToggle = document.getElementById('flash-toggle');
+    const flashState = document.getElementById('flash-state');
+    const camQrResult = document.getElementById('cam-qr-result');
+    const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
+    const fileSelector = document.getElementById('file-selector');
+    const fileQrResult = document.getElementById('file-qr-result');
+    
+    function setResult(label, result) {
+    
+    iziToast.success({
+            title: result,
+            message: new Date().toString(),
+            position: "topCenter",
+            timeout:5000,
+    });
+    //  label.textContent = result;
+    //  camQrResultTimestamp.textContent = new Date().toString();
+        label.style.color = 'white';
+        clearTimeout(label.highlightTimeout);
+        label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+        qrScanner.stop();
+    }
+    
+    // ####### Web Cam Scanning #######
+    QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+    
+    
+    const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
+    //  camQrResult.textContent = error;
+    //  camQrResult.style.color = 'inherit';
+    });
+    scanner.start().then(() => {
+        scanner.hasFlash().then(hasFlash => {
+            camHasFlash.textContent = hasFlash;
+            if (hasFlash) {
+                flashToggle.style.display = 'inline-block';
+                flashToggle.addEventListener('click', () => {
+                    scanner.toggleFlash().then(() => flashState.textContent = scanner.isFlashOn() ? 'on' : 'off');
+                });
+            }
+        });
+    });    
+</script>

@@ -1,0 +1,24 @@
+{
+  "name": "attendance-monitoring-system-via-qr-code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ja-bataller/amsviaqrcode.git"
+  },
+  "author": "John Anthony Bataller",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ja-bataller/amsviaqrcode/issues"
+  },
+  "homepage": "https://github.com/ja-bataller/amsviaqrcode#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "hbs": "^4.1.1",
+    "nodemon": "^2.0.7"
+  }
+}
