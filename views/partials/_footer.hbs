@@ -1,3 +1,12 @@
+<script
+  src="https://code.jquery.com/jquery-3.5.1.js"
+  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+  crossorigin="anonymous"></script>
+  
+<script src="js/script.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous"></script>
+
 <!-- Bootstrap core JavaScript-->
 <script src="js/jquery/jquery.min.js"></script>
 <script src="js/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -10,6 +19,7 @@
 <script src="css/datatables/dataTables.bootstrap4.min.js"></script>
 <!-- Page level custom scripts -->
 <script src="js/demo/datatables-demo.js"></script>
+
 
 <script type="module">
          import QrScanner from "../js/qr-scanner.min.js";
@@ -51,4 +61,10 @@
                  }
              });
          });
-      </script>
+</script>
+
+<script>
+    // MAXIMUM DATE INPUT IS TODAY
+    birthdate.max = new Date().toISOString().split("T")[0]
+</script>
+

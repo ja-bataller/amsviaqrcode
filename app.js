@@ -1,57 +1,72 @@
+// Express NPM
 const express = require("express");
+// Mongoose
+const mongoose = require("mongoose");
+// Handlebars
 const hbs = require("hbs");
+//  Cookie parser
+const cookieParser = require("cookie-parser");
+// JWT
+const jwt = require("jsonwebtoken");
 const path = require('path');
 
-// express app
+// Express app
 const app = express();
+const Account = require("./models/accounts");
+
+// MongoDB Connection
+const dbURI = "mongodb+srv://amsuser:OXdWoRD50o7q4CJw@ams-qrcode.oltgh.mongodb.net/ams-qrcode?retryWrites=true&w=majority";
+mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+    .then((result) => app.listen(3000), console.log("connected to db"))
+    .catch((err) => console.log(err))
 
 // Set static pages
 const publicDirectory = path.join(__dirname, './public/');
 app.use(express.static(publicDirectory));
 
-// Template Engine
+// Handlebars View Engine
 app.set("view engine", "hbs");
+// Handlebars Partials
 hbs.registerPartials(__dirname + "/views/partials");
 
-// listen for requests
-app.listen(3000);
+// Middleware
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+app.use(cookieParser());
 
-// views index
-app.get("/", (req, res) => {
-    res.render("index");
-});
+// Routes
+const authRoutes = require("./routes/authRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 
-// views admin
-app.get("/admin", (req, res) => {
-    res.render("admin");
-});
+app.use(authRoutes);
+app.use(adminRoutes);
 
-// views logs
-app.get("/logs", (req, res) => {
-    res.render("logs");
-});
 
-// views users
-app.get("/users", (req, res) => {
-    res.render("users");
-});
+//  Get the Admins account in MongoDB
+// app.get("/get-accounts", (req, res) => {
+//     Account.find()
+//     .then((result) => {
+//         res.send(result);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     });
+// })
 
-// views qr code tester
-app.get("/qrcodetester", (req, res) => {
-    res.render("qrcodetester");
-});
+// // Add an Admins account in MongoDB
+// app.get("/add-account", (req, res) => {
+//     const account = new Account({
+//         username: "gumboc",
+//         password: "gumboc",
+//         name: "Jay Victor Gumboc",
+//     });
+//     account.save()
+//     .then((result) => {
+//         res.send(result);
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     })
+// })
 
-// views register user
-app.get("/register", (req, res) => {
-    res.render("registeruser");
-});
 
-// views qr code generator
-app.get("/qrcode", (req, res) => {
-    res.render("qrcodegenerator");
-});
-
-// views about
-app.get("/about", (req, res) => {
-    res.render("about");
-});

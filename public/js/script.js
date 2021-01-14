@@ -39,22 +39,21 @@ if(loginForm)
 
 
 // ADD NEW USER to Database
-if(adduserForm)
-{
-    adduserForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+// if(adduserForm)
+// {
+//     adduserForm.addEventListener('submit', function(e) {
+//         e.preventDefault();
 
-        iziToast.success({
-            title: 'Added new user successfuly',
-            position: "topCenter",
-            timeout:2000,
-        });
-        setTimeout(function(){ let = baseURl = window.location.origin;
-            window.location.href = baseURl + '/qrcodegenerator.html'; }, 2000);
-        });
+//         iziToast.success({
+//             title: 'Added new user successfuly',
+//             position: "topCenter",
+//             timeout:2000,
+//         });
+//         setTimeout(function(){ let = baseURl = window.location.origin;
+//             window.location.href = baseURl + '/qrcode'; }, 2000);
+//         });
 
-}
-
+// }
 
 // DOWNLOAD generated QR code image 
 if(downloadBtn)
@@ -76,13 +75,13 @@ if(downloadBtn)
                 ['<button><b>YES</b></button>', function (instance, toast) {
                     
                     let = baseURl = window.location.origin;
-                    window.location.href = baseURl + '/adduserform.html';({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = baseURl + '/register';({ transitionOut: 'fadeOut' }, toast, 'button');
                     
                 }, true],
                 ['<button>NO</button>', function (instance, toast) {
                     
                     let = baseURl = window.location.origin;
-                    window.location.href = baseURl + '/users.html';({ transitionOut: 'fadeOut' }, toast, 'button');
+                    window.location.href = baseURl + '/users';({ transitionOut: 'fadeOut' }, toast, 'button');
                     
                 }],
             ],

@@ -44,17 +44,17 @@
                            <div class="card-back">
                               <div class="center-wrap">
                                  <div class="section text-center">
-                                    <form method="#" id="loginForm">
+                                    <form>
                                        <h4 class="mb-4 pb-3">Administrator Log In</h4>
                                        <div class="form-group">
-                                          <input type="text" name="logusername" class="form-style" placeholder="Your Username" id="logusername" autocomplete="off" required>
+                                          <input type="text" id="username" name="username" class="form-style" placeholder="Your Username"  autocomplete="off" required>
                                           <i class="input-icon uil uil-user"></i>
                                        </div>
                                        <div class="form-group mt-2">
-                                          <input type="password" name="logpass" class="form-style" placeholder="Your Password" id="logpass" autocomplete="off" required>
+                                          <input type="password" id="password" name="password" class="form-style" placeholder="Your Password"  autocomplete="off" required>
                                           <i class="input-icon uil uil-lock-alt"></i>
                                        </div>
-                                       <input class="btn  mt-4" type="submit" value="log in">
+                                       <input class="btn mt-4" type="submit" value="log in">
                                     </form>
                                  </div>
                               </div>
@@ -67,6 +67,65 @@
          </div>
       </div>
       {{> _footerindex}}
-      {{> _qrcodescanner}}
+
+      <script>
+      const form = document.querySelector('form');
+      
+
+      form.addEventListener('submit', async (e) => {
+         e.preventDefault();
+
+         // get values
+         const username = form.username.value;
+         const password = form.password.value;
+
+         try {
+            const res = await fetch('/', { 
+            method: 'POST', 
+            body: JSON.stringify({ username, password }),
+            headers: {'Content-Type': 'application/json'}
+            });
+            const data = await res.json();
+            console.log(data);
+            
+            // if the login inputs is incorrect this will trigger
+            if (data.errors) {
+               // if the login username input is incorrect
+               if (data.errors.username) {
+               iziToast.error({
+                title: data.errors.username,
+                message: "Unauthorized Access",
+                position: "topCenter",
+                timeout: 3000,
+               });
+               }
+               // if the login password input is incorrect
+               if (data.errors.password){
+               iziToast.error({
+               title: data.errors.password,
+               message: "Unauthorized Access",
+               position: "topCenter",
+               timeout: 3000,
+               });
+               }
+            }
+
+            if (data.account) {
+               iziToast.success({
+                title: 'Login Success',
+                message: "Authorized Access",
+                position: "topCenter",
+                timeout:2000,
+            });
+            setTimeout(function(){ let = baseURl = 
+               location.assign('/admin'); }, 2000);
+            }
+         }
+         catch (err) {
+            console.log(err);
+         }
+      });
+      </script>
+
    </body>
 </html>

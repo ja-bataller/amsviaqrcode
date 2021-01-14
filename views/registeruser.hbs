@@ -20,11 +20,11 @@
 
                <!-- Begin Page Content -->
             <div class="container-fluid">
-               <form id="newuserForm">
+               <form action="/register" method="POST" id="newuserForm">
                   <div class="row justify-content-center">
                      <!-- Border Left Utilities -->
                      <div class="col-lg-8">
-                        <a class="btn mb-3" href="users.html" role="button"> <i class="fas fa-arrow-circle-left"></i> Back</a>
+                        <a class="btn mb-3" href="/users" role="button"> <i class="fas fa-arrow-circle-left"></i> Back</a>
                         <div class="card my-1 mb-5 border-left-primary">
                            <div class="card-header">
                               <h4 class="mt-2"> <i class="fas fa-user-plus fa-sm"></i> Register New User</h4>
@@ -34,26 +34,26 @@
                                  <div class="col-lg-6">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">First Name</label>
-                                       <input type="text" class="form-control" id="firstname" pattern="[A-Za-z ]{0,}" title="Only Alphabets" aria-describedby="FirstName" autocomplete="off" maxlength="50" required>
+                                       <input type="text" class="form-control" name="firstname" id="firstname" pattern="[A-Za-z ]{0,}" title="Only Alphabets" aria-describedby="FirstName" autocomplete="off" maxlength="50" required>
                                     </div>
                                     <div class="form-group">
                                        <label>Middle Name</label>
-                                       <input type="text" class="form-control" id="Middlename"  pattern="[A-Za-z ]{0,}" title="Only Alphabets" maxlength="25" autocomplete="off">
+                                       <input type="text" class="form-control" name="middlename" id="middlename"  pattern="[A-Za-z ]{0,}" title="Only Alphabets" maxlength="25" autocomplete="off">
                                     </div>
                                     <div class="form-group">
                                        <label>Last Name</label>
-                                       <input type="text" class="form-control" id="lastname" pattern="[A-Za-z ]{0,}" title="Only Alphabets" maxlength="25" autocomplete="off" required>
+                                       <input type="text" class="form-control" name="lastname" id="lastname" pattern="[A-Za-z ]{0,}" title="Only Alphabets" maxlength="25" autocomplete="off" required>
                                     </div>
                                     <div class="row">
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label class="pb-1">Gender</label><br>
                                              <label class="radio-inline pl-4">
-                                             <input type="radio" name="gender" required
+                                             <input type="radio" name="gender" value="Male" required
                                              > Male
                                              </label>
                                              <label class="radio-inline pl-4">
-                                             <input type="radio" name="gender" required
+                                             <input type="radio" name="gender" value="Female" required
                                              > Female
                                              </label>
                                           </div>
@@ -61,7 +61,7 @@
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label>Age</label>
-                                             <input type="number" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true && event.keyCode == 189 ? false : true && event.keyCode == 109 ? false : true && event.keyCode == 107 ? false : true && event.keyCode == 187 ? false : true && event.keyCode == 190 ? false : true && event.keyCode == 110 ? false : true"  id="Age" min="18" max="60" autocomplete="off" required>
+                                             <input type="number" class="form-control" name="age" id="age" onkeydown="javascript: return event.keyCode == 69 ? false : true && event.keyCode == 189 ? false : true && event.keyCode == 109 ? false : true && event.keyCode == 107 ? false : true && event.keyCode == 187 ? false : true && event.keyCode == 190 ? false : true && event.keyCode == 110 ? false : true"  min="18" max="60" autocomplete="off" required>
                                           </div>
                                        </div>
                                     </div>
@@ -71,23 +71,23 @@
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label>Birthdate</label>
-                                             <input type="date" class="form-control" id="birthdate" required>
+                                             <input type="date" class="form-control" name="birthdate" id="birthdate" required>
                                           </div>
                                        </div>
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label>Contact Number</label>
-                                             <input type="number" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true && event.keyCode == 189 ? false : true && event.keyCode == 109 ? false : true && event.keyCode == 107 ? false : true && event.keyCode == 187 ? false : true && event.keyCode == 190 ? false : true && event.keyCode == 110 ? false : true" id="contactnumber" maxlength="15" autocomplete="off" required>
+                                             <input type="number" class="form-control" name="contact_number" id="contactnumber" onkeydown="javascript: return event.keyCode == 69 ? false : true && event.keyCode == 189 ? false : true && event.keyCode == 109 ? false : true && event.keyCode == 107 ? false : true && event.keyCode == 187 ? false : true && event.keyCode == 190 ? false : true && event.keyCode == 110 ? false : true"  maxlength="15" autocomplete="off" required>
                                           </div>
                                        </div>
                                     </div>
                                     <div class="form-group">
                                        <label>Email Address</label>
-                                       <input type="email" class="form-control" id="email" autocomplete="off" required>
+                                       <input type="email" class="form-control" name="email_address" id="email" autocomplete="off" required>
                                     </div>
                                     <div class="form-group">
                                        <label>Home Address</label>
-                                       <textarea class="form-control" name="Address" id="homeaddress" rows="4" maxlength="150" autocomplete="off" required
+                                       <textarea class="form-control" name="home_address" id="homeaddress" rows="4" maxlength="150" autocomplete="off" required
                                           oninvalid="this.setCustomValidity('Please Enter your Address here')"
                                           oninput="this.setCustomValidity('')"></textarea>
                                     </div>
@@ -98,13 +98,13 @@
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                        <label>ID Number</label>
-                                       <input type="number" class="form-control" onkeydown="javascript: return event.keyCode == 69 ? false : true && event.keyCode == 189 ? false : true && event.keyCode == 109 ? false : true && event.keyCode == 107 ? false : true && event.keyCode == 187 ? false : true && event.keyCode == 190 ? false : true && event.keyCode == 110 ? false : true" id="idnumber" aria-describedby="idnumber" required>
+                                       <input type="number" class="form-control" name="idnumber" id="idnumber" onkeydown="javascript: return event.keyCode == 69 ? false : true && event.keyCode == 189 ? false : true && event.keyCode == 109 ? false : true && event.keyCode == 107 ? false : true && event.keyCode == 187 ? false : true && event.keyCode == 190 ? false : true && event.keyCode == 110 ? false : true"  aria-describedby="idnumber" required>
                                     </div>
                                  </div>
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">Department</label>
-                                       <select class="form-control" id="department" required>
+                                       <select class="form-control" name="department" id="department" required>
                                           <option value="">choose Department</option>
                                           <option value="Industrial Technology"> Industrial Technology</option>
                                           <option value="Industrial Education">Industrial Education</option>
@@ -116,17 +116,17 @@
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">Shift</label>
-                                       <select class="form-control" required>
+                                       <select class="form-control" name="shift" id="shift" required>
                                           <option value="">choose Shift</option>
-                                          <option value="day">Day</option>
-                                          <option value="night">Night</option>
+                                          <option value="Day">Day</option>
+                                          <option value="Night">Night</option>
                                        </select>
                                     </div>
                                  </div>
                                  
                                  <div class="col-12">
                                     <div class="form-group mt-3">
-                                       <input  class="btn" type="submit"  value="Add New User">
+                                       <input  class="btn" type="submit" value="Add New User">
                                     </div>
                                  </div>
                               </div>
@@ -152,25 +152,8 @@
       <i class="fas fa-angle-up"></i>
       </a>
 
-      <!-- Logout Modal-->
-      <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel aria-hidden="true" data-backdrop="static" data-keyboard="false""
-         aria-hidden="true">
-         <div class="modal-dialog" role="document">
-            <div class="modal-content">
-               <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                  <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">×</span>
-                  </button> -->
-               </div>
-               <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-               <div class="modal-footer">
-                  <button class="btn" type="button" data-dismiss="modal">Cancel</button>
-                  <a class="btn" href="index.hbs">Logout</a>
-               </div>
-            </div>
-         </div>
-      </div>
+      {{!-- partials logout modal --}}
+      {{> _logoutmodal}}
 
     {{!-- partials footer --}}
       {{> _footer}}
