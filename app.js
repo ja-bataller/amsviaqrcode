@@ -56,9 +56,9 @@ app.use(adminRoutes);
 // // Add an Admins account in MongoDB
 // app.get("/add-account", (req, res) => {
 //     const account = new Account({
-//         username: "gumboc",
-//         password: "gumboc",
-//         name: "Jay Victor Gumboc",
+//         username: "antoni",
+//         password: "antoni",
+//         name: "Michael Antoni",
 //     });
 //     account.save()
 //     .then((result) => {

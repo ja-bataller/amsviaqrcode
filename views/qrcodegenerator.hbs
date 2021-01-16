@@ -26,11 +26,15 @@
                         <div class="card-body">
                            <div class="generateqrcode ">
                               <!-- class="QRcodeImage" -->
-                              <div id="qrcodegenerated" class="QRcodeImage"></div>
-                              <div class="form-group">
-                                 <a class="btn" download href="img/AMS.png" role="button" id="downloadBtn"> <i class="fas fa-qrcode"></i> Download QR Code</a> 
+                              <div id="qrcodegenerated" class="QRcodeImage mb-2">
+
                               </div>
-                              <span id="idnumberofuser"></span>
+                              <div class="form-group">
+                                 <a class="btn" download href="#" role="button" id="downloadBtn"> <i class="fas fa-qrcode"></i> Download QR Code</a> 
+                              </div>
+                              <span id="nameofuser" data-filename="{{user.firstname}}-{{user.lastname}}">{{user.firstname}} {{user.lastname}}</span>
+                              <br>
+                              <span id="idnumberofuser">{{user.idnumber}}</span>
                            </div>
                         </div>
                      </div>
@@ -58,6 +62,27 @@
 
     {{!-- partials footer --}}
       {{> _footer}}
+      
+
+      <script>
+      let idnumber = document.querySelector("#idnumberofuser").textContent;
+      let typeNumber = 4;
+      let errorCorrectionLevel = 'L';
+      let qr = qrcode(typeNumber, errorCorrectionLevel);
+      qr.addData(idnumber);
+      qr.make();
+      document.querySelector("#qrcodegenerated").innerHTML = qr.createImgTag(8,4);
+
+
+      addEventListener('click', function(e) {
+         const downloadBtn = document.querySelector('#downloadBtn');
+         const link = document.querySelector('#qrcodegenerated img').src;
+         const user = document.querySelector("#nameofuser");
+         downloadBtn.href = link;
+         downloadBtn.download = user.dataset.filename;
+         console.log(link)
+      })
+      </script>
       
    </body>
 </html>

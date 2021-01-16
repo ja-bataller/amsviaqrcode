@@ -3,23 +3,79 @@
   integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
   crossorigin="anonymous"></script>
 
-<script src="js/script.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous"></script>
 
+// Log in Validation
+<script>
+      const form = document.querySelector('form');
+
+      form.addEventListener('submit', async (e) => {
+         e.preventDefault();
+
+         // get values
+         const username = form.username.value;
+         const password = form.password.value;
+         
+
+         try {
+            const res = await fetch('/', { 
+            method: 'POST', 
+            body: JSON.stringify({ username, password }),
+            headers: {'Content-Type': 'application/json'}
+            });
+            const data = await res.json();
+            console.log(data);
+            
+            // if the login inputs is incorrect this will trigger
+            if (data.errors) {
+               // if the login username input is incorrect
+               if (data.errors.username) {
+               iziToast.error({
+                title: data.errors.username,
+                message: "Unauthorized Access",
+                position: "topCenter",
+                timeout: 3000,
+                
+               });
+               document.querySelector("#username").value = "";
+               document.querySelector("#password").value = "";
+               }
+               // if the login password input is incorrect
+               if (data.errors.password){
+               iziToast.error({
+               title: data.errors.password,
+               message: "Unauthorized Access",
+               position: "topCenter",
+               timeout: 3000,
+               });
+               document.querySelector("#username").value = "";
+               document.querySelector("#password").value = "";
+               }
+            }
+
+            // if login inputs is correct, the Admin page will open.
+            if (data.account) {
+
+               let = baseURl = 
+               location.assign('/admin');
+               
+            }
+         }
+         catch (err) {
+            console.log(err);
+         }
+      });
+      </script>
+
+// QR Code Scanner
 <script type="module">
     import QrScanner from "../js/qr-scanner.min.js";
     QrScanner.WORKER_PATH = "../js/qr-scanner-worker.min.js";
     
     const video = document.getElementById('qr-video');
     const camHasCamera = document.getElementById('cam-has-camera');
-    const camHasFlash = document.getElementById('cam-has-flash');
-    const flashToggle = document.getElementById('flash-toggle');
-    const flashState = document.getElementById('flash-state');
     const camQrResult = document.getElementById('cam-qr-result');
-    const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
-    const fileSelector = document.getElementById('file-selector');
-    const fileQrResult = document.getElementById('file-qr-result');
+
     
     function setResult(label, result) {
     
@@ -27,33 +83,38 @@
             title: result,
             message: new Date().toString(),
             position: "topCenter",
-            timeout:5000,
+            timeout:2000,
     });
-    //  label.textContent = result;
-    //  camQrResultTimestamp.textContent = new Date().toString();
         label.style.color = 'white';
         clearTimeout(label.highlightTimeout);
         label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
-        qrScanner.stop();
+
+        console.log("Stop Webam");
+        scanner.stop();
+
+        setTimeout(function(){ 
+            document.querySelector("#videoSpinner").innerHTML = 
+                `<div class="loader">
+                <div class="inner one"></div>
+                <div class="inner two"></div>
+                <div class="inner three"></div>
+                </div>`;
+         }, 500);
+        
+        setTimeout(function(){ 
+            document.querySelector("#videoSpinner").innerHTML = "";  
+            console.log("Start Web Cam Again"); 
+            scanner.start();
+         }, 3000);
+         
     }
-    
+
     // ####### Web Cam Scanning #######
     QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
-    
+    console.log("Open Camera");
     
     const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
-    //  camQrResult.textContent = error;
-    //  camQrResult.style.color = 'inherit';
+    console.log("Scanning");
     });
-    scanner.start().then(() => {
-        scanner.hasFlash().then(hasFlash => {
-            camHasFlash.textContent = hasFlash;
-            if (hasFlash) {
-                flashToggle.style.display = 'inline-block';
-                flashToggle.addEventListener('click', () => {
-                    scanner.toggleFlash().then(() => flashState.textContent = scanner.isFlashOn() ? 'on' : 'off');
-                });
-            }
-        });
-    });    
+    scanner.start();
 </script>

@@ -48,6 +48,13 @@ module.exports.login_get = (req,res) => {res.render("index");}
 module.exports.register_get = (req,res) => {res.render("registeruser");}
 module.exports.qrcodegenerator_get = (req,res) => {res.render("qrcodegenerator");}
 
+// Logging out Administrator Account
+module.exports.logout_get = (req, res) => {
+    console.log("Logged out");
+    res.cookie("jwt", "", {expiry_age: 1})
+    res.redirect("/");
+}
+
 // Logging in Administrator Account
 module.exports.login_post = async (req,res) => {
     const {username, password} = req.body;
@@ -62,6 +69,8 @@ module.exports.login_post = async (req,res) => {
         const errors = handleErrors(err);
         res.status(400).json({errors});
     }
+
+    
 }
 
 module.exports.register_post = (req,res) => {
@@ -70,19 +79,19 @@ module.exports.register_post = (req,res) => {
 
     user.save()
     .then((result) => {
-        res.redirect("/qrcode");
+        res.render("qrcodegenerator",{user});
     })
     .catch((err) =>{
         console.log(err);
     })
 }
 
-module.exports.qrcodegenerator_post = (req,res) => {
-    User.find()
-    .then((result) => {
-        res.render("qrcodegenerator", {users: result})
-    })
-    .catch((err) => {
-        console.log(err);
-    })
-}
+// module.exports.qrcodegenerator_post = (req,res) => {
+//     User.find()
+//     .then((result) => {
+//         res.render("qrcodegenerator", {users: result})
+//     })
+//     .catch((err) => {
+//         console.log(err);
+//     })
+// }

@@ -20,7 +20,7 @@ const accountSchema = new Schema({
 }, {timestamps: true});
 
 
-// Start a function before doc save to MongoDB
+// bcrypt password before saving to MongoDB
 accountSchema.pre("save", async function (next){
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt)

@@ -68,3 +68,25 @@
     birthdate.max = new Date().toISOString().split("T")[0]
 </script>
 
+<script src="qrcode.js"></script>
+{{!-- <script src="qr-generator.js"></script> --}}
+
+<script>
+    const accountName = document.querySelector("#accountName").textContent;
+    
+    if(accountName === "John Anthony Bataller"){
+        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="img/JABB.jpg">`;
+    }
+
+    if(accountName === "Michael Antoni"){
+        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="img/MA.jpg">`;
+    }
+
+    if(accountName === "Jay Victor Gumboc"){
+        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="img/JVG.jpg">`;
+    }
+
+    if(accountName === "Mary Chris Jasa"){
+        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="img/MCJ.jpg">`;
+    }
+</script>

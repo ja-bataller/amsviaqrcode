@@ -31,12 +31,9 @@
                                     <div class="videoContainer">
                                        <video id="qr-video" width="640" height="360"></video>
                                     </div>
+                                    <div id="videoSpinner"></div>
                                     <div class="form-group">
                                        <span class="spanStyle" id="cam-qr-result"></span>
-                                       <!-- <i class="input-icon uil uil-qrcode-scan"></i> -->
-                                       <!-- <b>Last detected at: </b>
-                                          <span id="cam-qr-result-timestamp"></span>
-                                          <br> -->
                                     </div>
                                  </div>
                               </div>
@@ -67,65 +64,6 @@
          </div>
       </div>
       {{> _footerindex}}
-
-      <script>
-      const form = document.querySelector('form');
-      
-
-      form.addEventListener('submit', async (e) => {
-         e.preventDefault();
-
-         // get values
-         const username = form.username.value;
-         const password = form.password.value;
-
-         try {
-            const res = await fetch('/', { 
-            method: 'POST', 
-            body: JSON.stringify({ username, password }),
-            headers: {'Content-Type': 'application/json'}
-            });
-            const data = await res.json();
-            console.log(data);
-            
-            // if the login inputs is incorrect this will trigger
-            if (data.errors) {
-               // if the login username input is incorrect
-               if (data.errors.username) {
-               iziToast.error({
-                title: data.errors.username,
-                message: "Unauthorized Access",
-                position: "topCenter",
-                timeout: 3000,
-               });
-               }
-               // if the login password input is incorrect
-               if (data.errors.password){
-               iziToast.error({
-               title: data.errors.password,
-               message: "Unauthorized Access",
-               position: "topCenter",
-               timeout: 3000,
-               });
-               }
-            }
-
-            if (data.account) {
-               iziToast.success({
-                title: 'Login Success',
-                message: "Authorized Access",
-                position: "topCenter",
-                timeout:2000,
-            });
-            setTimeout(function(){ let = baseURl = 
-               location.assign('/admin'); }, 2000);
-            }
-         }
-         catch (err) {
-            console.log(err);
-         }
-      });
-      </script>
 
    </body>
 </html>
