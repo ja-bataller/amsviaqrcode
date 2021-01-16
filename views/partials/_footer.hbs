@@ -2,91 +2,45 @@
   src="https://code.jquery.com/jquery-3.5.1.js"
   integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
   crossorigin="anonymous"></script>
-  
-<script src="js/script.js"></script>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous"></script>
 
 <!-- Bootstrap core JavaScript-->
-<script src="js/jquery/jquery.min.js"></script>
-<script src="js/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="/js/jquery/jquery.min.js"></script>
+<script src="/js/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Core plugin JavaScript-->
-<script src="js/jquery-easing/jquery.easing.min.js"></script>
+<script src="/js/jquery-easing/jquery.easing.min.js"></script>
 <!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
+<script src="/js/sb-admin-2.min.js"></script>
 <!-- Page level plugins -->
-<script src="css/datatables/jquery.dataTables.min.js"></script>
-<script src="css/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="/css/datatables/jquery.dataTables.min.js"></script>
+<script src="/css/datatables/dataTables.bootstrap4.min.js"></script>
 <!-- Page level custom scripts -->
-<script src="js/demo/datatables-demo.js"></script>
+<script src="/js/demo/datatables-demo.js"></script>
 
 
-<script type="module">
-         import QrScanner from "../js/qr-scanner.min.js";
-         QrScanner.WORKER_PATH = '../js/qr-scanner-worker.min.js';
-         
-         const video = document.getElementById('qr-video');
-         const camHasCamera = document.getElementById('cam-has-camera');
-         const camHasFlash = document.getElementById('cam-has-flash');
-         const flashToggle = document.getElementById('flash-toggle');
-         const flashState = document.getElementById('flash-state');
-         const camQrResult = document.getElementById('cam-qr-result');
-         const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
-         const fileSelector = document.getElementById('file-selector');
-         const fileQrResult = document.getElementById('file-qr-result');
-         
-         function setResult(label, result) {
-             label.textContent = result;
-            //  camQrResultTimestamp.textContent = new Date().toString();
-             label.style.color = 'black';
-             clearTimeout(label.highlightTimeout);
-             label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
-         }
-         // ####### Web Cam Scanning #######
-         QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
-         
-         
-         const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
-             camQrResult.textContent = error;
-             camQrResult.style.color = 'inherit';
-         });
-         scanner.start().then(() => {
-             scanner.hasFlash().then(hasFlash => {
-                 camHasFlash.textContent = hasFlash;
-                 if (hasFlash) {
-                     flashToggle.style.display = 'inline-block';
-                     flashToggle.addEventListener('click', () => {
-                         scanner.toggleFlash().then(() => flashState.textContent = scanner.isFlashOn() ? 'on' : 'off');
-                     });
-                 }
-             });
-         });
-</script>
 
-<script>
-    // MAXIMUM DATE INPUT IS TODAY
-    birthdate.max = new Date().toISOString().split("T")[0]
-</script>
 
-<script src="qrcode.js"></script>
+<script src="/js/qrcode.js"></script>
 {{!-- <script src="qr-generator.js"></script> --}}
 
 <script>
     const accountName = document.querySelector("#accountName").textContent;
     
     if(accountName === "John Anthony Bataller"){
-        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="img/JABB.jpg">`;
+        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="/img/JABB.jpg">`;
     }
 
     if(accountName === "Michael Antoni"){
-        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="img/MA.jpg">`;
+        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="/img/MA.jpg">`;
     }
 
     if(accountName === "Jay Victor Gumboc"){
-        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="img/JVG.jpg">`;
+        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="/img/JVG.jpg">`;
     }
 
     if(accountName === "Mary Chris Jasa"){
-        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="img/MCJ.jpg">`;
+        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="/img/MCJ.jpg">`;
     }
 </script>

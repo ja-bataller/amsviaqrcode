@@ -21,13 +21,20 @@ mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true, useCre
     .catch((err) => console.log(err))
 
 // Set static pages
-const publicDirectory = path.join(__dirname, './public/');
+const publicDirectory = path.join(__dirname, './public');
 app.use(express.static(publicDirectory));
 
 // Handlebars View Engine
 app.set("view engine", "hbs");
 // Handlebars Partials
 hbs.registerPartials(__dirname + "/views/partials");
+
+hbs.registerHelper('select', function(selected, options) {
+    return options.fn(this).replace(
+        new RegExp(' value=\"' + selected + '\"'),
+        '$& selected="selected"');
+});
+
 
 // Middleware
 app.use(express.urlencoded({extended:true}));

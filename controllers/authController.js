@@ -56,7 +56,7 @@ module.exports.logout_get = (req, res) => {
 }
 
 // Logging in Administrator Account
-module.exports.login_post = async (req,res) => {
+module.exports.loginadmin_post = async (req,res) => {
     const {username, password} = req.body;
     
     try {
@@ -69,8 +69,29 @@ module.exports.login_post = async (req,res) => {
         const errors = handleErrors(err);
         res.status(400).json({errors});
     }
+}
 
-    
+// Logging in User Account
+module.exports.loginuser_post = async (req,res) => {
+  const {idnumber} = req.body;
+  console.log(idnumber);
+
+  try {
+      const user = await User.findOne({idnumber});
+      console.log(user);
+
+      const user_logs= {
+        fullname: `${user.firstname} ${user.lastname}` ,
+        message: 'success',
+        idnumber: user.idnumber
+      };
+
+      res.status(200).json({user : user_logs})
+  }
+  catch (err) {
+      console.log(err);
+      res.status(400).json({errors: 'User not registered'});
+  }
 }
 
 module.exports.register_post = (req,res) => {

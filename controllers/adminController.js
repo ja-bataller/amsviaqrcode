@@ -12,11 +12,11 @@ module.exports.admin_get = (req,res) => {
         let employees = count;
         console.log("Employees: " + employees);
 
-        User.countDocuments({shift: "Day"}, function (err, count) {
+        User.countDocuments({shift: "day"}, function (err, count) {
             let day = count;
             console.log("Day Shift: " + day);
             
-            User.countDocuments({shift: "Night"}, function (err, count) {
+            User.countDocuments({shift: "night"}, function (err, count) {
                 let night = count;
                 console.log("Night Shift: " + night);
                 res.render("admin", {employees, day, night})
@@ -47,17 +47,31 @@ module.exports.users_get = (req,res) => {
     })
 }
 
-module.exports.users_delete = ("/users/:id,", (req, res) => {
-    const id = req.params.id;
 
-    User.findByIdAndDelete(id)
+module.exports.userview_get = (req,res) => {
+    const id = req.params.id;
+    console.log(id);
+    
+    User.findById(id)
     .then(result => {
-        res.json({redirect: "/users"});
+        res.render("user_view", {user:result})
     })
     .catch(err => {
         console.log(err);
     })
-}) 
+}
+
+module.exports.users_delete = (req, res) => {
+    const id = req.params.id;
+    
+    User.findByIdAndDelete(id)
+    .then(result => {
+        res.json({redirect: "/users" , message: "User has been deleted successfully"});
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}
 
 module.exports.qrcodetester_get = (req,res) => {res.render("qrcodetester");}
 module.exports.about_get = (req,res) => {res.render("about");}

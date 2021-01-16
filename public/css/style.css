@@ -1,0 +1,43 @@
+.sidebarCustom{
+  background-color: #222831 !important;
+}
+
+.videoContainer{
+    width: 250px;
+    text-align: center;
+    overflow: hidden;
+   margin: auto;
+    height: 250px;
+  }
+  #qr-video{
+    margin-left: -210px;
+    margin-top: -50px;
+  }
+  
+  .QRcodeImage{
+    margin: auto;
+    height: 300px !important;
+    width: 300px !important;;
+    padding: 10px;
+  }
+  
+  .centerStyle{
+    text-align: center;
+    margin: 0%;
+    padding: 0%;
+  }
+  
+  .aboutfooter{
+    margin-top: 7%;
+  }
+  .testerfooter{
+    margin-top: 6%;
+  }
+  
+  .marginauto{
+    margin: auto;
+  }
+
+.btn-update{
+  display: none;
+}

@@ -14,7 +14,8 @@ router.get("/register", requireAuth, authController.register_get);
 router.get("/logout", requireAuth, authController.logout_get);
 
 // get data
-router.post("/", authController.login_post);
+router.post("/login-admin", authController.loginadmin_post);
+router.post("/login-user", authController.loginuser_post);
 router.post("/register", authController.register_post);
 // router.post("/qrcode", authController.qrcodegenerator_post);
 

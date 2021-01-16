@@ -43,9 +43,6 @@
             </div>
             <!-- End of Main Content -->
 
-            {{!-- partials copyright --}}
-            {{> _copyright}}
-
          </div>
          <!-- End of Content Wrapper -->
 
@@ -81,6 +78,10 @@
          downloadBtn.href = link;
          downloadBtn.download = user.dataset.filename;
          console.log(link)
+
+         setTimeout(() => {
+            window.location = "/users";
+         },1000)
       })
       </script>
       

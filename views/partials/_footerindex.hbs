@@ -16,9 +16,8 @@
          const username = form.username.value;
          const password = form.password.value;
          
-
          try {
-            const res = await fetch('/', { 
+            const res = await fetch('/login-admin', { 
             method: 'POST', 
             body: JSON.stringify({ username, password }),
             headers: {'Content-Type': 'application/json'}
@@ -76,20 +75,63 @@
     const camHasCamera = document.getElementById('cam-has-camera');
     const camQrResult = document.getElementById('cam-qr-result');
 
-    
-    function setResult(label, result) {
-    
-    iziToast.success({
-            title: result,
+   async function setResult (label, result) {
+       
+    // get value
+    const idnumber = result;
+    console.log(result);
+   
+   try {
+      const res = await fetch('/login-user', { 
+      method: 'POST', 
+      body: JSON.stringify({idnumber}),
+      headers: {'Content-Type': 'application/json'}
+      });
+      const data = await res.json();
+      console.log(data);
+      
+      if (data.errors) {
+         if (data.errors) {
+         iziToast.error({
+            title: data.errors,
+            message: "Unauthorzied access",
+            position: "topCenter",
+            timeout: 3000,
+            
+         });
+         console.log("Stop Web Cam");
+         scanner.stop();
+
+        setTimeout(function(){ 
+            document.querySelector("#videoSpinner").innerHTML = 
+                `<div class="loader">
+                <div class="inner one"></div>
+                <div class="inner two"></div>
+                <div class="inner three"></div>
+                </div>`;
+         }, 500);
+        
+        setTimeout(function(){ 
+            document.querySelector("#videoSpinner").innerHTML = "";  
+            console.log("Start Web Cam Again"); 
+            scanner.start();
+         }, 3000);
+         }
+      }
+
+         if (data.user) {
+
+            iziToast.success({
+            title: data.user.fullname,
             message: new Date().toString(),
             position: "topCenter",
             timeout:2000,
-    });
+            });
         label.style.color = 'white';
         clearTimeout(label.highlightTimeout);
         label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
 
-        console.log("Stop Webam");
+        console.log("Stop Web Cam");
         scanner.stop();
 
         setTimeout(function(){ 
@@ -106,7 +148,12 @@
             console.log("Start Web Cam Again"); 
             scanner.start();
          }, 3000);
-         
+            
+         }
+      }
+      catch (err) {
+         console.log(err);
+      } 
     }
 
     // ####### Web Cam Scanning #######
