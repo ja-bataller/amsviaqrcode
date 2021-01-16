@@ -15,6 +15,9 @@ router.get("/about",  requireAuth, adminController.about_get);
 router.get("/qrcode-tester",  requireAuth, adminController.qrcodetester_get);
 router.get("/users/:id", requireAuth, adminController.userview_get);
 
+// Get Data
+router.post("/update/:id", requireAuth, adminController.update_post);
+
 // Delete Users
 router.delete("/users/:id",  requireAuth, adminController.users_delete);
 

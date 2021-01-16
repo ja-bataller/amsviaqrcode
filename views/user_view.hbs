@@ -20,7 +20,7 @@
 
                <!-- Begin Page Content -->
             <div class="container-fluid">
-               <form action="/register" method="POST" id="newuserForm">
+               <form action="/update/{{user._id}}" method="POST" id="newuserForm">
                   <div class="row justify-content-center">
                      <!-- Border Left Utilities -->
                      <div class="col-lg-8">
@@ -54,14 +54,11 @@
                                        <div class="col-lg-6">
                                           <div class="form-group">
                                              <label class="pb-1">Gender</label><br>
-                                             <label class="radio-inline pl-4">
-                                             <input class="update-form" type="radio" name="gender" value="Male" checked="({{user.gender}} == 'Male' ? true : false )" required disabled
-                                             > Male
-                                             </label>
-                                             <label class="radio-inline pl-4">
-                                             <input class="update-form" type="radio" name="gender" value="Female"  checked="({{user.gender}} == 'Female' ? true : false )" required disabled
-                                             > Female
-                                             </label>
+                                                <label class="radio-inline pl-4">
+                                                <input class="update-form" type="radio" name="gender" value="male" required disabled {{checked user.gender 'male'}}> Male</label>
+                                                <label class="radio-inline pl-4">
+                                                <input class="update-form" type="radio" name="gender" value="female" required disabled {{checked user.gender 'female'}}> Female</label>
+                                         
                                           </div>
                                        </div>
                                        <div class="col-lg-6">
@@ -104,7 +101,7 @@
                                  <div class="col-lg-4">
                                     <div class="form-group">
                                        <label>ID Number</label>
-                                       <input value="{{user.idnumber}}" type="number" class="form-control update-form" name="idnumber" id="idnumber" onkeydown="javascript: return event.keyCode == 69 ? false : true && event.keyCode == 189 ? false : true && event.keyCode == 109 ? false : true && event.keyCode == 107 ? false : true && event.keyCode == 187 ? false : true && event.keyCode == 190 ? false : true && event.keyCode == 110 ? false : true"  aria-describedby="idnumber" required disabled>
+                                       <input value="{{user.idnumber}}" type="number" class="form-control" name="idnumber" id="idnumber" onkeydown="javascript: return event.keyCode == 69 ? false : true && event.keyCode == 189 ? false : true && event.keyCode == 109 ? false : true && event.keyCode == 107 ? false : true && event.keyCode == 187 ? false : true && event.keyCode == 190 ? false : true && event.keyCode == 110 ? false : true"  aria-describedby="idnumber" required disabled>
                                     </div>
                                  </div>
                                  <div class="col-lg-4">
@@ -137,7 +134,7 @@
 
                                  <div class="col-12">
                                     <div class="form-group mt-3">
-                                       <input  class="btn btn-success btn-update" type="submit" value="Add New User">
+                                       <input  class="btn btn-success btn-update" type="submit" value="Update User">
                                     </div>
                                  </div>
                               </div>
@@ -193,6 +190,11 @@
          }
       }); 
    </script>
+
+   <script>
+      // MAXIMUM DATE INPUT IS TODAY
+      birthdate.max = new Date().toISOString().split("T")[0]
+   </script> 
       
    </body>
 </html>

@@ -98,7 +98,7 @@ module.exports.register_post = (req,res) => {
     const user = new User(req.body);
     console.log(req.body);
 
-    user.save()
+    user.update()
     .then((result) => {
         res.render("qrcodegenerator",{user});
     })

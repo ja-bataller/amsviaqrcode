@@ -35,6 +35,10 @@ hbs.registerHelper('select', function(selected, options) {
         '$& selected="selected"');
 });
 
+hbs.registerHelper('checked', function(value, test) {
+    if (value == undefined) return '';
+    return value==test ? 'checked' : '';
+});
 
 // Middleware
 app.use(express.urlencoded({extended:true}));

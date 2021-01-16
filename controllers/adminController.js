@@ -61,6 +61,22 @@ module.exports.userview_get = (req,res) => {
     })
 }
 
+module.exports.update_post = (req,res) => {
+    const id = req.params.id;
+    console.log(id);
+
+    const user = new User(req.body);
+    console.log(user);
+
+   User.findByIdAndUpdate(id, {firstname: user.firstname, middlename: user.middlename, lastname: user.lastname, gender: user.gender, age: user.age, birthdate: user.birthdate, contact_number: user.contact_number, email_address: user.email_address, home_address: user.home_address, department: user.department, shift: user.shift})
+    .then((result) => {
+        res.redirect("/users");
+    })
+    .catch((err) =>{
+        console.log(err);
+    })
+}
+
 module.exports.users_delete = (req, res) => {
     const id = req.params.id;
     
