@@ -246,7 +246,13 @@
                }, 1500)
                
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+               iziToast.error({
+               title: "User has already been deleted.",
+               position: "topCenter",
+               timeout:1000,
+               });
+            });
          });
    </script>
 

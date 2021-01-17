@@ -6,7 +6,7 @@ require('dotenv').config();
 // handle errors
 const handleErrors = (err) => {
     console.log(err.message, err.code);
-    let errors = { username: '', password: '' };
+    let errors = { username: '', password: ''};
   
     // incorrect username
     if (err.message === "Incorrect username") {
@@ -56,6 +56,19 @@ module.exports.logout_get = (req, res) => {
     res.redirect("/");
 }
 
+module.exports.qrcode_get = async (req,res) => {
+  const id = req.params.id;
+  console.log(id)
+
+   User.findById(id)
+   .then(result => {
+       res.render("qrcodegenerator", {user:result})
+   })
+   .catch(err => {
+       console.log(err);
+   })
+}
+
 // Logging in Administrator Account
 module.exports.loginadmin_post = async (req,res) => {
     const {username, password} = req.body;
@@ -95,25 +108,21 @@ module.exports.loginuser_post = async (req,res) => {
   }
 }
 
-module.exports.register_post = (req,res) => {
-    const user = new User(req.body);
-    console.log(req.body);
+module.exports.register_post = async (req,res) => {
+  const newUser = req.body;
+  console.log(newUser);
 
-    user.save()
-    .then((result) => {
-        res.render("qrcodegenerator",{user});
-    })
-    .catch((err) =>{
-        console.log(err);
-    })
+  const newUserID = newUser.idnumber;
+  console.log(newUserID);
+
+  const findID = await User.findOne({idnumber: newUserID})
+
+    if(findID){
+      res.status(400).json({errors: "The ID number is already taken"});
+    } 
+    else{
+      const user = new User(req.body);
+      user.save();
+      res.status(200).json({user});
+    }
 }
-
-// module.exports.qrcodegenerator_post = (req,res) => {
-//     User.find()
-//     .then((result) => {
-//         res.render("qrcodegenerator", {users: result})
-//     })
-//     .catch((err) => {
-//         console.log(err);
-//     })
-// }

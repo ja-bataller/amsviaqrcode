@@ -10,13 +10,12 @@ router.get("*", checkAccount);
 // Open pages
 router.get("/", authController.login_get);
 router.get("/register", requireAuth, authController.register_get);
-// router.get("/qrcode", requireAuth, authController.qrcodegenerator_get);
 router.get("/logout", requireAuth, authController.logout_get);
+router.get("/qrcode/:id", requireAuth, authController.qrcode_get);
 
 // get data
 router.post("/login-admin", authController.loginadmin_post);
 router.post("/login-user", authController.loginuser_post);
-router.post("/register", authController.register_post);
-// router.post("/qrcode", authController.qrcodegenerator_post);
+router.post("/register-qrcode", authController.register_post);
 
 module.exports = router;

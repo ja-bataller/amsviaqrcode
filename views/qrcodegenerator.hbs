@@ -5,9 +5,54 @@
       {{> _header}}
    </head>
    <body id="page-top">
-
-       {{!-- partials sidebar --}}
-        {{> _sidebar}}
+       <!-- Page Wrapper -->
+         <div id="wrapper">
+         <!-- Sidebar -->
+         <ul class="navbar-nav sidebarCustom sidebar sidebar-dark accordion" id="accordionSidebar">
+         <!-- Sidebar - Brand -->
+         <a class="sidebar-brand d-flex align-items-center justify-content-center disableClick" href="/admin">
+            <div class="sidebar-brand-text mx-3"> COMPANY NAME</div>
+         </a>
+         <!-- Divider -->
+         <hr class="sidebar-divider my-0">
+         <!-- Nav Item - Dashboard -->
+         <li class="nav-item">
+            <a class="nav-link disableClick" href="/admin">
+            <i class="fas fa-fw fa-home"></i>
+            <span>Dashboard</span></a>
+         </li>
+         <!-- Divider -->
+         <hr class="sidebar-divider">
+         <!-- Nav Item - Logs -->
+         <li class="nav-item">   
+            <a class="nav-link disableClick" href="/logs">
+            <i class="fas fa-fw fa-clipboard"></i>
+            <span>Logs</span></a>
+         </li>
+         <!-- Nav Item - User -->
+         <li class="nav-item">   
+            <a class="nav-link disableClick" href="/users">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Users</span></a>
+         </li>
+         <!-- Nav Item - QR Code Test -->
+         <li class="nav-item">   
+            <a class="nav-link disableClick" href="/qrcode-tester">
+            <i class="fas fa-fw fa-qrcode"></i>
+            <span>QR Code Tester</span></a>
+         </li>
+         <!-- Nav Item - QR Code Test -->
+         <li class="nav-item">   
+            <a class="nav-link disableClick" href="/about">
+            <i class="fas fa-fw fa-info-circle"></i>
+            <span>About</span></a>
+         </li>
+         <!-- Sidebar Toggler (Sidebar) -->
+         <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+         </div>
+         </ul>
+<!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -15,8 +60,85 @@
         <!-- Main Content -->
         <div id="content">
 
-        {{!-- partials topbar --}}
-         {{> _topbar}}
+        
+         <!-- Topbar -->
+         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+            <!-- Sidebar Toggle (Topbar) -->
+            <button id="sidebarToggleTop" class="btn d-md-none rounded-circle mr-3" style="background-color: #fc707e;">
+            <i class="fa fa-bars"></i>
+            </button>
+            <!-- Topbar Navbar -->
+            <ul class="navbar-nav ml-auto">
+               <!--                         
+               <li class="nav-item dropdown no-arrow mx-1">
+                     <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-bell fa-fw"></i>
+                        
+                        <span class="badge badge-danger badge-counter">3+</span>
+                     </a>
+                     
+                     <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                        aria-labelledby="alertsDropdown">
+                        <h6 class="dropdown-header">
+                           Alerts Center
+                        </h6>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                           <div class="mr-3">
+                                 <div class="icon-circle bg-primary">
+                                    <i class="fas fa-file-alt text-white"></i>
+                                 </div>
+                           </div>
+                           <div>
+                                 <div class="small text-gray-500">December 12, 2019</div>
+                                 <span class="font-weight-bold">A new monthly report is ready to download!</span>
+                           </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                           <div class="mr-3">
+                                 <div class="icon-circle bg-success">
+                                    <i class="fas fa-donate text-white"></i>
+                                 </div>
+                           </div>
+                           <div>
+                                 <div class="small text-gray-500">December 7, 2019</div>
+                                 $290.29 has been deposited into your account!
+                           </div>
+                        </a>
+                        <a class="dropdown-item d-flex align-items-center" href="#">
+                           <div class="mr-3">
+                                 <div class="icon-circle bg-warning">
+                                    <i class="fas fa-exclamation-triangle text-white"></i>
+                                 </div>
+                           </div>
+                           <div>
+                                 <div class="small text-gray-500">December 2, 2019</div>
+                                 Spending Alert: We've noticed unusually high spending for your account.
+                           </div>
+                        </a>
+                        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                     </div>
+               </li> -->
+               <!-- Nav Item - User Information -->
+               <li class="nav-item dropdown no-arrow">
+               <a class="nav-link dropdown-toggle disableClick" href="#" id="userDropdown" role="button"
+                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+               <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="accountName">{{account.name}}</span>
+               <div id="accountImage"></div>
+               
+               </a>
+               <!-- Dropdown - User Information -->
+               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                     aria-labelledby="userDropdown">
+                     <a class="dropdown-item disableClick" href="#" data-toggle="modal" data-target="#logoutModal ">
+                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                     Logout
+                     </a>
+               </div>
+               </li>
+            </ul>
+         </nav>
+         <!-- End of Topbar -->
 
                <!-- Begin Page Content -->
             <div class="container qrcode">
@@ -65,27 +187,36 @@
       
 
       <script>
-      let idnumber = document.querySelector("#idnumberofuser").textContent;
-      let typeNumber = 4;
-      let errorCorrectionLevel = 'L';
-      let qr = qrcode(typeNumber, errorCorrectionLevel);
-      qr.addData(idnumber);
-      qr.make();
-      document.querySelector("#qrcodegenerated").innerHTML = qr.createImgTag(8,4);
+         let idnumber = document.querySelector("#idnumberofuser").textContent;
+         let typeNumber = 4;
+         let errorCorrectionLevel = 'L';
+         let qr = qrcode(typeNumber, errorCorrectionLevel);
 
+            qr.addData(idnumber);
+            qr.make();
+            document.querySelector("#qrcodegenerated").innerHTML = qr.createImgTag(8,4);
 
-      addEventListener('click', function(e) {
          const downloadBtn = document.querySelector('#downloadBtn');
-         const link = document.querySelector('#qrcodegenerated img').src;
-         const user = document.querySelector("#nameofuser");
-         downloadBtn.href = link;
-         downloadBtn.download = user.dataset.filename;
-         console.log(link)
+         
+         iziToast.success({
+                     title: "User has been saved successfully",
+                     message: "Download your QR code image",
+                     position: "topCenter",
+                     timeout: 5000,  
+                     });
 
-         setTimeout(() => {
-            window.location = "/users";
-         },1000)
-      })
+         downloadBtn.addEventListener('click', function(e) {
+            const link = document.querySelector('#qrcodegenerated img').src;
+            const user = document.querySelector("#nameofuser");
+
+               downloadBtn.href = link;
+               downloadBtn.download = user.dataset.filename;
+               console.log(link)
+
+               setTimeout(() => {
+                  window.location = "/users";
+               },1000)
+         })
       </script>
       
    </body>
