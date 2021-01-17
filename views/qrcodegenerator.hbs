@@ -29,12 +29,15 @@
                               <div id="qrcodegenerated" class="QRcodeImage mb-2">
 
                               </div>
-                              <div class="form-group">
-                                 <a class="btn" download href="#" role="button" id="downloadBtn"> <i class="fas fa-qrcode"></i> Download QR Code</a> 
+                              <div class="form-group centerStyle mb-3">
+                                 <a class="btn btn-dark" download href="#" role="button" id="downloadBtn"> <i class="fas fa-qrcode"></i> Download QR Code</a> 
                               </div>
-                              <span id="nameofuser" data-filename="{{user.firstname}}-{{user.lastname}}">{{user.firstname}} {{user.lastname}}</span>
+                              <center>
+                              <span  id="nameofuser" data-filename="{{user.firstname}}-{{user.lastname}}">{{user.firstname}} {{user.lastname}}</span>
                               <br>
-                              <span id="idnumberofuser">{{user.idnumber}}</span>
+                              <span  id="idnumberofuser">{{user.idnumber}}</span>
+                              </center>
+                              
                            </div>
                         </div>
                      </div>

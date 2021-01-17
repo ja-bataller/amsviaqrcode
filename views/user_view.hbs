@@ -193,6 +193,7 @@
       const updateBtn = document.querySelector(".btn-update");
       const updateForm = document.querySelectorAll(".update-form");
       
+      const deleteBtn = document.querySelector("#deleteBtn");
       const deleteUserDB = document.querySelector("#deleteUserDB");
 
       updateBtn.style.display = "none";
@@ -201,9 +202,25 @@
       customSwitch.addEventListener("change", (e) => {
          console.log(updateForm);
          const event = e.target.checked;
-         
-         
-      });
+         if (event == true) {
+            
+            updateBtn.style.display = "block";
+            deleteBtn.style.display = "none";
+
+            for (let i=0; i < updateForm.length; i++) {
+               updateForm[i].removeAttribute("disabled");
+            }
+         }
+         else{
+
+            updateBtn.style.display = "none";
+            deleteBtn.style.display = "block";
+
+            for (let i=0; i < updateForm.length; i++) {
+               updateForm[i].setAttribute("disabled", true);
+            }
+         }
+      }); 
 
       //Delete Button in Modal
       deleteUserDB.addEventListener("click", function() {

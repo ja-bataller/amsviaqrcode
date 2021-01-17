@@ -16,9 +16,12 @@ const Account = require("./models/accounts");
 
 require('dotenv').config();
 const DB_URI = process.env.MONGO_ATLAST_URI;
+
+const PORT = process.env.PORT  || 3000;
+
 // MongoDB Connection
 mongoose.connect(DB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    .then((result) => app.listen(3000), console.log("connected to db"))
+    .then((result) => app.listen(PORT), console.log("connected to db"))
     .catch((err) => console.log(err))
 
 // Set static pages
