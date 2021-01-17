@@ -1,9 +1,14 @@
-const {Router} = require ("express");
+const {
+    Router
+} = require("express");
 // authController.js 
 const authController = require("../controllers/authController");
 const router = Router();
 
-const {requireAuth, checkAccount} = require ("../middleware/authMiddleware")
+const {
+    requireAuth,
+    checkAccount
+} = require("../middleware/authMiddleware")
 
 router.get("*", checkAccount);
 

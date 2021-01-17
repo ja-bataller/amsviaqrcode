@@ -1,165 +1,162 @@
 <script
-  src="https://code.jquery.com/jquery-3.5.1.js"
-  integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-  crossorigin="anonymous"></script>
-
+   src="https://code.jquery.com/jquery-3.5.1.js"
+   integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+   crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous"></script>
-
-// Log in Validation
+{{!-- Log in Validation --}}
 <script>
-      const form = document.querySelector('form');
-
-      form.addEventListener('submit', async (e) => {
-         e.preventDefault();
-
-         // get values
-         const username = form.username.value;
-         const password = form.password.value;
-         
-         try {
-            const res = await fetch('/login-admin', { 
-            method: 'POST', 
-            body: JSON.stringify({ username, password }),
-            headers: {'Content-Type': 'application/json'}
-            });
-            const data = await res.json();
-            console.log(data);
-            
-            // if the login inputs is incorrect this will trigger
-            if (data.errors) {
-               // if the login username input is incorrect
-               if (data.errors.username) {
-               iziToast.error({
-                title: data.errors.username,
-                message: "Unauthorized Access",
-                position: "topCenter",
-                timeout: 3000,
-                
-               });
-               document.querySelector("#username").value = "";
-               document.querySelector("#password").value = "";
-               }
-               // if the login password input is incorrect
-               if (data.errors.password){
-               iziToast.error({
-               title: data.errors.password,
-               message: "Unauthorized Access",
-               position: "topCenter",
-               timeout: 3000,
-               });
-               document.querySelector("#username").value = "";
-               document.querySelector("#password").value = "";
-               }
-            }
-
-            // if login inputs is correct, the Admin page will open.
-            if (data.account) {
-
-               let = baseURl = 
-               location.assign('/admin');
-               
-            }
-         }
-         catch (err) {
-            console.log(err);
-         }
-      });
-      </script>
-
-// QR Code Scanner
-<script type="module">
-    import QrScanner from "../js/qr-scanner.min.js";
-    QrScanner.WORKER_PATH = "../js/qr-scanner-worker.min.js";
-    
-    const video = document.getElementById('qr-video');
-    const camHasCamera = document.getElementById('cam-has-camera');
-    const camQrResult = document.getElementById('cam-qr-result');
-
-   async function setResult (label, result) {
-       
-    // get value
-    const idnumber = result;
-    console.log(result);
+   const form = document.querySelector('form');
    
-   try {
-      const res = await fetch('/login-user', { 
-      method: 'POST', 
-      body: JSON.stringify({idnumber}),
-      headers: {'Content-Type': 'application/json'}
-      });
-      const data = await res.json();
-      console.log(data);
+   form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+   
+      // get values
+      const username = form.username.value;
+      const password = form.password.value;
       
-      if (data.errors) {
+      try {
+         const res = await fetch('/login-admin', { 
+         method: 'POST', 
+         body: JSON.stringify({ username, password }),
+         headers: {'Content-Type': 'application/json'}
+         });
+         const data = await res.json();
+         console.log(data);
+         
+         // if the login inputs is incorrect this will trigger
          if (data.errors) {
-         iziToast.error({
-            title: data.errors,
-            message: "Unauthorzied access",
+            // if the login username input is incorrect
+            if (data.errors.username) {
+            iziToast.error({
+             title: data.errors.username,
+             message: "Unauthorized Access",
+             position: "topCenter",
+             timeout: 3000,
+             
+            });
+            document.querySelector("#username").value = "";
+            document.querySelector("#password").value = "";
+            }
+            // if the login password input is incorrect
+            if (data.errors.password){
+            iziToast.error({
+            title: data.errors.password,
+            message: "Unauthorized Access",
             position: "topCenter",
             timeout: 3000,
-            
-         });
-         console.log("Stop Web Cam");
-         scanner.stop();
-
-        setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = 
-                `<div class="loader">
-                <div class="inner one"></div>
-                <div class="inner two"></div>
-                <div class="inner three"></div>
-                </div>`;
-         }, 500);
-        
-        setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = "";  
-            console.log("Start Web Cam Again"); 
-            scanner.start();
-         }, 3000);
-         }
-      }
-         if (data.user) {
-            iziToast.success({
-            title: data.user.fullname,
-            message: new Date().toString(),
-            position: "topCenter",
-            timeout:2000,
             });
-        label.style.color = 'white';
-        clearTimeout(label.highlightTimeout);
-        label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
-
-        console.log("Stop Web Cam");
-        scanner.stop();
-
-        setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = 
-                `<div class="loader">
-                <div class="inner one"></div>
-                <div class="inner two"></div>
-                <div class="inner three"></div>
-                </div>`;
-         }, 500);
-        
-        setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = "";  
-            console.log("Start Web Cam Again"); 
-            scanner.start();
-         }, 3000);
+            document.querySelector("#username").value = "";
+            document.querySelector("#password").value = "";
+            }
+         }
+   
+         // if login inputs is correct, the Admin page will open.
+         if (data.account) {
+   
+            let = baseURl = 
+            location.assign('/admin');
             
          }
       }
       catch (err) {
          console.log(err);
-      } 
-    }
-
-    // ####### Web Cam Scanning #######
-    QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
-    console.log("Open Camera");
-    
-    const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
-    console.log("Scanning");
-    });
-    scanner.start();
+      }
+   });
+</script>
+// QR Code Scanner
+<script type="module">
+   import QrScanner from "../js/qr-scanner.min.js";
+   QrScanner.WORKER_PATH = "../js/qr-scanner-worker.min.js";
+   
+   const video = document.getElementById('qr-video');
+   const camHasCamera = document.getElementById('cam-has-camera');
+   const camQrResult = document.getElementById('cam-qr-result');
+   
+   async function setResult (label, result) {
+      
+   // get value
+   const idnumber = result;
+   console.log(result);
+   
+   try {
+     const res = await fetch('/login-user', { 
+     method: 'POST', 
+     body: JSON.stringify({idnumber}),
+     headers: {'Content-Type': 'application/json'}
+     });
+     const data = await res.json();
+     console.log(data);
+     
+     if (data.errors) {
+        if (data.errors) {
+        iziToast.error({
+           title: data.errors,
+           message: "Unauthorized access",
+           position: "topCenter",
+           timeout: 3000,
+           
+        });
+        console.log("Stop Web Cam");
+        scanner.stop();
+   
+       setTimeout(function(){ 
+           document.querySelector("#videoSpinner").innerHTML = 
+               `<div class="loader">
+               <div class="inner one"></div>
+               <div class="inner two"></div>
+               <div class="inner three"></div>
+               </div>`;
+        }, 500);
+       
+       setTimeout(function(){ 
+           document.querySelector("#videoSpinner").innerHTML = "";  
+           console.log("Start Web Cam Again"); 
+           scanner.start();
+        }, 3000);
+        }
+     }
+        if (data.user) {
+           iziToast.success({
+           title: data.user.fullname,
+           message: new Date().toString(),
+           position: "topCenter",
+           timeout:2000,
+           });
+       label.style.color = 'white';
+       clearTimeout(label.highlightTimeout);
+       label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+   
+       console.log("Stop Web Cam");
+       scanner.stop();
+   
+       setTimeout(function(){ 
+           document.querySelector("#videoSpinner").innerHTML = 
+               `<div class="loader">
+               <div class="inner one"></div>
+               <div class="inner two"></div>
+               <div class="inner three"></div>
+               </div>`;
+        }, 500);
+       
+       setTimeout(function(){ 
+           document.querySelector("#videoSpinner").innerHTML = "";  
+           console.log("Start Web Cam Again"); 
+           scanner.start();
+        }, 3000);
+           
+        }
+     }
+     catch (err) {
+        console.log(err);
+     } 
+   }
+   
+   // ####### Web Cam Scanning #######
+   QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
+   console.log("Open Camera");
+   
+   const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
+   console.log("Scanning");
+   });
+   scanner.start();
 </script>

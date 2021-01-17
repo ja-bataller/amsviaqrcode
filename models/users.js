@@ -5,7 +5,7 @@ const userSchema = new Schema({
     idnumber: {
         type: Number,
         required: true,
-        unique:true,
+        unique: true,
     },
     firstname: {
         type: String,
@@ -50,10 +50,11 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-},  {timestamps: true});
+}, {
+    timestamps: true
+});
 
 
 const User = mongoose.model("User", userSchema);
 
 module.exports = User;
-

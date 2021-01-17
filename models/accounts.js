@@ -17,11 +17,13 @@ const accountSchema = new Schema({
         type: String,
         required: true
     },
-}, {timestamps: true});
+}, {
+    timestamps: true
+});
 
 
 // bcrypt password before saving to MongoDB
-accountSchema.pre("save", async function (next){
+accountSchema.pre("save", async function(next) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt)
     next();
@@ -29,13 +31,15 @@ accountSchema.pre("save", async function (next){
 
 // Login user
 accountSchema.statics.login = async function(username, password) {
-    const account = await this.findOne({ username });
+    const account = await this.findOne({
+        username
+    });
     if (account) {
         const auth = await bcrypt.compare(password, account.password)
         if (auth) {
             return account;
         }
-        throw Error ("Incorrect password");
+        throw Error("Incorrect password");
     }
     throw Error("Incorrect username")
 }
@@ -43,4 +47,3 @@ accountSchema.statics.login = async function(username, password) {
 const Account = mongoose.model("Account", accountSchema);
 
 module.exports = Account;
-

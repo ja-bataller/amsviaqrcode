@@ -1,24 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
    <head>
-    {{!-- partials header --}}
+      {{!-- partials header --}}
       {{> _header}}
    </head>
    <body id="page-top">
-
-       {{!-- partials sidebar --}}
-        {{> _sidebar}}
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-        <!-- Main Content -->
-        <div id="content">
-
-        {{!-- partials topbar --}}
-         {{> _topbar}}
-
-               <!-- Begin Page Content -->
+      {{!-- partials sidebar --}}
+      {{> _sidebar}}
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+         <!-- Main Content -->
+         <div id="content">
+            {{!-- partials topbar --}}
+            {{> _topbar}}
+            <!-- Begin Page Content -->
             <div class="container-fluid">
                <form>
                   <div class="row justify-content-center">
@@ -50,11 +45,11 @@
                                              <label class="pb-1">Gender</label><br>
                                              <label class="radio-inline pl-4">
                                              <input type="radio" name="gender" value="male" required
-                                             > Male
+                                                > Male
                                              </label>
                                              <label class="radio-inline pl-4">
                                              <input type="radio" name="gender" value="female" required
-                                             > Female
+                                                > Female
                                              </label>
                                           </div>
                                        </div>
@@ -124,7 +119,6 @@
                                        </select>
                                     </div>
                                  </div>
-                                 
                                  <div class="col-12">
                                     <div class="form-group mt-3">
                                        <input  class="btn btn-success" type="submit" value="Add New User">
@@ -138,76 +132,68 @@
                </div>
             </div>
             <!-- End of Main Content -->
-
          </div>
          <!-- End of Content Wrapper -->
-
       </div>
       <!-- End of Page Wrapper -->
-
       <!-- Scroll to Top Button-->
       <a class="scroll-to-top rounded" href="#page-top">
       <i class="fas fa-angle-up"></i>
       </a>
-
       {{!-- partials logout modal --}}
       {{> _logoutmodal}}
-
-    {{!-- partials footer --}}
+      {{!-- partials footer --}}
       {{> _footer}}
-
       <script>
          // MAXIMUM DATE INPUT IS TODAY
          birthdate.max = new Date().toISOString().split("T")[0]
       </script>   
-
       <script>
-            const form = document.querySelector('form');
-
-            form.addEventListener('submit', async (e) => {
-               e.preventDefault();
-
-               // get values
-               const firstname = form.firstname.value;
-               const middlename = form.middlename.value;
-               const lastname = form.lastname.value;
-               const gender = form.gender.value;
-               const age = form.age.value;
-               const birthdate = form.birthdate.value;
-               const contact_number = form.contact_number.value;
-               const email_address = form.email_address.value;
-               const home_address = form.home_address.value;
-               const idnumber = form.idnumber.value;
-               const department = form.department.value;
-               const shift = form.shift.value;
+         const form = document.querySelector('form');
+         
+         form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+         
+            // get values
+            const firstname = form.firstname.value;
+            const middlename = form.middlename.value;
+            const lastname = form.lastname.value;
+            const gender = form.gender.value;
+            const age = form.age.value;
+            const birthdate = form.birthdate.value;
+            const contact_number = form.contact_number.value;
+            const email_address = form.email_address.value;
+            const home_address = form.home_address.value;
+            const idnumber = form.idnumber.value;
+            const department = form.department.value;
+            const shift = form.shift.value;
+            
+            try {
+               const res = await fetch('/register-qrcode', { 
+               method: 'POST', 
+               body: JSON.stringify({ firstname, middlename, lastname, gender, age, birthdate, contact_number, email_address, home_address, idnumber, department, shift }),
+               headers: {'Content-Type': 'application/json'}
+               });
+               const data = await res.json();
+               console.log(data);
                
-               try {
-                  const res = await fetch('/register-qrcode', { 
-                  method: 'POST', 
-                  body: JSON.stringify({ firstname, middlename, lastname, gender, age, birthdate, contact_number, email_address, home_address, idnumber, department, shift }),
-                  headers: {'Content-Type': 'application/json'}
+               // if the login inputs is incorrect this will trigger
+               if (data.errors) {
+                  iziToast.error({
+                  title: data.errors,
+                  position: "topCenter",
+                  timeout: 3000,  
                   });
-                  const data = await res.json();
-                  console.log(data);
-                  
-                  // if the login inputs is incorrect this will trigger
-                  if (data.errors) {
-                     iziToast.error({
-                     title: data.errors,
-                     position: "topCenter",
-                     timeout: 3000,  
-                     });
-                  }
-                  else{
-                     let = baseURl = 
-                     location.assign(`/qrcode/${data.user._id}`);
-                  }
-                  }
-               catch (err) {
-                  console.log(err);
                }
-            });
+               else{
+                  let = baseURl = 
+                  location.assign(`/qrcode/${data.user._id}`);
+               }
+               }
+            catch (err) {
+               console.log(err);
+            }
+         });
       </script>
-      
    </body>
 </html>
