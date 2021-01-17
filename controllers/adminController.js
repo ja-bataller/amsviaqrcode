@@ -34,12 +34,19 @@ module.exports.admin_get = (req,res) => {
     // })
 }
 
-module.exports.logs_get = (req,res) => {res.render("logs");}
+module.exports.logs_get = (req,res) => {
+    res.render("logs");
+}
 
 module.exports.users_get = (req,res) => {
 
     User.find()
     .then((result) => {
+
+        result.map(user => {
+            user.middlename = user.middlename != '' ? user.middlename : 'N/A';
+        });    
+
         res.render("users", {users: result})
     })
     .catch((err) => {
@@ -79,7 +86,7 @@ module.exports.update_post = (req,res) => {
 
 module.exports.users_delete = (req, res) => {
     const id = req.params.id;
-    
+    console.log(id);
     User.findByIdAndDelete(id)
     .then(result => {
         res.json({redirect: "/users" , message: "User has been deleted successfully"});

@@ -1,3 +1,7 @@
+a:hover{
+  text-decoration: none;
+}
+
 .sidebarCustom{
   background-color: #222831 !important;
 }
@@ -40,4 +44,10 @@
 
 .btn-update{
   display: none;
+}
+
+#deleteBtn{
+  float: right;
+  display: block;
+  
 }

@@ -25,25 +25,6 @@
                   <a class="btn btn-success mb-3" href="/register" role="button"> <i class="fas fa-fw fa-user-plus"></i> Add New User</a>
                   <!-- DataTales Example -->
                   <div class="card shadow mb-4">
-                  <!-- Modal -->
-                  <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel aria-hidden="true" data-backdrop="static" data-keyboard="false""
-                     aria-hidden="true">
-                     <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                           <div class="modal-header">
-                              <h5 class="modal-title" id="exampleModalLabel">Delete User?</h5>
-                              <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">×</span>
-                              </button> -->
-                           </div>
-                           <div class="modal-body">Are you sure you want to delete this user?</div>
-                           <div class="modal-footer">
-                              <button class="btn btn-dark" type="button" data-dismiss="modal">No</button>
-                              <a class="btn btn-danger" id="deleteUserDB">Yes</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
                      <div class="card-body">
                         <div class="table-responsive">
                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -51,46 +32,32 @@
                                  <tr>
                                     <th>I.D #</th>
                                     <th>First Name</th>
+                                    <th>Middle Name</th>
                                     <th>Last Name</th>
-                                    <th>Department</th>
                                     <th>Contact No.</th>
                                     <th>Email Address</th>
-                                    <th class="centerStyle">Actions</th>
-                                    
                                  </tr>
                               </thead>
                               <tfoot>
                                  <tr>
                                     <th>I.D #</th>
                                     <th>First Name</th>
+                                    <th>Middle Name</th>
                                     <th>Last Name</th>
-                                    <th>Department</th>
                                     <th>Contact No.</th>
                                     <th>Email Address</th>
-                                    <th class="centerStyle" width="5%">Actions</th>
-                                    
                                  </tr>
                               </tfoot>
                               <tbody>
                                  {{#if users}}
                                     {{#each users}}
                                     <tr>
-                                       <td>{{idnumber}}</td>
+                                       <td><a href="/users/{{_id}}"><strong><i class="fa fa-user"></i> {{idnumber}}</strong></a></td>
                                        <td>{{firstname}}</td>
+                                       <td>{{middlename}}</td>
                                        <td>{{lastname}}</td>
-                                       <td>{{department}}</td>
                                        <td>{{contact_number}}</td>
                                        <td>{{email_address}}</td>
-                                      <td>
-                                         <div class="btn-group" >
-                                             <a id="viewUser" href="/users/{{_id}}" class="btn btn-primary">
-                                               <i class="fa fa-user"></i>
-                                             </a>
-                                             <button id="deleteUser" data-idnum="{{_id}}" class="btn btn-danger" href="#" data-toggle="modal" data-target="#deleteModal">
-                                               <i class="fa fa-trash"></i>
-                                             </button>
-                                         </div>
-                                      </td>
                                     </tr>
                                     {{/each}}
                                  {{/if}}
@@ -126,37 +93,5 @@
     {{!-- partials footer --}}
       {{> _footer}}
       
-      <script>
-         const editUser = document.querySelector("#editUser");
-         const deleteUser = document.querySelector("#deleteUser");
-         const deleteUserDB = document.querySelector("#deleteUserDB")
-
-         deleteUserDB.addEventListener("click", function() {
-          const idNumDB = deleteUser.getAttribute('data-idnum');
-          console.log(idNumDB);
-
-          const endpoint = `/users/${idNumDB}`;
-            fetch(endpoint, {
-            method: 'DELETE',
-            })
-            .then(response => response.json())
-            .then(data => {
-               $("#deleteModal").modal("hide");
-
-               iziToast.success({
-               title: data.message,
-               position: "topCenter",
-               timeout:2000,
-               });
-
-               setTimeout(() => {
-                  window.location.href = data.redirect;
-               }, 2100)
-               
-            })
-            .catch(err => console.log(err));
-         });
-
-      </script>
    </body>
 </html>

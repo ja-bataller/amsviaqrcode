@@ -1,6 +1,7 @@
 const User = require("../models/users");
 const Account = require("../models/accounts")
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
 
 // handle errors
 const handleErrors = (err) => {
@@ -98,7 +99,7 @@ module.exports.register_post = (req,res) => {
     const user = new User(req.body);
     console.log(req.body);
 
-    user.update()
+    user.save()
     .then((result) => {
         res.render("qrcodegenerator",{user});
     })

@@ -14,9 +14,10 @@ const path = require('path');
 const app = express();
 const Account = require("./models/accounts");
 
+require('dotenv').config();
+const DB_URI = process.env.MONGO_ATLAST_URI;
 // MongoDB Connection
-const dbURI = "mongodb+srv://amsuser:OXdWoRD50o7q4CJw@ams-qrcode.oltgh.mongodb.net/ams-qrcode?retryWrites=true&w=majority";
-mongoose.connect(dbURI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+mongoose.connect(DB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
     .then((result) => app.listen(3000), console.log("connected to db"))
     .catch((err) => console.log(err))
 
