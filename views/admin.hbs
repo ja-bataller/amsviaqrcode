@@ -4,7 +4,7 @@
       {{!-- partials header --}}
       {{> _header}}
    </head>
-   <body id="page-top">
+   <body id="page-top" onload="timeCount();">
       {{!-- partials sidebar --}}
       {{> _sidebar}}
       <!-- Content Wrapper -->
@@ -18,15 +18,14 @@
                <!-- Content Row -->
                <div class="row justify-content-center">
                   <!-- Border Bottom Utilities -->
-                  <div class="col-lg-12">
+                  <div class="col-lg-6">
                      <div class="card mb-4 py-3 border-bottom-dark">
                         <div class="card-body">
                            <h2>Employees</h2>
                            <i class="fas fa-users fa-3x"> {{employees}}</i>
                         </div>
                      </div>
-                  </div>
-                  <div class="col-lg-6">
+                     
                      <div class="card mb-4 py-3 border-bottom-dark">
                         <div class="card-body">
                            <h2>Day Shift</h2>
@@ -36,7 +35,7 @@
                      <div class="card mb-4 py-3 border-bottom-dark">
                         <div class="card-body">
                            <h2>Active</h2>
-                           <i class="fas fa-user-check fa-3x"></i>
+                           <i class="fas fa-user-check fa-3x"> {{active}}</i>
                         </div>
                      </div>
                      <div class="card mb-4 py-3 border-bottom-dark">
@@ -48,6 +47,12 @@
                   </div>
                   <!-- Border Bottom Utilities -->
                   <div class="col-lg-6">
+                     <div class="card bg-dark mb-4 py-3 border-bottom-dark">
+                        <div class="card-body">
+                           <h2 class="iconWhite">Date | Time</h2>
+                            <div> <i class="fas fa-clock fa-3x iconWhite"> <span id="timeAdmin" class="font"> </span></i></div>
+                        </div>
+                     </div>
                      <div class="card mb-4 py-3 border-bottom-dark">
                         <div class="card-body">
                            <h2>Night Shift</h2>
@@ -56,8 +61,8 @@
                      </div>
                      <div class="card mb-4 py-3 border-bottom-dark">
                         <div class="card-body">
-                           <h2>Absent</h2>
-                           <i class="fas fa-user-times fa-3x"> </i>
+                           <h2>Done</h2>
+                           <i class="fas fa-user-times fa-3x"> {{done}}</i>
                         </div>
                      </div>
                      <div class="card mb-4 py-3 border-bottom-dark">
@@ -84,5 +89,29 @@
       {{> _logoutmodal}}
       {{!-- partials footer --}}
       {{> _footer}}
+
+      <script>
+         
+         	function timeCount() {
+               var today = new Date();
+
+               var day = today.getDate();
+               var month = today.getMonth()+1;
+               var year = today.getFullYear();
+
+               var hour = today.getHours();
+               if(hour<10)hour = "0"+hour;
+
+               var minute = today.getMinutes();
+               if(minute<10)minute = "0"+minute;
+
+               var second = today.getSeconds();
+               if(second<10)second = "0"+second;
+
+               document.getElementById("timeAdmin").textContent = month+"/"+day+"/"+year+" | "+hour+":"+minute+":"+second;
+
+			setTimeout("timeCount()", 1000);
+		}
+      </script>
    </body>
 </html>

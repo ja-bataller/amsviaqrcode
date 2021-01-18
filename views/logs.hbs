@@ -26,8 +26,8 @@
                               <tr>
                                  <th>ID #</th>
                                  <th>Name</th>
-                                 <th>Department</th>
                                  <th>Status</th>
+                                 <th>Date</th>
                                  <th>Time-in</th>
                                  <th>Time-out</th>
                                  <th>Late</th>
@@ -39,8 +39,8 @@
                               <tr>
                                  <th>ID #</th>
                                  <th>Name</th>
-                                 <th>Department</th>
                                  <th>Status</th>
+                                 <th>Date</th>
                                  <th>Time-in</th>
                                  <th>Time-out</th>
                                  <th>Late</th>
@@ -49,6 +49,21 @@
                               </tr>
                            </tfoot>
                            <tbody>
+                              {{#if logs}}
+                              {{#each logs}}
+                              <tr>
+                                 <td><a href="/users/{{userID}}"><strong><i class="fa fa-user"></i> {{idnumber}}</strong></a></td>
+                                 <td>{{name}}</td>
+                                 <td>{{status}}</td>
+                                 <td>{{date}}</td>
+                                 <td>{{time_in}}</td>
+                                 <td></td>
+                                 <td></td>
+                                 <td></td>
+                                 <td></td>
+                              </tr>
+                              {{/each}}
+                              {{/if}}
                            </tbody>
                         </table>
                      </div>

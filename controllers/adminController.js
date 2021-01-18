@@ -7,6 +7,7 @@ const {
     db
 } = require('../models/users');
 const User = require('../models/users');
+const Log = require('../models/logs');
 
 // Open admin view and show Data from MongoDB
 module.exports.admin_get = (req, res) => {
@@ -25,11 +26,19 @@ module.exports.admin_get = (req, res) => {
             }, function(err, count) {
                 let night = count;
                 console.log("Night Shift: " + night);
-                res.render("admin", {
-                    employees,
-                    day,
-                    night
-                })
+                Log.countDocuments({
+                    status: "active"
+                }, function(err, count) {
+                    let active = count;
+                    console.log("Status active: " + active);
+                    Log.countDocuments({
+                        status: "done"
+                    }, function(err, count) {
+                        let done = count;
+                        console.log("Status done: " + done);
+                        res.render("admin", {employees,day,night,active,done})
+                    });
+                });
             });
         });
     });
@@ -45,7 +54,16 @@ module.exports.admin_get = (req, res) => {
 }
 
 module.exports.logs_get = (req, res) => {
-    res.render("logs");
+    Log.find()
+        .then((result) => {
+
+            res.render("logs", {
+                logs: result
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 }
 
 module.exports.users_get = (req, res) => {

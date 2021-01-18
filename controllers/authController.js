@@ -1,4 +1,5 @@
 const User = require("../models/users");
+const Log = require("../models/logs");
 const Account = require("../models/accounts")
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
@@ -113,26 +114,58 @@ module.exports.loginadmin_post = async (req, res) => {
 
 // Logging in User Account
 module.exports.loginuser_post = async (req, res) => {
-    const {
-        idnumber
-    } = req.body;
+    const {idnumber,time, date} = req.body;
     console.log(idnumber);
+    console.log(time);
+    console.log(date);
 
     try {
-        const user = await User.findOne({
-            idnumber
-        });
-        console.log(user);
+        const userCheck = await User.findOne({idnumber})
+        const logCheck = await Log.findOne({idnumber})
+        // id = userCheck._id;
+        
+        // If USER is NOT registered
+        if(userCheck == null)
+        {
+            return res.status(404).json({error: "This user is not registered"})
+        }
 
-        const user_logs = {
-            fullname: `${user.firstname} ${user.lastname}`,
-            message: 'success',
-            idnumber: user.idnumber
-        };
+        // If USER is registered and USER has logged out today's date then USER cannot enter again
+        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "done"){
+            return res.status(404).json({error: "You cannot enter twice a day please contact your admin"})
+        }
 
-        res.status(200).json({
-            user: user_logs
-        })
+        // If USER is registered and USER has logged in then update log status to done and time out
+        if (userCheck && logCheck && logCheck.date == date){
+            // const id = logCheck._id;
+            // const log =  await Log.findByIdAndUpdate(id, {status: "done", time_out: time}, {new: true});
+
+            const log = await Log.findOneAndUpdate({ userID: userCheck._id }, { status: "done", time_out: time }, {new: true});
+
+            console.log("User out")
+
+            const timeOutLog = {
+                userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                time_out: log.time_out,
+            }
+            return res.status(200).json({userOut: timeOutLog})
+        }
+
+        // If USER is registered and USER doesn't have logs then create a log
+        if (userCheck && logCheck == null){
+            const log = new Log({userID: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, status: "active", date: date, time_in: time});
+            log.save();
+
+            console.log("New User Recorded")
+
+            const timeInLog = {
+                userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                time_in: time,
+            }
+
+            return res.status(200).json({userFoundandRecord: timeInLog})
+        }
+
     } catch (err) {
         console.log(err);
         res.status(400).json({
@@ -148,9 +181,7 @@ module.exports.register_post = async (req, res) => {
     const newUserID = newUser.idnumber;
     console.log(newUserID);
 
-    const findID = await User.findOne({
-        idnumber: newUserID
-    })
+    const findID = await User.findOne({idnumber: newUserID})
 
     if (findID) {
         res.status(400).json({

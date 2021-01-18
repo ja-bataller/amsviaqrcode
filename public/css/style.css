@@ -55,3 +55,12 @@ a:hover{
 .disableClick{
   pointer-events: none;
 }
+
+.iconWhite{
+  color: white;
+}
+
+.font{
+  font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+  font-size:35.6px !important;
+}

@@ -2,41 +2,35 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const LogSchema = new Schema({
+    userID: {
+        type: String,
+    },
     idnumber: {
         type: String,
-        required: true,
     },
     name: {
         type: String,
-        required: true,
-    },
-    department: {
-        type: String,
-        required: true,
     },
     status: {
         type: String,
-        required: true,
+    },
+    date: {
+        type: String,
     },
     time_in: {
         type: String,
-        required: true,
     },
     time_out: {
         type: String,
-        required: true,
     },
     late: {
         type: String,
-        required: true,
     },
     early_out: {
         type: String,
-        required: true,
     },
     absent: {
         type: String,
-        required: true,
     },
 }, {
     timestamps: true
