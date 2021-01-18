@@ -67,6 +67,19 @@ module.exports.logs_get = (req, res) => {
         })
 }
 
+module.exports.records_get = (req, res) => {
+    Record.find()
+        .then((result) => {
+
+            res.render("records", {
+                records: result
+            })
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}
+
 module.exports.users_get = (req, res) => {
 
     User.find()

@@ -62,5 +62,41 @@ a:hover{
 
 .font{
   font-family: Verdana, Geneva, Tahoma, sans-serif !important;
-  font-size:35.6px !important;
+  font-size:15px !important;
 }
+
+.page-item.active .page-link
+  {
+    z-index: 3;
+    color: #fff;
+    background-color: #5a5c69 !important;
+    border-color: #5a5c69 !important;
+}
+
+.capitalize {
+  text-transform: capitalize !important;
+}
+
+.uppercase {
+  text-transform: uppercase !important;
+}
+
+.smallTopButtonstyle{
+  background-color: #5a5c69 !important;
+  color: white !important;
+}
+
+.topDropdown:active {      
+  background-color: #5a5c69 !important;
+}
+
+.infoLink{
+  color: #36b8cc9d ;
+}
+.infoLink:hover{
+  color: #36b9cc ;
+}
+
+/* a:hover{
+  text-decoration: none;
+} */

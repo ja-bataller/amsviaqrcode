@@ -153,7 +153,7 @@ module.exports.loginuser_post = async (req, res) => {
 
             console.log("Uses log is now logged out")
 
-            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, status: "done", date: log.date, time_in: log.time_in, time_out: log.time_out});
+            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "done", date: log.date, time_in: log.time_in, time_out: log.time_out});
             record.save();
             console.log("User done log has been put to Record")
 
@@ -169,7 +169,7 @@ module.exports.loginuser_post = async (req, res) => {
 
         // If USER is registered and USER doesn't have logs then create a log
         if (userCheck && logCheck == null){
-            const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, status: "active", date: date, time_in: time, time_out: ""});
+            const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: ""});
             log.save();
 
             console.log("New user has been added to logs and now active")

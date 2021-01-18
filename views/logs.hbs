@@ -16,7 +16,7 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
                <!-- Page Heading -->
-               <h2>User Logs</h2>
+               <h2> <i class="fas fa-clipboard-list"></i> Logs <a type="button" href="/records" class="btn btn-success" style="float: right;"> <i class="fas fa-file-alt"></i> Show records</a></h2>
                <!-- DataTales Example -->
                <div class="card shadow mb-4">
                   <div class="card-body">
@@ -50,9 +50,10 @@
                               {{#if logs}}
                               {{#each logs}}
                               <tr>
-                                 <td><a href="/users/{{user_id}}"><strong><i class="fa fa-user"></i> {{idnumber}}</strong></a></td>
-                                 <td>{{name}}</td>
-                                 <td>{{status}}</td>
+                                 <td>{{idnumber}}</td>
+                                 <td class="uppercase"><a class="infoLink" href="/users/{{user_id}}"><strong><i class="fa fa-user"></i> {{name}}</strong></a></td>
+                                 <td class="uppercase">{{shift}}</td>
+                                 <td class="uppercase">{{status}}</td>
                                  <td>{{time_in}}</td>
                                  <td>{{time_out}}</td>
                                   <td></td>
@@ -81,5 +82,14 @@
       {{> _logoutmodal}}
       {{!-- partials footer --}}
       {{> _footer}}
+
+      <script>
+         const userRecords = document.querySelector("#userRecords");
+
+         userRecords.addEventListener("click" (e) => {
+            let = baseURl = 
+            location.assign('/records');
+         })
+      </script>
    </body>
 </html>

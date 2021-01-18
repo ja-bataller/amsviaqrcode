@@ -36,15 +36,15 @@
                                  <div class="col-lg-6">
                                     <div class="form-group">
                                        <label for="exampleInputEmail1">First Name</label>
-                                       <input value="{{user.firstname}}" type="text" class="form-control update-form" name="firstname" id="firstname" pattern="[A-Za-z ]{0,}" title="Only Alphabets" aria-describedby="FirstName" autocomplete="off" maxlength="50" required disabled>
+                                       <input value="{{user.firstname}}" type="text" class="form-control update-form capitalize" name="firstname" id="firstname" pattern="[A-Za-z ]{0,}" title="Only Alphabets" aria-describedby="FirstName" autocomplete="off" maxlength="50" required disabled>
                                     </div>
                                     <div class="form-group">
                                        <label>Middle Name</label>
-                                       <input value="{{user.middlename}}" type="text"  class="form-control update-form" name="middlename" id="middlename"  pattern="[A-Za-z ]{0,}" title="Only Alphabets" maxlength="25" autocomplete="off" disabled>
+                                       <input value="{{user.middlename}}" type="text"  class="form-control update-form capitalize" name="middlename" id="middlename"  pattern="[A-Za-z ]{0,}" title="Only Alphabets" maxlength="25" autocomplete="off" disabled>
                                     </div>
                                     <div class="form-group">
                                        <label>Last Name</label>
-                                       <input value="{{user.lastname}}" type="text"  class="form-control update-form" name="lastname" id="lastname" pattern="[A-Za-z ]{0,}" title="Only Alphabets" maxlength="25" autocomplete="off" required disabled>
+                                       <input value="{{user.lastname}}" type="text"  class="form-control update-form capitalize" name="lastname" id="lastname" pattern="[A-Za-z ]{0,}" title="Only Alphabets" maxlength="25" autocomplete="off" required disabled>
                                     </div>
                                     <div class="row">
                                        <div class="col-lg-6">
@@ -85,7 +85,7 @@
                                     </div>
                                     <div class="form-group">
                                        <label>Home Address</label>
-                                       <textarea class="form-control update-form" name="home_address" id="homeaddress" rows="4" maxlength="150" autocomplete="off" required disabled
+                                       <textarea class="form-control update-form capitalize" name="home_address" id="homeaddress" rows="4" maxlength="150" autocomplete="off" required disabled
                                           oninvalid="this.setCustomValidity('Please Enter your Address here')"
                                           oninput="this.setCustomValidity('')">{{user.home_address}}</textarea>
                                     </div>
