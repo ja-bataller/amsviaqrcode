@@ -11,6 +11,9 @@ const LogSchema = new Schema({
     name: {
         type: String,
     },
+    shift: {
+        type: String,
+    },
     status: {
         type: String,
     },

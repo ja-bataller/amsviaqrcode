@@ -116,9 +116,9 @@ module.exports.loginadmin_post = async (req, res) => {
 // Logging in User Account
 module.exports.loginuser_post = async (req, res) => {
     const {idnumber,time, date} = req.body;
-    console.log(idnumber);
-    console.log(time);
-    console.log(date);
+    console.log(`Scanned user ID number: ${idnumber}`);
+    console.log(`Time today: ${time}`);
+    console.log(`Date today: ${date}`);
 
     try {
         const userCheck = await User.findOne({idnumber})
@@ -134,33 +134,31 @@ module.exports.loginuser_post = async (req, res) => {
 
         // If USER is registered and USER did not logged out last session then USER cannot enter again
         if (userCheck && logCheck && logCheck.date != date && logCheck.time_in != "" && logCheck.time_out == ""){
-            return res.status(404).json({error: "You did not logged out last session. Please contact your admin."})
+            return res.status(400).json({error: "You did not logged out last session. Please contact your admin."})
         }
 
         // If USER is registered and USER has logged out today's date then USER cannot enter again
-        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "done"){
-            return res.status(404).json({error: "You cannot enter twice a day. Please contact your admin"})
+        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "logged out" && logCheck.time_in != "" && logCheck.time_out != ""){
+            return res.status(400).json({error: "You cannot enter twice a day. Please contact your admin"})
         }
 
-        // If USER is registered and USER has logged in then update log status to done and time out
-        if (userCheck && logCheck && logCheck.date == date && logCheck.time_out == ""){
+        // If USER is registered and USER has logged in then update log status to logged out and time out
+        if (userCheck && logCheck && logCheck.date == date && logCheck.time_in != "" && logCheck.time_out == ""){
             const id = logCheck._id;
             console.log(id);
-            const log =  await Log.findByIdAndUpdate(id, {status: "done", time_out: time}, {new: true});
+
+            const log =  await Log.findByIdAndUpdate(id, {status: "logged out", time_out: time}, {new: true});
 
             // const log = await Log.findOneAndUpdate({user_id: userCheck._id }, { status: "done", time_out: time }, {new: true});
 
-            console.log("User out")
-            console.log(log);
+            console.log("Uses log is now logged out")
 
-            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, status: log.status, date: log.date, time_in: log.time_in, time_out: log.time_out});
+            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, status: "done", date: log.date, time_in: log.time_in, time_out: log.time_out});
             record.save();
-            
-            console.log("Has been put to Record")
+            console.log("User done log has been put to Record")
 
-            await Log.findByIdAndUpdate(id, {time_in: "", time_out: ""});
-            
-            console.log("Log has been Updated")
+            await Log.findByIdAndUpdate(id, {time_in: log.time_in, time_out: log.time_out});
+            console.log("User log time in and time out has been updated to blank")
 
             const timeOutLog = {
                 userName: `${userCheck.firstname} ${userCheck.lastname}`,
@@ -174,7 +172,7 @@ module.exports.loginuser_post = async (req, res) => {
             const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, status: "active", date: date, time_in: time, time_out: ""});
             log.save();
 
-            console.log("New User Recorded")
+            console.log("New user has been added to logs and now active")
 
             const timeInLog = {
                 userName: `${userCheck.firstname} ${userCheck.lastname}`,
@@ -185,11 +183,11 @@ module.exports.loginuser_post = async (req, res) => {
         }
 
         // If USER is registered and USER has logs and then create another log (different date)
-        if (userCheck && logCheck && logCheck.time_in == "" && logCheck.date != date){
+        if (userCheck && logCheck &&  logCheck.date != date && logCheck.time_in != "" && logCheck.time_out != ""){
             const id = logCheck._id;
             await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: ""});
 
-            console.log("New User Recorded")
+            console.log("Old User log has been updated and now active")
 
             const timeInLog = {
                 userName: `${userCheck.firstname} ${userCheck.lastname}`,
@@ -201,9 +199,7 @@ module.exports.loginuser_post = async (req, res) => {
 
     } catch (err) {
         console.log(err);
-        res.status(400).json({
-            errors: 'User not registered'
-        });
+        res.status(400).json({error: '400'});
     }
 }
 

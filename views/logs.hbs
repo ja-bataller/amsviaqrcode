@@ -16,7 +16,7 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
                <!-- Page Heading -->
-               <h2>Logs</h2>
+               <h2>User Logs</h2>
                <!-- DataTales Example -->
                <div class="card shadow mb-4">
                   <div class="card-body">
@@ -26,41 +26,37 @@
                               <tr>
                                  <th>ID #</th>
                                  <th>Name</th>
+                                 <th>Shift</th>
                                  <th>Status</th>
-                                 <th>Date</th>
                                  <th>Time-in</th>
                                  <th>Time-out</th>
                                  <th>Late</th>
-                                 <th>Early-out</th>
-                                 <th>Absent</th>
+                                 <th>Date</th>
                               </tr>
                            </thead>
                            <tfoot>
                               <tr>
                                  <th>ID #</th>
                                  <th>Name</th>
+                                 <th>Shift</th>
                                  <th>Status</th>
-                                 <th>Date</th>
                                  <th>Time-in</th>
                                  <th>Time-out</th>
                                  <th>Late</th>
-                                 <th>Early-out</th>
-                                 <th>Absent</th>
+                                 <th>Date</th>
                               </tr>
                            </tfoot>
                            <tbody>
                               {{#if logs}}
                               {{#each logs}}
                               <tr>
-                                 <td><a href="/users/{{userID}}"><strong><i class="fa fa-user"></i> {{idnumber}}</strong></a></td>
+                                 <td><a href="/users/{{user_id}}"><strong><i class="fa fa-user"></i> {{idnumber}}</strong></a></td>
                                  <td>{{name}}</td>
                                  <td>{{status}}</td>
-                                 <td>{{date}}</td>
                                  <td>{{time_in}}</td>
-                                 <td></td>
-                                 <td></td>
-                                 <td></td>
-                                 <td></td>
+                                 <td>{{time_out}}</td>
+                                  <td></td>
+                                 <td>{{date}}</td>
                               </tr>
                               {{/each}}
                               {{/if}}

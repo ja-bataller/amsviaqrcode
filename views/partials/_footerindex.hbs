@@ -121,7 +121,7 @@
 
       if (data.userFoundandRecord) {
 
-         let message = `${data.userFoundandRecord.userName} Time-in: ${data.userFoundandRecord.time_in}`;
+         let message = `${data.userFoundandRecord.userName} | Time-in: ${data.userFoundandRecord.time_in}`;
          alertMessage('success', message )
 
          console.log("Stop Web Cam");
@@ -145,7 +145,7 @@
 
       if (data.userOut) {
 
-         let message = `${data.userOut.userName} Time-out: ${data.userOut.time_out}`;
+         let message = `${data.userOut.userName} | Time-out: ${data.userOut.time_out}`;
          alertMessage('success', message )
          
          console.log("Stop Web Cam");

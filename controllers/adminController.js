@@ -8,6 +8,7 @@ const {
 } = require('../models/users');
 const User = require('../models/users');
 const Log = require('../models/logs');
+const Record = require('../models/records');
 
 // Open admin view and show Data from MongoDB
 module.exports.admin_get = (req, res) => {
@@ -32,7 +33,7 @@ module.exports.admin_get = (req, res) => {
                     let active = count;
                     console.log("Status active: " + active);
                     Log.countDocuments({
-                        status: "done"
+                        status: "logged out"
                     }, function(err, count) {
                         let done = count;
                         console.log("Status done: " + done);
