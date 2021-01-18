@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const LogSchema = new Schema({
+const RecordSchema = new Schema({
     user_id: {
         type: String,
     },
@@ -36,6 +36,6 @@ const LogSchema = new Schema({
     timestamps: true
 });
 
-const Log = mongoose.model("Log", LogSchema);
+const Record = mongoose.model("Record", RecordSchema);
 
-module.exports = Log;
+module.exports = Record;

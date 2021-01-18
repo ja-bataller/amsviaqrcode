@@ -76,12 +76,6 @@
    const camHasCamera = document.getElementById('cam-has-camera');
    const camQrResult = document.getElementById('cam-qr-result');
 
-   let time = time12h();
-   let date = getDate();
-   console.log(time);
-   console.log(date);
-
-
    async function setResult (label, result) {
       
    // get value
@@ -106,33 +100,6 @@
 
          alertMessage("error", data.error);
       
-         console.log("Stop Web Cam");
-         scanner.stop();
-      
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = 
-                  `<div class="loader">
-                  <div class="inner one"></div>
-                  <div class="inner two"></div>
-                  <div class="inner three"></div>
-                  </div>`;
-         }, 500);
-         
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = "";  
-            console.log("Start Web Cam Again"); 
-            scanner.start();
-         }, 3000);
-      }
-
-      if (data.userFound) {
-         iziToast.success({
-            title: data.userFound,
-            message: "Authorized access",
-            position: "topCenter",
-            timeout: 3000,
-            
-         });
          console.log("Stop Web Cam");
          scanner.stop();
       

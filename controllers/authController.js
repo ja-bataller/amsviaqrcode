@@ -1,5 +1,6 @@
 const User = require("../models/users");
 const Log = require("../models/logs");
+const Record = require("../models/records");
 const Account = require("../models/accounts")
 const jwt = require("jsonwebtoken");
 require('dotenv').config();
@@ -122,6 +123,7 @@ module.exports.loginuser_post = async (req, res) => {
     try {
         const userCheck = await User.findOne({idnumber})
         const logCheck = await Log.findOne({idnumber})
+        const recordCheck = await Record.findOne({idnumber})
         // id = userCheck._id;
         
         // If USER is NOT registered
@@ -130,19 +132,35 @@ module.exports.loginuser_post = async (req, res) => {
             return res.status(404).json({error: "This user is not registered"})
         }
 
+        // If USER is registered and USER did not logged out last session then USER cannot enter again
+        if (userCheck && logCheck && logCheck.date != date && logCheck.time_in != "" && logCheck.time_out == ""){
+            return res.status(404).json({error: "You did not logged out last session. Please contact your admin."})
+        }
+
         // If USER is registered and USER has logged out today's date then USER cannot enter again
         if (userCheck && logCheck && logCheck.date == date && logCheck.status == "done"){
-            return res.status(404).json({error: "You cannot enter twice a day please contact your admin"})
+            return res.status(404).json({error: "You cannot enter twice a day. Please contact your admin"})
         }
 
         // If USER is registered and USER has logged in then update log status to done and time out
-        if (userCheck && logCheck && logCheck.date == date){
-            // const id = logCheck._id;
-            // const log =  await Log.findByIdAndUpdate(id, {status: "done", time_out: time}, {new: true});
+        if (userCheck && logCheck && logCheck.date == date && logCheck.time_out == ""){
+            const id = logCheck._id;
+            console.log(id);
+            const log =  await Log.findByIdAndUpdate(id, {status: "done", time_out: time}, {new: true});
 
-            const log = await Log.findOneAndUpdate({ userID: userCheck._id }, { status: "done", time_out: time }, {new: true});
+            // const log = await Log.findOneAndUpdate({user_id: userCheck._id }, { status: "done", time_out: time }, {new: true});
 
             console.log("User out")
+            console.log(log);
+
+            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, status: log.status, date: log.date, time_in: log.time_in, time_out: log.time_out});
+            record.save();
+            
+            console.log("Has been put to Record")
+
+            await Log.findByIdAndUpdate(id, {time_in: "", time_out: ""});
+            
+            console.log("Log has been Updated")
 
             const timeOutLog = {
                 userName: `${userCheck.firstname} ${userCheck.lastname}`,
@@ -153,8 +171,23 @@ module.exports.loginuser_post = async (req, res) => {
 
         // If USER is registered and USER doesn't have logs then create a log
         if (userCheck && logCheck == null){
-            const log = new Log({userID: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, status: "active", date: date, time_in: time});
+            const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, status: "active", date: date, time_in: time, time_out: ""});
             log.save();
+
+            console.log("New User Recorded")
+
+            const timeInLog = {
+                userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                time_in: time,
+            }
+
+            return res.status(200).json({userFoundandRecord: timeInLog})
+        }
+
+        // If USER is registered and USER has logs and then create another log (different date)
+        if (userCheck && logCheck && logCheck.time_in == "" && logCheck.date != date){
+            const id = logCheck._id;
+            await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: ""});
 
             console.log("New User Recorded")
 
