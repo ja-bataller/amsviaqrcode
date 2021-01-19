@@ -67,6 +67,22 @@ module.exports.logs_get = (req, res) => {
         })
 }
 
+module.exports.userrecords_get = async (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+
+    const findUserRecord = await Record.find({user_id: id})
+    const findUserName = await Record.findOne({user_id: id})
+
+    if(findUserRecord && findUserName){
+        console.log(findUserRecord);
+            res.render("user_records", {user_records: findUserRecord, name: findUserName.name})
+    } else{
+        consolge.log(err);
+    }
+
+}
+
 module.exports.records_get = (req, res) => {
     Record.find()
         .then((result) => {
@@ -81,7 +97,6 @@ module.exports.records_get = (req, res) => {
 }
 
 module.exports.users_get = (req, res) => {
-
     User.find()
         .then((result) => {
 
@@ -105,9 +120,7 @@ module.exports.userview_get = (req, res) => {
 
     User.findById(id)
         .then(result => {
-            res.render("user_view", {
-                user: result
-            })
+            res.render("user_view", {user: result})
         })
         .catch(err => {
             console.log(err);

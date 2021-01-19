@@ -71,13 +71,13 @@ app.use(adminRoutes);
 // // Add an Admins account in MongoDB
 // app.get("/add-account", (req, res) => {
 //     const account = new Account({
-//         username: "antoni",
-//         password: "antoni",
-//         name: "Michael Antoni",
+//         username: "jdbt",
+//         password: "jdbt",
+//         name: "John Anthony Bataller",
 //     });
 //     account.save()
 //     .then((result) => {
-//         res.send(result);
+//         res.send({message: 'Account Created'});
 //     })
 //     .catch((err) => {
 //         console.log(err);

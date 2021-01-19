@@ -3,6 +3,7 @@ const Log = require("../models/logs");
 const Record = require("../models/records");
 const Account = require("../models/accounts")
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 require('dotenv').config();
 
 // handle errors
@@ -223,4 +224,45 @@ module.exports.register_post = async (req, res) => {
             user
         });
     }
+}
+
+module.exports.changePassword_put = async (req, res) => {
+    const {currentPassword, newPassword} = req.body;
+    const id = req.params.id;
+
+    console.log(id)
+    console.log(currentPassword);
+    console.log(newPassword);
+
+    const account = await Account.findOne({_id: id});
+
+    if (account) {
+        const auth = await bcrypt.compare(currentPassword, account.password)
+        if (auth) {
+
+            const salt = await bcrypt.genSalt();
+            encryptedPassword = await bcrypt.hash(newPassword, salt)
+
+            await Account.findByIdAndUpdate(id, {password: encryptedPassword});
+
+            console.log("Updated Account Password");
+            return res.status(200).json({success: "Your Password has been updated sucessfully. Please log in again."});
+
+        } else{
+             return res.status(404).json({error: "The current password you enter is incorrect"});
+        }
+    } else {
+        return res.status(404).json({error: "404"});
+    }
+    // if (findUsername) {
+    //     res.status(400).json({
+    //         error: "The ID number is already taken"
+    //     });
+    // } else {
+    //     const user = new User(req.body);
+    //     user.save();
+    //     res.status(200).json({
+    //         user
+    //     });
+    // }
 }

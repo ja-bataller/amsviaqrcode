@@ -18,6 +18,9 @@
 <script src="/js/qrcode.js"></script>
 {{!-- <script src="qr-generator.js"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+{{> _helper}}
+
 <script>
    const accountName = document.querySelector("#accountName").textContent;
    
@@ -36,4 +39,65 @@
    if(accountName === "Mary Chris Jasa"){
        document.querySelector("#accountImage").innerHTML = `<img class="img-profile rounded-circle" src="/img/MCJ.jpg">`;
    }
+</script>
+
+<script>
+   const changePassword = document.querySelector("#changePassword");   
+
+      changePassword.addEventListener('click', async (e) => {
+         e.preventDefault();
+         
+         const account_id = changePassword.getAttribute('data-account_id');
+
+         // get input value 
+         const currentPassword = document.querySelector("#currentPassword").value;
+         const newPassword = document.querySelector("#newPassword").value;
+         const confirmPassword = document.querySelector("#confirmPassword").value;
+
+         
+         try {
+            if (currentPassword == "" || newPassword == "" || confirmPassword == "") {
+               return alertMessage("error", "Please complete all input field.")
+            }
+
+            if (newPassword != confirmPassword) {
+               return alertMessage("error", "The New password you entered and Confirm  new password doesn't match.")
+            }
+
+            const res = await fetch(`/change-password/${account_id}`, { 
+            method: 'PUT', 
+            body: JSON.stringify({currentPassword, newPassword}),
+            headers: {'Content-Type': 'application/json'}
+            });
+
+            const data = await res.json();
+            console.log(data);
+            
+            if (data.error) {
+                  // if the current password input is incorrect this will trigger
+               iziToast.error({
+               title: data.error,
+               position: "topCenter",
+               timeout: 3000,  
+               });
+            }
+
+            if (data.success) {
+               // if the password is successfully update this will trigger
+               iziToast.success({
+               title: data.success,
+               position: "topCenter",
+               timeout: 2000,  
+               });
+
+               setTimeout(() => {
+                  let = baseURl = 
+                  location.assign("/logout");
+               },2100)
+            }
+            }
+         catch (err) {
+            console.log(err);
+         }
+      });
 </script>

@@ -63,7 +63,7 @@
                <!-- Begin Page Content -->
                <div class="container-fluid">
                   <!-- Page Heading -->
-                  <h2> <i class="fas fa-file-alt"></i> Records<a class="btn btn-secondary" href="/logs" role="button" style="float: right;"> <i class="fas fa-arrow-circle-left"></i> Back</a></h2>
+                  <h2> <i class="fas fa-file-alt"></i> {{name}} Records<a class="btn btn-secondary" href="/logs" role="button" style="float: right;"> <i class="fas fa-arrow-circle-left"></i> Back</a></h2>
                   <!-- DataTales Example -->
                   <div class="card shadow mb-4">
                      <div class="card-body">
@@ -94,8 +94,8 @@
                                  </tr>
                               </tfoot>
                               <tbody>
-                                 {{#if records}}
-                                 {{#each records}}
+                                 {{#if user_records}}
+                                 {{#each user_records}}
                                  <tr>
                                     <td>{{idnumber}}</td>
                                     <td class="uppercase">{{name}}</td>

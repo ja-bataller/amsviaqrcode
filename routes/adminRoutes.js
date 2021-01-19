@@ -20,6 +20,7 @@ router.get("/users", requireAuth, adminController.users_get);
 router.get("/about", requireAuth, adminController.about_get);
 router.get("/qrcode-tester", requireAuth, adminController.qrcodetester_get);
 router.get("/users/:id", requireAuth, adminController.userview_get);
+router.get("/user-records/:id", requireAuth, adminController.userrecords_get);
 
 
 // Get Data

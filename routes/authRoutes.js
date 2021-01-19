@@ -23,4 +23,7 @@ router.post("/login-admin", authController.loginadmin_post);
 router.post("/login-user", authController.loginuser_post);
 router.post("/register-qrcode", authController.register_post);
 
+// put
+router.put("/change-password/:id", authController.changePassword_put);
+
 module.exports = router;
