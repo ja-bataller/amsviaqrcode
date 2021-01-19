@@ -41,8 +41,9 @@
    }
 </script>
 
+{{!-- Change Password --}}
 <script>
-   const changePassword = document.querySelector("#changePassword");   
+   const changePasswordForm = document.querySelector("#changePasswordForm");   
    const changePasswordClose = document.querySelector("#changePasswordClose"); 
 
    if (changePasswordClose) {
@@ -56,16 +57,16 @@
          });
    }
 
-   if (changePassword) {
-         changePassword.addEventListener('click', async (e) => {
+   if (changePasswordForm) {
+         changePasswordForm.addEventListener('submit', async (e) => {
          e.preventDefault();
          
          const account_id = changePassword.getAttribute('data-account_id');
 
          // get input value 
-         const currentPassword = document.querySelector("#currentPassword").value;
-         const newPassword = document.querySelector("#newPassword").value;
-         const confirmPassword = document.querySelector("#confirmPassword").value;
+         const currentPassword = changePasswordForm.currentPassword.value;
+         const newPassword = changePasswordForm.newPassword.value;
+         const confirmPassword = changePasswordForm.confirmPassword.value;
 
          
          try {
