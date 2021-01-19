@@ -167,8 +167,6 @@
       <a class="scroll-to-top rounded" href="#page-top">
       <i class="fas fa-angle-up"></i>
       </a>
-      {{!-- partials logout modal --}}
-      {{> _logoutmodal}}
       {{!-- partials footer --}}
       {{> _footer}}
       <script>
@@ -196,7 +194,6 @@
          
                downloadBtn.href = link;
                downloadBtn.download = user.dataset.filename;
-               console.log(link)
          
                setTimeout(() => {
                   window.location = "/users";

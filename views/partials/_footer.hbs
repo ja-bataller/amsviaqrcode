@@ -43,8 +43,21 @@
 
 <script>
    const changePassword = document.querySelector("#changePassword");   
+   const changePasswordClose = document.querySelector("#changePasswordClose"); 
 
-      changePassword.addEventListener('click', async (e) => {
+   if (changePasswordClose) {
+         changePasswordClose.addEventListener('click', async (e) => {
+         e.preventDefault();
+         
+         document.querySelector("#currentPassword").value = "";
+         document.querySelector("#newPassword").value = "";
+         document.querySelector("#confirmPassword").value = "";
+         $("#profileSettingsModal").modal("hide");
+         });
+   }
+
+   if (changePassword) {
+         changePassword.addEventListener('click', async (e) => {
          e.preventDefault();
          
          const account_id = changePassword.getAttribute('data-account_id');
@@ -100,4 +113,7 @@
             console.log(err);
          }
       });
+   }
 </script>
+
+

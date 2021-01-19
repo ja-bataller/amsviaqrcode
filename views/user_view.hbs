@@ -66,14 +66,17 @@
                      <div class="row justify-content-center">
                         <!-- Border Left Utilities -->
                         <div class="col-lg-8">
-                           <a class="btn  btn-secondary mb-3" href="/users" role="button"> <i class="fas fa-arrow-circle-left"></i> Back</a>
-                           <button type="button" id="deleteBtn" class="btn btn-danger mb-3" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i> Delete</button>
+                           <div id="qrcodegeneratedImage" class="QRcodeImage hideContent"></div>
+                           <span  id="fullNameofUser" class="hideContent" data-filename="{{user.firstname}}-{{user.lastname}}">{{user.firstname}} {{user.lastname}}</span>
+                           <a class="btn  btn-secondary mb-3" href="/users" role="button"><i class="fas fa-arrow-left"></i></a>
+                           <button type="button" id="deleteBtn" class="btn btn-danger mb-3 floatRight" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash"></i></button>
+                           <a download href="#" role="button" id="downloadImageBtn" class="btn btn-success mb-3 mr-2 floatRight"><i class="fas fa-qrcode"></i></a>
                            <div class="card my-1 mb-5 border-left-secondary">
                               <div class="card-header">
                                  <h4 class="mt-2">
                                     <i class="fa fa-user fa-sm"></i> User Profile 
-                                    <div class="custom-control custom-switch" style="float: right;">
-                                       <input type="checkbox" class="custom-control-input" id="customSwitch">
+                                    <div class="custom-control custom-switch " style="float: right;">
+                                       <input type="checkbox" class="custom-control-input edit" id="customSwitch">
                                        <label class="custom-control-label" id="switchLabel" for="customSwitch">Edit</label>
                                     </div>
                                  </h4>
@@ -215,8 +218,6 @@
       <a class="scroll-to-top rounded" href="#page-top">
       <i class="fas fa-angle-up"></i>
       </a>
-      {{!-- partials logout modal --}}
-      {{> _logoutmodal}}
       {{!-- partials footer --}}
       {{> _footer}}
       <script>
@@ -224,6 +225,7 @@
          const updateBtn = document.querySelector(".btn-update");
          const updateForm = document.querySelectorAll(".update-form");
          
+         const downloadBtn = document.querySelector("#downloadBtn");
          const deleteBtn = document.querySelector("#deleteBtn");
          const deleteUserDB = document.querySelector("#deleteUserDB");
          
@@ -237,6 +239,7 @@
                
                updateBtn.style.display = "block";
                deleteBtn.style.display = "none";
+               downloadImageBtn.style.display = "none";
          
                for (let i=0; i < updateForm.length; i++) {
                   updateForm[i].removeAttribute("disabled");
@@ -246,6 +249,7 @@
          
                updateBtn.style.display = "none";
                deleteBtn.style.display = "block";
+               downloadImageBtn.style.display = "block";
          
                for (let i=0; i < updateForm.length; i++) {
                   updateForm[i].setAttribute("disabled", true);
@@ -254,31 +258,67 @@
          }); 
          
          //Delete Button in Modal
-         deleteUserDB.addEventListener("click", function() {
-             const idNumDB = this.getAttribute('data-idnum');
+         deleteUserDB.addEventListener("click", async (e) => {
+            e.preventDefault();
+             const idNumDB = deleteUserDB.getAttribute('data-idnum');
              console.log(idNumDB);
+
+            try{
+               const res = await fetch(`/users/${idNumDB}`, { 
+                  method: 'DELETE', 
+                  headers: {'Content-Type': 'application/json'}
+               });
+
+               const data = await res.json();
+                  console.log(data);
+               
+                  if (data.success){
+                     iziToast.success({
+                     title: data.success,
+                     position: "topCenter",
+                     timeout: 3000,  
+                     });
+
+                     $("#deleteModal").modal("hide");
+
+                     setTimeout(() => {
+                        let = baseURl = location.assign('/users');     
+                     },3100)
+                  }
+            }
+            catch (err){
+               console.log(err);
+            }
+         });
+
+      </script>
+      {{!-- QR code generator --}}
+      <script>
+         let idnumber = document.querySelector("#idnumber").value;
+         let typeNumber = 4;
+         let errorCorrectionLevel = 'L';
+         let qr = qrcode(typeNumber, errorCorrectionLevel);
          
-             const endpoint = `/users/${idNumDB}`;
-               fetch(endpoint, {
-               method: 'DELETE',
-               })
-               .then(response => response.json())
-               .then(data => {
-                  $("#deleteModal").modal("hide");
+            qr.addData(idnumber);
+            qr.make();
+            document.querySelector("#qrcodegeneratedImage").innerHTML = qr.createImgTag(8,4);
          
-                  iziToast.success({
-                  title: data.message,
-                  position: "topCenter",
-                  timeout:1000,
-                  });
+         const downloadImageBtn = document.querySelector('#downloadImageBtn');
          
-                  setTimeout(() => {
-                     window.location.href = data.redirect;
-                  }, 1500)
-                  
-               })
-               .catch(err => console.log(err));
-            });
+         downloadImageBtn.addEventListener('click', function(e) {
+            const link = document.querySelector('#qrcodegeneratedImage img').src;
+            const user = document.querySelector("#fullNameofUser");
+         
+               iziToast.success({
+                     title: "QR code has been downloaded succcessfully",
+                     position: "topCenter",
+                     timeout: 3000,  
+                     });
+         
+               downloadImageBtn.href = link;
+               downloadImageBtn.download = user.dataset.filename;
+               console.log(link)
+         });
       </script>
       <script>
          // MAXIMUM DATE INPUT IS TODAY

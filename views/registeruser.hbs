@@ -62,11 +62,11 @@
             {{> _topbar}}
             <!-- Begin Page Content -->
             <div class="container-fluid">
-               <form>
+               <form id="registerNewUserForm">
                   <div class="row justify-content-center">
                      <!-- Border Left Utilities -->
                      <div class="col-lg-8">
-                        <a class="btn btn-secondary mb-3" href="/users" role="button"> <i class="fas fa-arrow-circle-left"></i> Back</a>
+                        <a class="btn btn-secondary mb-3" href="/users" role="button"> <i class="fas fa-arrow-left"></i></a>
                         <div class="card my-1 mb-5 border-left-secondary">
                            <div class="card-header">
                               <h4 class="mt-2"> <i class="fas fa-user-plus fa-sm"></i> Register New User</h4>
@@ -187,8 +187,6 @@
       <a class="scroll-to-top rounded" href="#page-top">
       <i class="fas fa-angle-up"></i>
       </a>
-      {{!-- partials logout modal --}}
-      {{> _logoutmodal}}
       {{!-- partials footer --}}
       {{> _footer}}
       <script>
@@ -196,7 +194,7 @@
          birthdate.max = new Date().toISOString().split("T")[0]
       </script>   
       <script>
-         const form = document.querySelector('form');
+         const form = document.querySelector("#registerNewUserForm");
          
          form.addEventListener('submit', async (e) => {
             e.preventDefault();

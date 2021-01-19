@@ -78,4 +78,55 @@
       </li>
    </ul>
 </nav>
+
+{{!-- Change Password Modal --}}
+<div class="modal fade" id="profileSettingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLabel"> <i class="fa fa-lock"></i> Change password</h3>
+         </div>
+         <div class="modal-body">
+            <form>
+               <div class="form-group">
+                  <label for="currentPassword" class="col-form-label">Current Password:</label>
+                  <input type="password" class="form-control" id="currentPassword" placeholder="Type your Current password here" required>
+               </div>
+               <div class="form-group">
+                  <label for="newPassword" class="col-form-label">New Password:</label>
+                  <input type="password" class="form-control" id="newPassword" placeholder="Type your New password here" required>
+               </div>
+               <div class="form-group">
+                  <label for="confirmPassword" class="col-form-label">Confirm New Password:</label>
+                  <input type="password" class="form-control" id="confirmPassword" placeholder="Re-type your New password here" required>
+               </div>
+               <div class="modal-footer">
+                  <button type="button" id="changePasswordClose" class="btn btn-secondary">Close</button>
+                  <button type="submit" id="changePassword" class="btn btn-danger" data-account_id={{account._id}} >CONFIRM</button>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Sign out</h5>
+            <!-- <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+            </button> -->
+        </div>
+        <div class="modal-body">Are you sure you want to Sign out?</div>
+        <div class="modal-footer">
+            <button class="btn btn-dark" type="button" data-dismiss="modal">NO</button>
+            <a class="btn btn-danger" href="/logout">YES</a>
+        </div>
+    </div>
+    </div>
+</div>
 <!-- End of Topbar -->

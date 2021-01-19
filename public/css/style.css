@@ -46,7 +46,7 @@ a:hover{
   display: none;
 }
 
-#deleteBtn{
+.floatRight{
   float: right;
   display: block;
   
@@ -101,6 +101,6 @@ a:hover{
   text-decoration: none;
 } */
 
-.hide{
-  display.
+.hideContent{
+  display: none;
 }
