@@ -19,6 +19,14 @@
 {{!-- <script src="qr-generator.js"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+<script type='text/javascript' src='https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js'></script>
+<script type='text/javascript'>
+   (function(){
+      emailjs.init('user_NoFcwBgkEKzAzkTAHTnci');
+   })();
+</script> 
+
 {{> _helper}}
 
 <script>
@@ -115,6 +123,52 @@
          }
       });
    }
+
+
+   const contactUsForm = document.querySelector("#contactUsForm");
+
+   if(contactUsForm){
+      contactUsForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const title = document.querySelector("#c-title").value;
+      const message = document.querySelector("#c-message").value;
+      const accountName = document.querySelector('#accountName').textContent;
+
+      let templateParams = {
+         project: 'AMS PLATFORM',
+         to_name: 'johnanthonybataller.ce@gmail.com',
+         subject: title,
+         message: message,
+         user: accountName
+      };
+      
+      const spinner = `<button class="btn btn-primary btn-sm" type="button" disabled>
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                        Sending...
+                     </button>`;
+
+      $('#sendEmailBtn').attr('disabled', 'disabled').html(spinner);
+
+      emailjs.send('jdbt','AMS_SYSTEM', templateParams)
+         .then(function(response) {
+            $('#sendEmailBtn').removeAttr('disabled').html('Send');
+            $('#contactModal').modal('hide');
+            Swal.fire('Success', 'Your message has been sent successfully.', 'success')
+
+            document.querySelector("#c-title").value = "";
+            document.querySelector("#c-message").value = "";
+         }, function(err) {
+            $('#sendEmailBtn').removeAttr('disabled').html('Send');
+            Swal.fire('Error', 'Server error.', 'error')
+
+            document.querySelector("#c-title").value = "";
+            document.querySelector("#c-message").value = "";
+         });
+      });
+}
 </script>
+
+
 
 

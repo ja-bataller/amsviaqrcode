@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
+   <head >
       {{!-- partials header --}}
       {{> _header}}
    </head>
@@ -11,8 +11,9 @@
       <ul class="navbar-nav sidebarCustom sidebar sidebar-dark accordion" id="accordionSidebar">
          <!-- Sidebar - Brand -->
          <a class="sidebar-brand d-flex align-items-center justify-content-center disableClick" href="/admin">
-            <div class="sidebar-brand-text mx-3">  <img src="/img/logo.png" width="50px" alt=""> COMPANY NAME</div>
-         </a>
+               <img src="/img/logo.png" width="50px" alt="">
+               <div class="sidebar-brand-text mx-3"> COMPANY NAME</div>
+            </a>
          <!-- Divider -->
          <hr class="sidebar-divider my-0">
          <!-- Nav Item - Dashboard -->
@@ -175,6 +176,7 @@
       </a>
       {{!-- partials footer --}}
       {{> _footer}}
+
       <script>
          let idnumber = document.querySelector("#idnumberofuser").textContent;
          let typeNumber = 4;
@@ -205,6 +207,11 @@
                   window.location = "/users";
                },1000)
          })
+      </script>
+
+      {{!-- PREVENT BROWSER BACK BUTTON --}}
+      <script type="text/javascript" >
+         window.onbeforeunload = function() { return "Your work will be lost."; };
       </script>
    </body>
 </html>
