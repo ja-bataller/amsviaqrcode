@@ -239,7 +239,6 @@
          
          // Edit Switch
          customSwitch.addEventListener("change", (e) => {
-            console.log(updateForm);
             const event = e.target.checked;
             if (event == true) {
                
@@ -267,7 +266,6 @@
          deleteUserDB.addEventListener("click", async (e) => {
             e.preventDefault();
              const idNumDB = deleteUserDB.getAttribute('data-idnum');
-             console.log(idNumDB);
 
             try{
                const res = await fetch(`/users/${idNumDB}`, { 
@@ -276,7 +274,6 @@
                });
 
                const data = await res.json();
-                  console.log(data);
                
                   if (data.success){
                      iziToast.success({
@@ -315,15 +312,9 @@
             const link = document.querySelector('#qrcodegeneratedImage img').src;
             const user = document.querySelector("#fullNameofUser");
          
-               iziToast.success({
-                     title: "QR code has been downloaded succcessfully",
-                     position: "topCenter",
-                     timeout: 3000,  
-                     });
-         
                downloadImageBtn.href = link;
                downloadImageBtn.download = user.dataset.filename;
-               console.log(link)
+
          });
       </script>
       <script>

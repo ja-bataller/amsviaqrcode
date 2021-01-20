@@ -26,7 +26,6 @@
          headers: {'Content-Type': 'application/json'}
          });
          const data = await res.json();
-         console.log(data);
          
          // if the login inputs is incorrect this will trigger
          if (data.errors) {
@@ -85,9 +84,6 @@
    const idnumber = result;
    let time = time12h();
    let date = getDate();
-   console.log(result);
-   console.log(time);
-   console.log(date);
    
    try {
      const res = await fetch('/login-user', { 
@@ -96,8 +92,6 @@
      headers: {'Content-Type': 'application/json'}
      });
      const data = await res.json();
-     console.log(data);
-     
 
       if (data.error) {
 
@@ -205,10 +199,6 @@
         console.log(err);
      } 
    }
-   
-   // ####### Web Cam Scanning #######
-   QrScanner.hasCamera().then(hasCamera => camHasCamera.textContent = hasCamera);
-   console.log("Open Camera");
    
    const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
    console.log("Scanning");
