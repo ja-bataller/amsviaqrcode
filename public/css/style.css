@@ -59,6 +59,9 @@ a:hover{
 .iconWhite{
   color: white;
 }
+.blackContent{
+  color: black;
+}
 
 .font{
   font-family: Verdana, Geneva, Tahoma, sans-serif !important;

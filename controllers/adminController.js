@@ -16,21 +16,26 @@ module.exports.admin_get = (req, res) => {
         let employees = count;
         User.countDocuments({
             shift: "day"
-        }, function(err, count) {
+        }, function(err, count){
             let day = count;
             User.countDocuments({
                 shift: "night"
-            }, function(err, count) {
+            }, function(err, count){
                 let night = count;
                 Log.countDocuments({
                     status: "active"
-                }, function(err, count) {
+                }, function(err, count){
                     let active = count;
                     Log.countDocuments({
                         status: "logged out"
-                    }, function(err, count) {
+                    }, function(err, count){
                         let done = count;
-                        res.render("admin", {employees,day,night,active,done})
+                        Log.countDocuments({
+                            late: "yes"
+                        }, function(err, count){
+                            let late = count;
+                            res.render("admin", {employees,day,night,active,done,late})
+                        });
                     });
                 });
             });
@@ -56,6 +61,7 @@ module.exports.logs_get = (req, res) => {
             })
         })
         .catch((err) => {
+            res.render("404page")
             console.log(err);
         })
 }
@@ -70,6 +76,7 @@ module.exports.userrecords_get = async (req, res) => {
         console.log(findUserRecord);
             res.render("user_records", {user_records: findUserRecord, name: findUserName.name})
     } else {
+        res.render("404page")
         console.log("Error");
     }
 
@@ -84,6 +91,7 @@ module.exports.records_get = (req, res) => {
             })
         })
         .catch((err) => {
+            res.render("404page")
             console.log(err);
         })
 }
@@ -101,31 +109,37 @@ module.exports.users_get = (req, res) => {
             })
         })
         .catch((err) => {
+            res.render("404page")
             console.log(err);
         })
 }
 
 
-module.exports.userview_get = (req, res) => {
+module.exports.userview_get = async (req, res) => {
     const id = req.params.id;
-    ;
 
-    User.findById(id)
-        .then(result => {
-            res.render("user_view", {user: result})
-        })
-        .catch(err => {
-            console.log(err);
-        })
+    const checkUser =  await User.findById(id)
+
+    try{
+        if (!checkUser){
+            res.render("404page")
+        }   
+        else {
+            res.render("user_view", {user: checkUser})
+        }
+    }
+    catch{
+        res.render("404page")
+        console.log("Error")
+    }
+
 }
 
 module.exports.update_post = (req, res) => {
     const id = req.params.id;
-    
 
     const user = new User(req.body);
     
-
     User.findByIdAndUpdate(id, {
             firstname: user.firstname,
             middlename: user.middlename,
@@ -143,6 +157,7 @@ module.exports.update_post = (req, res) => {
             res.redirect("/users");
         })
         .catch((err) => {
+            res.render("404page")
             console.log(err);
         })
 }
@@ -153,31 +168,30 @@ module.exports.users_delete = async (req, res) => {
 
     const userCheck = await User.findOne({_id: id})
     const findUserLog = await Log.findOne({user_id: id})
-    
-    const userIdLog = findUserLog.user_id;
-
-    if (userCheck && findUserLog == "" && findUserRecord == "") {
-        // delete User
-        await User.findByIdAndDelete(id)
-
-        return res.status(200).json({success: "User has been deleted successfully"})
-    }
 
     if (userCheck && findUserLog) {
         // delete User
         await User.findByIdAndDelete(id)
-        
 
         // delete User Logs
-        await Log.deleteOne({user_id: userIdLog})
+        await Log.deleteOne({user_id: id})
         
-
-        // delete User Records
-        await Record.deleteMany({user_id: userIdLog})
-        
-
+    //     // delete User Records
+    //     await Record.deleteMany({user_id: userIdLog})
         return res.status(200).json({success: "User has been deleted successfully"})
     }
+
+    if (userCheck) {
+        // delete User
+        await User.findByIdAndDelete(id)
+
+        return res.status(200).json({success: "User has been deleted successfully"})
+    } 
+
+    else {
+        res.render("404page")
+    }
+
 }
 
 module.exports.qrcodetester_get = (req, res) => {

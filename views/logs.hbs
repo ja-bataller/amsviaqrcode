@@ -104,12 +104,12 @@
                                  {{#each logs}}
                                  <tr>
                                     <td><a class="bt-primary" href="/user-records/{{user_id}}"><strong><i class="fa fa-clipboard-list"></i> {{idnumber}}</strong></a></td>
-                                    <td class="uppercase"><a class="infoLink" href="/users/{{user_id}}"><strong><i class="fa fa-user"></i> {{name}}</strong></a></td>
+                                    <td class="uppercase"><a class="infoLink" href="/users/{{user_id}}" ><strong><i class="fa fa-user"></i> {{name}}</strong></a></td>
                                     <td class="uppercase">{{shift}}</td>
                                     <td class="uppercase">{{status}}</td>
                                     <td>{{time_in}}</td>
                                     <td>{{time_out}}</td>
-                                    <td></td>
+                                    <td>{{late}}</td>
                                     <td>{{date}}</td>
                                  </tr>
                                  {{/each}}

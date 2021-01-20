@@ -146,10 +146,40 @@
          }, 3000);
       }
 
-      if (data.userOut) {
+      if (data.late) {
+         iziToast.warning({
+            title: `${data.late.userName} | Time-in: ${data.late.time_in}`,
+            message: "LATE",
+            position: "topCenter",
+            timeout: 3000,
+        });
 
-         let message = `${data.userOut.userName} | Time-out: ${data.userOut.time_out}`;
-         alertMessage('success', message )
+         console.log("Stop Web Cam");
+         scanner.stop();
+      
+         setTimeout(function(){ 
+            document.querySelector("#videoSpinner").innerHTML = 
+                  `<div class="loader">
+                  <div class="inner one"></div>
+                  <div class="inner two"></div>
+                  <div class="inner three"></div>
+                  </div>`;
+         }, 500);
+         
+         setTimeout(function(){ 
+            document.querySelector("#videoSpinner").innerHTML = "";  
+            console.log("Start Web Cam Again"); 
+            scanner.start();
+         }, 3000);
+      }
+
+      if (data.userOut) {
+         iziToast.info({
+            title: `${data.userOut.userName} | Time-out: ${data.userOut.time_out}`,
+            message: "Logged Out",
+            position: "topCenter",
+            timeout: 3000,
+        });
          
          console.log("Stop Web Cam");
          scanner.stop();

@@ -121,11 +121,13 @@ module.exports.loginuser_post = async (req, res) => {
     console.log(`Time today: ${time}`);
     console.log(`Date today: ${date}`);
 
+    let hour = parseInt(time.charAt(0));
+    let min = parseInt(time.substring(2, 4));
+    let ampm = time.substr(time.length - 2);
+
     try {
         const userCheck = await User.findOne({idnumber})
         const logCheck = await Log.findOne({idnumber})
-        const recordCheck = await Record.findOne({idnumber})
-        // id = userCheck._id;
         
         // If USER is NOT registered
         if(userCheck == null)
@@ -154,11 +156,11 @@ module.exports.loginuser_post = async (req, res) => {
 
             console.log("Uses log is now logged out")
 
-            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "done", date: log.date, time_in: log.time_in, time_out: log.time_out});
+            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "done", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late});
             record.save();
             console.log("User done log has been put to Record")
 
-            await Log.findByIdAndUpdate(id, {time_in: log.time_in, time_out: log.time_out});
+            await Log.findByIdAndUpdate(id, {time_in: log.time_in, time_out: log.time_out, late: ""});
             console.log("User log time in and time out has been updated to blank")
 
             const timeOutLog = {
@@ -170,32 +172,184 @@ module.exports.loginuser_post = async (req, res) => {
 
         // If USER is registered and USER doesn't have logs then create a log
         if (userCheck && logCheck == null){
-            const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: ""});
-            log.save();
+            // NEW USER DAY SHIFT
+            if(ampm == 'AM' && userCheck.shift == "day"){
+                if(hour > 6) {
+                    console.log("Late")
+                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                    log.save();
+        
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+        
+                    return res.status(200).json({late: timeInLog})
+                }
 
-            console.log("New user has been added to logs and now active")
+                else if(hour == 6 && min > 0) {
+                    console.log("Late")
+                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                    log.save();
+        
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+        
+                    return res.status(200).json({late: timeInLog})
+                }
 
-            const timeInLog = {
-                userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                time_in: time,
+                else {
+                    console.log("On-time")
+                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no"});
+                    log.save();
+        
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+        
+                    return res.status(200).json({userFoundandRecord: timeInLog})
+                }
             }
 
-            return res.status(200).json({userFoundandRecord: timeInLog})
+            // NEW USER NIGHT SHIFT
+            if(ampm == 'PM' && userCheck.shift == "night"){
+                if(hour > 2) {
+                    console.log("Late")
+                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                    log.save();
+        
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+        
+                    return res.status(200).json({late: timeInLog})
+                }
+
+                else if(hour == 2 && min > 0) {
+                    console.log("Late")
+                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                    log.save();
+        
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+        
+                    return res.status(200).json({late: timeInLog})
+                }
+
+                else {
+                    console.log("On-time")
+                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no"});
+                    log.save();
+        
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+        
+                    return res.status(200).json({userFoundandRecord: timeInLog})
+                }
+            }
         }
 
         // If USER is registered and USER has logs and then create another log (different date)
         if (userCheck && logCheck &&  logCheck.date != date && logCheck.time_in != "" && logCheck.time_out != ""){
-            const id = logCheck._id;
-            await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: ""});
 
-            console.log("Old User log has been updated and now active")
+            // EXISTING USER DAY SHIFT
+            if(ampm == 'AM' && userCheck.shift == "day"){
+                if(hour > 6){
+                    const id = logCheck._id;
+                    await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
 
-            const timeInLog = {
-                userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                time_in: time,
+                    console.log("Old User log has been updated and now active")
+
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+
+                    return res.status(200).json({late: timeInLog})
+                }
+
+                else if(hour == 6 && min > 0){
+                    const id = logCheck._id;
+                    await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+
+                    console.log("Old User log has been updated and now active")
+
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+
+                    return res.status(200).json({late: timeInLog})
+                }
+
+                else{
+                    const id = logCheck._id;
+                    await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no"});
+
+                    console.log("Old User log has been updated and now active")
+
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+
+                    return res.status(200).json({userFoundandRecord: timeInLog})
+                }
             }
 
-            return res.status(200).json({userFoundandRecord: timeInLog})
+            // EXISTING USER NIGHT SHIFT
+            if(ampm == 'PM' && userCheck.shift == "night"){
+
+                if(hour > 2){
+                    const id = logCheck._id;
+                    await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+
+                    console.log("Old User log has been updated and now active")
+
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+
+                    return res.status(200).json({late: timeInLog})
+                }
+
+                else if(hour == 2 && min > 0){
+                    const id = logCheck._id;
+                    await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+
+                    console.log("Old User log has been updated and now active")
+
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+
+                    return res.status(200).json({late: timeInLog})
+                }
+
+                else{
+                    const id = logCheck._id;
+                    await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no"});
+
+                    console.log("Old User log has been updated and now active")
+
+                    const timeInLog = {
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
+                    }
+
+                    return res.status(200).json({userFoundandRecord: timeInLog})
+                }
+            } 
         }
 
     } catch (err) {
