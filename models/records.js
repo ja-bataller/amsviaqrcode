@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// RECORDS SCHEMA IN MONGO DB
 const RecordSchema = new Schema({
     user_id: {
         type: String,

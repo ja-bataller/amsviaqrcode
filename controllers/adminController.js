@@ -3,14 +3,12 @@ const express = require("express");
 // Express app
 const app = express();
 
-const {
-    db
-} = require('../models/users');
+const {db} = require('../models/users');
 const User = require('../models/users');
 const Log = require('../models/logs');
 const Record = require('../models/records');
 
-// Open admin view and show Data from MongoDB
+// OPEN ADMIN PAGE AND SHOW DATA DASHBOARD FROM MONGO DB
 module.exports.admin_get = (req, res) => {
     User.countDocuments({}, function(err, count) {
         let employees = count;
@@ -52,20 +50,22 @@ module.exports.admin_get = (req, res) => {
     // })
 }
 
+// OPEN LOGS PAGE AND SHOW ALL LOGS TABLE FROM MONGO DB
 module.exports.logs_get = (req, res) => {
     Log.find()
         .then((result) => {
-
             res.render("logs", {
                 logs: result
             })
         })
+
         .catch((err) => {
             res.render("404page")
             console.log(err);
         })
 }
 
+// OPEN USER RECORDS PAGE AND SHOW SINGLE USER RECORDS TABLE FROM MONGO DB
 module.exports.userrecords_get = async (req, res) => {
     const id = req.params.id;
 
@@ -82,6 +82,7 @@ module.exports.userrecords_get = async (req, res) => {
 
 }
 
+// OPEN RECORDS PAGE AND SHOW ALL RECORDS TABLE FROM MONGO DB
 module.exports.records_get = (req, res) => {
     Record.find()
         .then((result) => {
@@ -96,6 +97,7 @@ module.exports.records_get = (req, res) => {
         })
 }
 
+// OPEN USERS PAGE AND SHOW ALL USERS TABLE FROM MONGO DB
 module.exports.users_get = (req, res) => {
     User.find()
         .then((result) => {
@@ -114,7 +116,7 @@ module.exports.users_get = (req, res) => {
         })
 }
 
-
+// OPEN USER VIEW PAGE AND SHOW SINGLE USER DATA FROM MONGO DB
 module.exports.userview_get = async (req, res) => {
     const id = req.params.id;
 
@@ -135,6 +137,7 @@ module.exports.userview_get = async (req, res) => {
 
 }
 
+// USER VIEW PAGE - EDIT THE CURRENT USER INFORMATION
 module.exports.update_post = (req, res) => {
     const id = req.params.id;
 
@@ -162,6 +165,7 @@ module.exports.update_post = (req, res) => {
         })
 }
 
+// USER VIEW PAGE - PERMANENTLY DELETE THE CURRENT USER
 module.exports.users_delete = async (req, res) => {
     const id = req.params.id;
     console.log(id);
@@ -194,9 +198,12 @@ module.exports.users_delete = async (req, res) => {
 
 }
 
+// OPEN QR CODE TESTER PAGE
 module.exports.qrcodetester_get = (req, res) => {
     res.render("qrcodetester");
 }
+
+// OPEN ABOUT PAGE
 module.exports.about_get = (req, res) => {
     res.render("about");
 }

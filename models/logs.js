@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// LOGS SCHEMA IN MONGO DB
 const LogSchema = new Schema({
     user_id: {
         type: String,

@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require('dotenv').config();
 
-// Error Handling / Validation
+// ERROR HANDLING / VALIDATION
 const handleErrors = (err) => {
     console.log(err.message, err.code);
     let errors = {
@@ -55,13 +55,17 @@ const createToken = (id) => {
     });
 };
 
-// OPEN PAGES START
+// OPEN INDEX / MAIN PAGE
 module.exports.login_get = (req, res) => {
     res.render("index");
 }
+
+// OPEN REGISTER NEW USER PAGE
 module.exports.register_get = (req, res) => {
     res.render("registeruser");
 }
+
+// OPEN QR CODE GENERATOR PAGE
 module.exports.qrcodegenerator_get = (req, res) => {
     res.render("qrcodegenerator");
 }

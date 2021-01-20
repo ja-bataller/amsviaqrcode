@@ -7,8 +7,7 @@ const secret = process.env.JWT_SECRET;
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
 
-
-    // check json web token exists & verified
+    // CHECK JSON WEB TOKEN (JWT) EXIST AND VERIFIED
     if (token) {
         jwt.verify(token, secret, (err, decodedToken) => {
             if (err) {
@@ -24,7 +23,7 @@ const requireAuth = (req, res, next) => {
     }
 }
 
-// check current user
+// CHECK CURRENT ADMINISTRATOR ACCOUNT
 const checkAccount = (req, res, next) => {
     const token = req.cookies.jwt;
     if (token) {

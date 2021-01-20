@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// USERS ACCOUNT SCHEMA IN MONGO DB
 const userSchema = new Schema({
     idnumber: {
         type: Number,

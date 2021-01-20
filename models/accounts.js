@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcrypt");
 
+// ADMINISTRATOR ACCOUNT SCHEMA IN MONGO DB
 const accountSchema = new Schema({
     username: {
         type: String,
@@ -22,14 +23,14 @@ const accountSchema = new Schema({
 });
 
 
-// bcrypt password before saving to MongoDB
+// BCRYPT ADMINISTRATOR ACCOUNT BEFORE SAVING IT TO MONGO DB
 accountSchema.pre("save", async function(next) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt)
     next();
 });
 
-// Login user
+// CHECKING / VALIDATION IF THE ADMINISTRATOR ACCOUNT IS REGISTERED IN MONGO DB
 accountSchema.statics.login = async function(username, password) {
     const account = await this.findOne({
         username
