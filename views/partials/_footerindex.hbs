@@ -3,6 +3,7 @@
    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
    crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 {{> _helper}}
 
@@ -97,6 +98,32 @@
 
          alertMessage("error", data.error);
       
+         console.log("Stop Web Cam");
+         scanner.stop();
+      
+         setTimeout(function(){ 
+            document.querySelector("#videoSpinner").innerHTML = 
+                  `<div class="loader">
+                  <div class="inner one"></div>
+                  <div class="inner two"></div>
+                  <div class="inner three"></div>
+                  </div>`;
+         }, 500);
+         
+         setTimeout(function(){ 
+            document.querySelector("#videoSpinner").innerHTML = "";  
+            console.log("Start Web Cam Again"); 
+            scanner.start();
+         }, 3000);
+      }
+
+      if (data.warning){
+         Swal.fire(
+         'Warning!',
+         `${data.warning}`,
+         'warning'
+         )
+
          console.log("Stop Web Cam");
          scanner.stop();
       
