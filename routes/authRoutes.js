@@ -19,4 +19,8 @@ router.post("/register-qrcode", authController.register_post);
 // CHANGE ADMINISTRATOR ACCOUNT PASSWORD
 router.put("/change-password/:id", authController.changePassword_put);
 
+// CREATE FAKER USERS / EMPLOYEES
+router.get("/seed/:count", requireAuth, authController.seedusers_get);
+router.get("/drop/collection", requireAuth, authController.seeddrop_get);
+
 module.exports = router;

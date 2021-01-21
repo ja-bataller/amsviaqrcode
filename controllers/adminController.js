@@ -52,7 +52,7 @@ module.exports.admin_get = (req, res) => {
 
 // OPEN LOGS PAGE AND SHOW ALL LOGS TABLE FROM MONGO DB
 module.exports.logs_get = (req, res) => {
-    Log.find()
+    Log.find().sort({createdAt: "desc"})
         .then((result) => {
             res.render("logs", {
                 logs: result
@@ -84,7 +84,7 @@ module.exports.userrecords_get = async (req, res) => {
 
 // OPEN RECORDS PAGE AND SHOW ALL RECORDS TABLE FROM MONGO DB
 module.exports.records_get = (req, res) => {
-    Record.find()
+    Record.find().sort({createdAt: "desc"})
         .then((result) => {
 
             res.render("records", {
@@ -97,9 +97,37 @@ module.exports.records_get = (req, res) => {
         })
 }
 
+// EXPORT ALL RECORDS INTO CSV FILE
+module.exports.recordsexport_get = async (req, res) => {
+    try {
+        const record = await Record.find({}).sort({ created_at: 'desc' });
+
+        const records = record.map(rec => {
+            const allRecord = {};
+
+            allRecord['_id'] = rec._id;
+            allRecord['idnumber'] = rec.idnumber;
+            allRecord['name'] = rec.name;
+            allRecord['department'] = rec.department;
+            allRecord['shift'] = rec.shift;
+            allRecord['time_in'] = rec.time_in;
+            allRecord['time_out'] = rec.time_out;
+            allRecord['late'] = rec.late;
+            allRecord['date'] = rec.date;
+
+            return allRecord;
+        })
+
+        res.status(200).json({ records });
+        
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 // OPEN USERS PAGE AND SHOW ALL USERS TABLE FROM MONGO DB
 module.exports.users_get = (req, res) => {
-    User.find()
+    User.find().sort({createdAt: "desc"})
         .then((result) => {
 
             result.map(user => {

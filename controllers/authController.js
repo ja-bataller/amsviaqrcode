@@ -4,7 +4,9 @@ const Record = require("../models/records");
 const Account = require("../models/accounts")
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const faker = require("faker");
 require('dotenv').config();
+
 
 // ERROR HANDLING / VALIDATION
 const handleErrors = (err) => {
@@ -231,7 +233,7 @@ module.exports.loginuser_post = async (req, res) => {
                     }
                     
                     else{
-                        return res.status(400).json({warning: "You cannot enter the facility your shift is already done. Please contact your Administrator."})
+                        return res.status(400).json({warning: "You cannot enter the building your shift is already done. Please contact your Administrator."})
                     }
                 }
 
@@ -303,7 +305,7 @@ module.exports.loginuser_post = async (req, res) => {
                     }
 
                     else if((hour == 9 && min > 0) || (hour == 9 && min == 0) || (hour > 9 && hour < 12)){
-                        return res.status(400).json({warning: "You cannot enter the facility your shift is already done. Please contact your Administrator."})
+                        return res.status(400).json({warning: "You cannot enter the building your shift is already done. Please contact your Administrator."})
                     }
 
                     else if(hour == 1 && min == 0 || hour == 12){
@@ -380,7 +382,7 @@ module.exports.loginuser_post = async (req, res) => {
                     }
 
                     else{
-                        return res.status(400).json({warning: "You cannot enter the facility your shift is already done. Please contact your Administrator."})
+                        return res.status(400).json({warning: "You cannot enter the building your shift is already done. Please contact your Administrator."})
                     }
                 }
 
@@ -461,7 +463,7 @@ module.exports.loginuser_post = async (req, res) => {
                     }
 
                     else if((hour == 9 && min > 0) || (hour == 9 && min == 0) || (hour > 9 && hour < 12)){
-                        return res.status(400).json({warning: "You cannot enter the facility your shift is already done. Please contact your Administrator."})
+                        return res.status(400).json({warning: "You cannot enter the building your shift is already done. Please contact your Administrator."})
                     }
                     
                     else if(hour == 1 && min == 0 || hour == 12){
@@ -556,3 +558,66 @@ module.exports.qrcode_get = async (req, res) => {
 }
 
 
+// SEED FAKE USER / EMPLOYEE
+
+const random = {
+    dept: [
+        "Industrial Technology", 
+        "Industrial Education", 
+        "Electrical Engineering Technolgy",
+        "Civil Engineering Technology", 
+        "Computer Science"
+    ],
+    gender: ['male','female'],
+    shift: ['day', 'night'],
+    bday: ['1987-05-14', '1999-06-21','1995-12-08', '1991-03-17']
+  };
+
+function generateRandom (choices) {
+    const random = Math.floor(Math.random() * choices.length);
+    return choices[random];
+}
+
+module.exports.seedusers_get = async (req, res) => {
+ 
+      let count = req.params.count;
+        
+      for(let i=0; i<count; i++){  
+      
+          let formParams = {  
+              firstname: faker.name.firstName(),  
+              middlename: faker.name.lastName(),  
+              lastname: faker.name.lastName(),  
+              gender: generateRandom(random['gender']),  
+              age: faker.random.number({'min': 18,'max': 60 }),  
+              birthdate: generateRandom(random['bday']), 
+              contact_number: "09" + faker.random.number({'max': 10000000}),
+              email_address: faker.internet.email(), 
+              home_address: faker.address.streetAddress(), 
+              department: generateRandom(random['dept']),
+              shift: generateRandom(random['shift']),
+              idnumber: faker.unique(faker.random.number),
+          };
+      
+          let users = new User(formParams);  
+          await users.save();
+      }
+
+    let data = {
+        message: `Seeded data total of${count}`,
+        status: 'success'
+    }
+    res.send(data);
+}
+
+// DELETE / DROP USERS AND LOGS COLLECTION IN MONGO DB
+module.exports.seeddrop_get = async (req, res) => {
+    await User.deleteMany({})
+    await Log.deleteMany({})
+
+    let data = {
+        message: "DELETED SUCCESSFULLY",
+        status: 'success'
+    }
+    res.send(data);
+}

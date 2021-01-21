@@ -9,6 +9,7 @@ router.get("*", checkAccount);
 router.get("/admin", requireAuth, adminController.admin_get);
 router.get("/logs", requireAuth, adminController.logs_get);
 router.get("/records", requireAuth, adminController.records_get);
+router.get("/records/export", requireAuth, adminController.recordsexport_get);
 router.get("/users", requireAuth, adminController.users_get);
 router.get("/about", requireAuth, adminController.about_get);
 router.get("/qrcode-tester", requireAuth, adminController.qrcodetester_get);

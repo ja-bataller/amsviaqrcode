@@ -12,6 +12,9 @@ const RecordSchema = new Schema({
     name: {
         type: String,
     },
+    department: {
+        type: String,
+    },
     shift: {
         type: String,
     },
@@ -28,12 +31,6 @@ const RecordSchema = new Schema({
         type: String,
     },
     late: {
-        type: String,
-    },
-    early_out: {
-        type: String,
-    },
-    absent: {
         type: String,
     },
 }, {
