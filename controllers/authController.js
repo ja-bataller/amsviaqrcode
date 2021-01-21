@@ -217,6 +217,17 @@ module.exports.loginuser_post = async (req, res) => {
                             time_in: time,
                         }
                         return res.status(200).json({late: timeInLog})
+                    } 
+                    else if (hour == 12){
+                        console.log("Late")
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                        log.save();
+            
+                        const timeInLog = {
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
+                        }
+                        return res.status(200).json({late: timeInLog})
                     }
                     
                     else{
