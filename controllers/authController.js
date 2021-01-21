@@ -365,6 +365,20 @@ module.exports.loginuser_post = async (req, res) => {
                         return res.status(200).json({late: timeInLog})
                     }
 
+                    else if (hour == 12){
+                        const id = logCheck._id;
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+
+                        console.log("Old User log has been updated and now active")
+
+                        const timeInLog = {
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
+                        }
+
+                        return res.status(200).json({late: timeInLog})
+                    }
+
                     else{
                         return res.status(400).json({warning: "You cannot enter the facility your shift is already done. Please contact your Administrator."})
                     }
