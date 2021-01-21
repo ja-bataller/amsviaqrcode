@@ -21,14 +21,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js'></script>
-<script type='text/javascript'>
-   (function(){
-      emailjs.init('user_NoFcwBgkEKzAzkTAHTnci');
-   })();
-</script> 
+<script type='text/javascript'>(function(){emailjs.init('user_NoFcwBgkEKzAzkTAHTnci');})();</script> 
 
 {{> _helper}}
 
+{{!-- ADMINISTRATOR ACCOUNT IMAGE --}}
 <script>
    const accountName = document.querySelector("#accountName").textContent;
    
@@ -49,7 +46,8 @@
    }
 </script>
 
-{{!-- Change Password --}}
+
+{{!-- CHANGE PASSWORD --}}
 <script>
    const changePasswordForm = document.querySelector("#changePasswordForm");   
    const changePasswordClose = document.querySelector("#changePasswordClose"); 
@@ -124,9 +122,8 @@
       });
    }
 
-
+   // CONTACT US
    const contactUsForm = document.querySelector("#contactUsForm");
-
    if(contactUsForm){
       contactUsForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -136,7 +133,7 @@
       const accountName = document.querySelector('#accountName').textContent;
 
       let templateParams = {
-         project: 'AMS PLATFORM',
+         project: 'AMS QR code PLATFORM',
          to_name: 'johnanthonybataller.ce@gmail.com',
          subject: title,
          message: message,
@@ -150,7 +147,7 @@
 
       $('#sendEmailBtn').attr('disabled', 'disabled').html(spinner);
 
-      emailjs.send('jdbt','AMS_SYSTEM', templateParams)
+      emailjs.send('jdbt','AMS_QRcode', templateParams)
          .then(function(response) {
             $('#sendEmailBtn').removeAttr('disabled').html('Send');
             $('#contactModal').modal('hide');
