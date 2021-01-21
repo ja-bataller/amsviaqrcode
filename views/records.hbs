@@ -141,20 +141,14 @@
       const exportBtn = document.querySelector('#exportBtn');
       const BASE_URL = window.location.origin;
 
-      // Export Btn
-      if(exportBtn)
-      {
-         console.log(BASE_URL)
-         
+      // EXPORT BUTTON
+      if(exportBtn){
          exportBtn.addEventListener('click', async (e) => {
             e.preventDefault();
             
             try {
-                  console.log("run")
                   const res = await fetch(`${BASE_URL}/records/export`);
                   const json = await res.json();
-
-                  console.log(json);
                   
                   const data = json.records.map(rec => ({
                      "ID NUMBER": rec.idnumber,
@@ -165,6 +159,14 @@
                      "LATE": rec.late,
                      "DATE": rec.date,
                   }));
+
+                  if (data.length == 0){
+                      return  Swal.fire(
+                           'Error',
+                           'No records found',
+                           'error'
+                           )
+                  }
 
                   // console.log(data);
                   const csvData = await dataToCSV(data);
@@ -178,7 +180,7 @@
       }
 
 
-      // Data to  CSV
+      // DATA TO CSV
       const dataToCSV = async (data) => {
          const csvRows = [];
          // get the headers
@@ -200,7 +202,7 @@
       };
 
 
-      // Create a tag to download
+      // CREATE A TAG TO DOWNLOAD
       const downloadCSV = (data) => {
 
          let today = new Date();
