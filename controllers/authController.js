@@ -16,17 +16,17 @@ const handleErrors = (err) => {
 
     // incorrect username
     if (err.message === "Incorrect username") {
-        errors.username = "That username is not registered";
+        errors.username = "The username is not registered.";
     }
 
     // incorrect password
     if (err.message === "Incorrect password") {
-        errors.password = "That password is incorrect";
+        errors.password = "The password is incorrect.";
     }
 
     // duplicate username error
     if (err.code === 11000) {
-        errors.username = 'that username is already registered';
+        errors.username = 'The username is already registered.';
         return errors;
     }
 

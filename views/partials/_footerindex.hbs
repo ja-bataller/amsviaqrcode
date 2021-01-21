@@ -14,7 +14,6 @@
    form.addEventListener('submit', async (e) => {
       e.preventDefault();
    
-      // get values
       const username = form.username.value;
       const password = form.password.value;
       
@@ -26,7 +25,7 @@
          });
          const data = await res.json();
          
-         // if the login inputs is incorrect this will trigger
+         // IF LOGIN INPUT IS INCORRECT THEN ERROR
          if (data.errors) {
             // if the login username input is incorrect
             if (data.errors.username) {
@@ -53,7 +52,7 @@
             }
          }
    
-         // if login inputs is correct, the Admin page will open.
+         // IF LOGIN INPUT IS CORRECT THEN LOGIN
          if (data.account) {
    
             let = baseURl = 
@@ -78,7 +77,6 @@
 
    async function setResult (label, result) {
       
-   // get value
    const idnumber = result;
    let time = time12h();
    let date = getDate();
