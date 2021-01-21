@@ -30,12 +30,6 @@ const LogSchema = new Schema({
     late: {
         type: String,
     },
-    early_out: {
-        type: String,
-    },
-    absent: {
-        type: String,
-    },
 }, {
     timestamps: true
 });

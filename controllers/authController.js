@@ -558,8 +558,8 @@ module.exports.qrcode_get = async (req, res) => {
 }
 
 
-// SEED FAKE USER / EMPLOYEE
 
+// SEED FAKE USER / EMPLOYEE
 const random = {
     dept: [
         "Industrial Technology", 
@@ -578,6 +578,7 @@ function generateRandom (choices) {
     return choices[random];
 }
 
+// SEED FAKE USER / EMPLOYEE
 module.exports.seedusers_get = async (req, res) => {
  
       let count = req.params.count;
@@ -604,7 +605,7 @@ module.exports.seedusers_get = async (req, res) => {
       }
 
     let data = {
-        message: `Seeded data total of${count}`,
+        message: `Seeded Users total of ${count}`,
         status: 'success'
     }
     res.send(data);
@@ -614,6 +615,7 @@ module.exports.seedusers_get = async (req, res) => {
 module.exports.seeddrop_get = async (req, res) => {
     await User.deleteMany({})
     await Log.deleteMany({})
+    await Record.deleteMany({})
 
     let data = {
         message: "DELETED SUCCESSFULLY",

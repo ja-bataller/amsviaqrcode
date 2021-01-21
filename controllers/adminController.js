@@ -127,7 +127,7 @@ module.exports.recordsexport_get = async (req, res) => {
 
 // OPEN USERS PAGE AND SHOW ALL USERS TABLE FROM MONGO DB
 module.exports.users_get = (req, res) => {
-    User.find().sort({createdAt: "desc"})
+    User.find().sort({createdAt: -1})
         .then((result) => {
 
             result.map(user => {

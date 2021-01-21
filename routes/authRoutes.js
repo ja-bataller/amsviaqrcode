@@ -21,6 +21,8 @@ router.put("/change-password/:id", authController.changePassword_put);
 
 // CREATE FAKER USERS / EMPLOYEES
 router.get("/seed/:count", requireAuth, authController.seedusers_get);
+
+// DELETE USERS, LOGS, RECORDS DATA IN MONGO DB
 router.get("/drop/collection", requireAuth, authController.seeddrop_get);
 
 module.exports = router;

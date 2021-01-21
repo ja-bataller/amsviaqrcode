@@ -12,9 +12,6 @@ const RecordSchema = new Schema({
     name: {
         type: String,
     },
-    department: {
-        type: String,
-    },
     shift: {
         type: String,
     },
