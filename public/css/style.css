@@ -107,3 +107,9 @@ a:hover{
 .hideContent{
   display: none;
 }
+
+.aboutCenter {
+  display: block;
+  margin-left: auto;
+  margin-right: auto
+}
