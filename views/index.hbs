@@ -63,6 +63,28 @@
             </div>
          </div>
       </div>
+
+      <div class="modal fade" id="latereasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLabel"> <i class="fas fa-envelope"></i> You're Late! </h3>
+               </div>
+               <div class="modal-body">
+                  <form id="lateForm">
+                     <div class="form-group">
+                        <label for="title" class="col-form-label">Reason:</label>
+                        <input type="text" class="form-control" name="reason" id="reason" autocomplete="off" required>
+                     </div>
+                     <div class="modal-footer">
+                        <button type="submit" id="submitLateReason" class="btn btn-primary"> Submit</button>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+
       {{> _footerindex}}
    </body>
 </html>

@@ -69,7 +69,7 @@
                <!-- Begin Page Content -->
                <div class="container-fluid">
                   <!-- Page Heading -->
-                  <h2> <i class="fas fa-clipboard-list"></i> Logs <a type="button" href="/records" class="btn btn-info" style="float: right;"> <i class="fas fa-file-alt"></i> RECORDS</a></h2>
+                  <h2> <i class="fas fa-clipboard-list"></i> Logs <a type="button" href="/records" class="btn btn-info ml-2" style="float: right;"> <i class="fas fa-file-alt"></i> RECORDS</a> <a  class="btn btn-warning disabled" role="button" href="#" id="absents" style="float: right;"> <i class="fas fa-users-slash"></i> ABSENT</a> </h2>
                   <!-- DataTales Example -->
                   <div class="card shadow mb-4">
                      <div class="card-body">
@@ -133,5 +133,57 @@
       </a>
       {{!-- partials footer --}}
       {{> _footer}}
+
+
+      <script>
+         const absent = document.querySelector("#absents");
+         let date = getDate();
+         
+         absent.addEventListener('click', async (e) => {
+            e.preventDefault();
+
+            absent.style.display = "none";
+         
+            try {
+               const res = await fetch('/absents', { 
+               method: 'POST', 
+               body: JSON.stringify({ date }),
+               headers: {'Content-Type': 'application/json'}
+               });
+               
+               const data = await res.json();
+               console.log(data);
+               
+               // if the login inputs is incorrect this will trigger
+               if (data.errors) {
+                  iziToast.success({
+                  title: "No Absent for Today",
+                  position: "topCenter",
+                  timeout: 3000,  
+                  });
+               }
+               else {
+                  iziToast.warning({
+                  title: "Absent recorded",
+                  position: "topCenter",
+                  timeout: 3000,  
+                  });
+               }
+            } catch (err) {
+               console.log(err);
+            }   
+         });
+      </script>
+
+      <script>
+         const btn = document.querySelector("#absents");
+
+         var time = new Date();
+         var hours = time.getHours();
+         if(hours == 21) {
+            btn.classList.remove("disabled");
+            console.log("enabled")
+         }
+      </script>
    </body>
 </html>

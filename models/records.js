@@ -30,6 +30,9 @@ const RecordSchema = new Schema({
     late: {
         type: String,
     },
+    late_reason: {
+        type: String,
+    },
 }, {
     timestamps: true
 });

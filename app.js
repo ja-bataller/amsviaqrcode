@@ -21,7 +21,7 @@ const PORT = process.env.PORT  || 3000;
 
 // MongoDB Connection
 mongoose.connect(DB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
-    .then((result) => app.listen(PORT), console.log("connected to db"))
+    .then((result) => app.listen(PORT), console.log("Connected to MongoDB"))
     .catch((err) => console.log(err))
 
 // Set static pages

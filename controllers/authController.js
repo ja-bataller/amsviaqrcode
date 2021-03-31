@@ -175,7 +175,11 @@ module.exports.loginuser_post = async (req, res) => {
         }
 
         // If USER is registered and USER has logged out today's date then USER cannot enter again
-        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "logged out" && logCheck.time_in != "" && logCheck.time_out != ""){
+        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "present" && logCheck.time_in != "" && logCheck.time_out != ""){
+            return res.status(400).json({warning: "You cannot login twice a day. Please contact your Administrator."})
+        }
+
+        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "absent" && logCheck.time_in != "" && logCheck.time_out != ""){
             return res.status(400).json({warning: "You cannot login twice a day. Please contact your Administrator."})
         }
 
@@ -184,23 +188,24 @@ module.exports.loginuser_post = async (req, res) => {
             const id = logCheck._id;
             console.log(id);
 
-            const log =  await Log.findByIdAndUpdate(id, {status: "logged out", time_out: time}, {new: true});
+            const log =  await Log.findByIdAndUpdate(id, {status: "present", time_out: time}, {new: true});
 
             // const log = await Log.findOneAndUpdate({user_id: userCheck._id }, { status: "done", time_out: time }, {new: true});
 
             console.log("Uses log is now logged out")
 
-            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "done", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late});
+            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "present", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late});
             record.save();
             console.log("User done log has been put to Record")
 
-            await Log.findByIdAndUpdate(id, {time_in: log.time_in, time_out: log.time_out, late: ""});
+            await Log.findByIdAndUpdate(id, {time_in: log.time_in, time_out: log.time_out, late: "late"});
             console.log("User log time in and time out has been updated to blank")
 
             const timeOutLog = {
                 userName: `${userCheck.firstname} ${userCheck.lastname}`,
                 time_out: log.time_out,
             }
+            
             return res.status(200).json({userOut: timeOutLog})
         }
 
@@ -288,6 +293,8 @@ module.exports.loginuser_post = async (req, res) => {
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
                         return res.status(200).json({late: timeInLog})
                     }
@@ -300,6 +307,8 @@ module.exports.loginuser_post = async (req, res) => {
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
                         return res.status(200).json({late: timeInLog})
                     }
@@ -518,6 +527,40 @@ module.exports.loginuser_post = async (req, res) => {
     }
 }
 
+// GETTING ABSENT EMPLOYEES
+module.exports.absents_post = async (req, res) => {
+    const {date} = req.body;
+    const log =  await Log.find({status: 'absent'})
+    
+    try {
+        if (log.length == 0){
+            console.log("no logs")
+
+            await Log.updateMany({time_in: "null", time_out: "null", late: "", status: "absent"});
+            console.log("User log time in and time out has been updated to blank")
+
+            res.status(400).json({errors: "The ID number is already taken"});
+        }   
+        else {
+            
+            for(var i = 0; i < log.length; ++i){
+                
+                console.log(i)
+                const record =  new Record({user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late});
+                record.save();
+                console.log(record)
+                }
+
+            await Log.updateMany({time_in: "null", time_out: "null", late: "", status: "absent"});
+            console.log("User log time in and time out has been updated to blank")
+            res.status(200).json({success: "The Absent employees has been recorded."});
+            }
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({error: '400'});
+    }
+}
+
 // REGISTER NEW USER / EMPLOYEE
 module.exports.register_post = async (req, res) => {
     const newUser = req.body;
@@ -556,7 +599,6 @@ module.exports.qrcode_get = async (req, res) => {
             console.log(err);
         })
 }
-
 
 
 // SEED FAKE USER / EMPLOYEE
@@ -622,4 +664,11 @@ module.exports.seeddrop_get = async (req, res) => {
         status: 'success'
     }
     res.send(data);
+}
+
+// LATE REASON
+module.exports.late_post = async (req, res) => {
+    const {reason} = req.body;
+    console.log(reason);
+    res.status(200).json({success: "The Absent employees has been recorded."});
 }

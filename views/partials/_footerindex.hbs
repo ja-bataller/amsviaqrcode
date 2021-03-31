@@ -1,9 +1,10 @@
-<script
-   src="https://code.jquery.com/jquery-3.5.1.js"
-   integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-   crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
 
 {{> _helper}}
 
@@ -77,153 +78,193 @@
 
    async function setResult (label, result) {
       
-   const idnumber = result;
-   let time = time12h();
-   let date = getDate();
-   
-   try {
-     const res = await fetch('/login-user', { 
-     method: 'POST', 
-     body: JSON.stringify({idnumber,time,date}),
-     headers: {'Content-Type': 'application/json'}
-     });
-     const data = await res.json();
-
-      if (data.error) {
-
-         alertMessage("error", data.error);
+      const idnumber = result;
+      let time = time12h();
+      let date = getDate();
       
-         console.log("Stop Web Cam");
-         scanner.stop();
-      
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = 
-                  `<div class="loader">
-                  <div class="inner one"></div>
-                  <div class="inner two"></div>
-                  <div class="inner three"></div>
-                  </div>`;
-         }, 500);
+      try {
+      const res = await fetch('/login-user', { 
+      method: 'POST', 
+      body: JSON.stringify({idnumber,time,date}),
+      headers: {'Content-Type': 'application/json'}
+      });
+      const data = await res.json();
+
+         if (data.error) {
+
+            alertMessage("error", data.error);
          
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = "";  
-            console.log("Start Web Cam Again"); 
-            scanner.start();
-         }, 3000);
+            console.log("Stop Web Cam");
+            scanner.stop();
+         
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = 
+                     `<div class="loader">
+                     <div class="inner one"></div>
+                     <div class="inner two"></div>
+                     <div class="inner three"></div>
+                     </div>`;
+            }, 500);
+            
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = "";  
+               console.log("Start Web Cam Again"); 
+               scanner.start();
+            }, 3000);
+         }
+
+         if (data.warning){
+            Swal.fire(
+            'Warning!',
+            `${data.warning}`,
+            'warning'
+            )
+
+            console.log("Stop Web Cam");
+            scanner.stop();
+         
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = 
+                     `<div class="loader">
+                     <div class="inner one"></div>
+                     <div class="inner two"></div>
+                     <div class="inner three"></div>
+                     </div>`;
+            }, 500);
+            
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = "";  
+               console.log("Start Web Cam Again"); 
+               scanner.start();
+            }, 3000);
+         }
+
+         if (data.userFoundandRecord) {
+
+            let message = `${data.userFoundandRecord.userName} | Time-in: ${data.userFoundandRecord.time_in}`;
+            alertMessage('success', message )
+
+            console.log("Stop Web Cam");
+            scanner.stop();
+         
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = 
+                     `<div class="loader">
+                     <div class="inner one"></div>
+                     <div class="inner two"></div>
+                     <div class="inner three"></div>
+                     </div>`;
+            }, 500);
+            
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = "";  
+               console.log("Start Web Cam Again"); 
+               scanner.start();
+            }, 3000);
+         }
+
+         if (data.late) {
+            iziToast.warning({
+               title: `${data.late.userName} | Time-in: ${data.late.time_in}`,
+               message: "LATE",
+               position: "topCenter",
+               timeout: 3000,
+            });
+
+            console.log("Stop Web Cam");
+            scanner.stop();
+
+            $("#latereasonModal").modal('show')
+           
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = 
+                     `<div class="loader">
+                     <div class="inner one"></div>
+                     <div class="inner two"></div>
+                     <div class="inner three"></div>
+                     </div>`;
+            }, 500);
+            
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = "";  
+               console.log("Start Web Cam Again"); 
+               scanner.start();
+            }, 3000);
+         }
+
+         if (data.userOut) {
+            iziToast.info({
+               title: `${data.userOut.userName} | Time-out: ${data.userOut.time_out}`,
+               message: "Logged Out",
+               position: "topCenter",
+               timeout: 3000,
+         });
+            
+            console.log("Stop Web Cam");
+            scanner.stop();
+         
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = 
+                     `<div class="loader">
+                     <div class="inner one"></div>
+                     <div class="inner two"></div>
+                     <div class="inner three"></div>
+                     </div>`;
+            }, 500);
+            
+            setTimeout(function(){ 
+               document.querySelector("#videoSpinner").innerHTML = "";  
+               console.log("Start Web Cam Again"); 
+               scanner.start();
+            }, 3000);
+         }
+
       }
-
-      if (data.warning){
-         Swal.fire(
-         'Warning!',
-         `${data.warning}`,
-         'warning'
-         )
-
-         console.log("Stop Web Cam");
-         scanner.stop();
-      
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = 
-                  `<div class="loader">
-                  <div class="inner one"></div>
-                  <div class="inner two"></div>
-                  <div class="inner three"></div>
-                  </div>`;
-         }, 500);
-         
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = "";  
-            console.log("Start Web Cam Again"); 
-            scanner.start();
-         }, 3000);
-      }
-
-      if (data.userFoundandRecord) {
-
-         let message = `${data.userFoundandRecord.userName} | Time-in: ${data.userFoundandRecord.time_in}`;
-         alertMessage('success', message )
-
-         console.log("Stop Web Cam");
-         scanner.stop();
-      
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = 
-                  `<div class="loader">
-                  <div class="inner one"></div>
-                  <div class="inner two"></div>
-                  <div class="inner three"></div>
-                  </div>`;
-         }, 500);
-         
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = "";  
-            console.log("Start Web Cam Again"); 
-            scanner.start();
-         }, 3000);
-      }
-
-      if (data.late) {
-         iziToast.warning({
-            title: `${data.late.userName} | Time-in: ${data.late.time_in}`,
-            message: "LATE",
-            position: "topCenter",
-            timeout: 3000,
-        });
-
-         console.log("Stop Web Cam");
-         scanner.stop();
-      
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = 
-                  `<div class="loader">
-                  <div class="inner one"></div>
-                  <div class="inner two"></div>
-                  <div class="inner three"></div>
-                  </div>`;
-         }, 500);
-         
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = "";  
-            console.log("Start Web Cam Again"); 
-            scanner.start();
-         }, 3000);
-      }
-
-      if (data.userOut) {
-         iziToast.info({
-            title: `${data.userOut.userName} | Time-out: ${data.userOut.time_out}`,
-            message: "Logged Out",
-            position: "topCenter",
-            timeout: 3000,
-        });
-         
-         console.log("Stop Web Cam");
-         scanner.stop();
-      
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = 
-                  `<div class="loader">
-                  <div class="inner one"></div>
-                  <div class="inner two"></div>
-                  <div class="inner three"></div>
-                  </div>`;
-         }, 500);
-         
-         setTimeout(function(){ 
-            document.querySelector("#videoSpinner").innerHTML = "";  
-            console.log("Start Web Cam Again"); 
-            scanner.start();
-         }, 3000);
-      }
-
-     }
-     catch (err) {
-        console.log(err);
-     } 
+      catch (err) {
+         console.log(err);
+      } 
    }
    
    const scanner = new QrScanner(video, result => setResult(camQrResult, result), error => {
    console.log("Scanning");
    });
    scanner.start();
+</script>
+
+<script>
+   // LATE REASON MODEL
+      const lateForm = document.querySelector("#lateForm");
+
+      if (lateForm) {
+         lateForm.addEventListener('submit', async (e) => {
+         e.preventDefault();
+
+         const reason = "asd";
+
+         console.log(reason);
+
+
+          try {
+            const res = await fetch('/late-reason', { 
+               method: 'POST', 
+               body: JSON.stringify({ reason: "hello" }),
+               headers: {'Content-Type': 'application/json'}
+               });
+         
+            const data = await res.json();
+            console.log(data);
+
+            if(data.success) {
+               console.log("Submitted")
+            }
+
+
+         }
+         catch (err) {
+            console.log(err);
+         }
+      });
+      }
+
+      
 </script>

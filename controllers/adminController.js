@@ -25,7 +25,7 @@ module.exports.admin_get = (req, res) => {
                 }, function(err, count){
                     let active = count;
                     Log.countDocuments({
-                        status: "logged out"
+                        status: "absent"
                     }, function(err, count){
                         let done = count;
                         Log.countDocuments({
@@ -194,12 +194,12 @@ module.exports.update_post = (req, res) => {
 }
 
 // USER VIEW PAGE - PERMANENTLY DELETE THE CURRENT USER
-module.exports.users_delete = async (req, res) => {
+module.exports.users_delete =  async (req, res) => {
     const id = req.params.id;
     console.log(id);
 
-    const userCheck = await User.findOne({_id: id})
-    const findUserLog = await Log.findOne({user_id: id})
+    const userCheck =  await User.findOne({_id: id})
+    const findUserLog =  await Log.findOne({user_id: id})
 
     if (userCheck && findUserLog) {
         // delete User
@@ -220,7 +220,7 @@ module.exports.users_delete = async (req, res) => {
         return res.status(200).json({success: "User has been deleted successfully"})
     } 
 
-    else {
+    {
         res.render("404page")
     }
 
@@ -235,3 +235,4 @@ module.exports.qrcodetester_get = (req, res) => {
 module.exports.about_get = (req, res) => {
     res.render("about");
 }
+

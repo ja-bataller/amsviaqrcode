@@ -16,6 +16,7 @@ router.get("/qrcode-tester", requireAuth, adminController.qrcodetester_get);
 router.get("/users/:id", requireAuth, adminController.userview_get);
 router.get("/user-records/:id", requireAuth, adminController.userrecords_get);
 
+
 // UPDATE USER / EMPLOYEE DATA
 router.post("/update/:id", requireAuth, adminController.update_post);
 
