@@ -19,15 +19,15 @@
   },
   "homepage": "https://github.com/ja-bataller/amsviaqrcode#readme",
   "dependencies": {
-    "bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "faker": "^5.1.0",
+    "faker": "^5.5.2",
     "hbs": "^4.1.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
-    "mongoose": "^5.11.11",
+    "mongoose": "^5.12.2",
     "nodemon": "^2.0.7",
     "validator": "^13.5.2"
   }

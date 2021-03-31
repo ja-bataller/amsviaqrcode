@@ -5,6 +5,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/js/iziToast.min.js" integrity="sha512-Zq9o+E00xhhR/7vJ49mxFNJ0KQw1E1TMWkPTxrWcnpfEFDEXgUiwJHIKit93EW/XxE31HSI5GEOW06G6BF1AtA==" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/499416/TweenLite.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/499416/EasePack.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/499416/demo.js"></script>
+
 
 {{> _helper}}
 
@@ -76,6 +80,9 @@
    const camHasCamera = document.getElementById('cam-has-camera');
    const camQrResult = document.getElementById('cam-qr-result');
 
+   const submitLateReason = document.querySelector("#submitLateReason");
+   const late_reason = document.querySelector("#late_reason");
+
    async function setResult (label, result) {
       
       const idnumber = result;
@@ -83,11 +90,15 @@
       let date = getDate();
       
       try {
+
       const res = await fetch('/login-user', { 
+
       method: 'POST', 
       body: JSON.stringify({idnumber,time,date}),
       headers: {'Content-Type': 'application/json'}
+
       });
+
       const data = await res.json();
 
          if (data.error) {
@@ -171,25 +182,75 @@
                timeout: 3000,
             });
 
+            $("#latereasonModal").modal("show")
+
             console.log("Stop Web Cam");
             scanner.stop();
-
-            $("#latereasonModal").modal('show')
-           
-            setTimeout(function(){ 
-               document.querySelector("#videoSpinner").innerHTML = 
-                     `<div class="loader">
-                     <div class="inner one"></div>
-                     <div class="inner two"></div>
-                     <div class="inner three"></div>
-                     </div>`;
-            }, 500);
             
-            setTimeout(function(){ 
-               document.querySelector("#videoSpinner").innerHTML = "";  
-               console.log("Start Web Cam Again"); 
-               scanner.start();
-            }, 3000);
+            submitLateReason.addEventListener('click', async (e) => {
+               e.preventDefault();
+
+               const reason = late_reason.value;
+               const idnumber = data.late.idnumber;
+               const date = data.late.date;
+
+            
+               try {
+
+                  if (reason == "") {
+                  return alertMessage("error", "Please type you're reason.")
+                  }
+
+                  console.log(reason);
+                  console.log(idnumber);
+                  console.log(date);
+                  
+                  const response = await fetch('/late', { 
+                  method: 'POST', 
+                  body: JSON.stringify({ reason, idnumber, date }),
+                  headers: {'Content-Type': 'application/json'}
+                  });
+
+                  const value = await response.json();
+                  console.log(value);
+                  
+                  // if the login inputs is incorrect this will trigger
+                  if (value.success) {
+                     iziToast.success({
+                     title: "Late Reason has been recorded",
+                     position: "topCenter",
+                     timeout: 3000,  
+                     });
+                  
+                  document.querySelector("#late_reason").value = "";
+                  $("#latereasonModal").modal("hide")
+
+                  setTimeout(function(){ 
+                  document.querySelector("#videoSpinner").innerHTML = 
+                        `<div class="loader">
+                        <div class="inner one"></div>
+                        <div class="inner two"></div>
+                        <div class="inner three"></div>
+                        </div>`;
+                  }, 500);
+               
+                  setTimeout(function(){ 
+                     location.reload();
+                  }, 3000);
+
+                  } else {
+                     iziToast.warning({
+                     title: "Late Reason is not recorded",
+                     position: "topCenter",
+                     timeout: 3000,  
+                     });
+                  }
+                  
+               } catch (err) {
+                  console.log(err);
+               }   
+            });
+
          }
 
          if (data.userOut) {
@@ -229,42 +290,4 @@
    console.log("Scanning");
    });
    scanner.start();
-</script>
-
-<script>
-   // LATE REASON MODEL
-      const lateForm = document.querySelector("#lateForm");
-
-      if (lateForm) {
-         lateForm.addEventListener('submit', async (e) => {
-         e.preventDefault();
-
-         const reason = "asd";
-
-         console.log(reason);
-
-
-          try {
-            const res = await fetch('/late-reason', { 
-               method: 'POST', 
-               body: JSON.stringify({ reason: "hello" }),
-               headers: {'Content-Type': 'application/json'}
-               });
-         
-            const data = await res.json();
-            console.log(data);
-
-            if(data.success) {
-               console.log("Submitted")
-            }
-
-
-         }
-         catch (err) {
-            console.log(err);
-         }
-      });
-      }
-
-      
 </script>

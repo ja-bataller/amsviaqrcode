@@ -20,7 +20,7 @@ const DB_URI = process.env.MONGO_ATLAST_URI;
 const PORT = process.env.PORT  || 3000;
 
 // MongoDB Connection
-mongoose.connect(DB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true})
+mongoose.connect(DB_URI, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true})
     .then((result) => app.listen(PORT), console.log("Connected to MongoDB"))
     .catch((err) => console.log(err))
 

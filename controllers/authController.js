@@ -190,15 +190,13 @@ module.exports.loginuser_post = async (req, res) => {
 
             const log =  await Log.findByIdAndUpdate(id, {status: "present", time_out: time}, {new: true});
 
-            // const log = await Log.findOneAndUpdate({user_id: userCheck._id }, { status: "done", time_out: time }, {new: true});
-
             console.log("Uses log is now logged out")
 
-            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "present", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late});
+            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "present", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late, late_reason: log.late_reason});
             record.save();
             console.log("User done log has been put to Record")
 
-            await Log.findByIdAndUpdate(id, {time_in: log.time_in, time_out: log.time_out, late: "late"});
+            await Log.findByIdAndUpdate(id, {time_in: "null", time_out: "null", late: "null", late_reason: "null"});
             console.log("User log time in and time out has been updated to blank")
 
             const timeOutLog = {
@@ -216,23 +214,27 @@ module.exports.loginuser_post = async (req, res) => {
                 if(ampm == 'PM'){
                     if(hour >= 0 && hour < 2){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
                         log.save();
             
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
                         return res.status(200).json({late: timeInLog})
                     } 
                     else if (hour == 12){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
                         log.save();
             
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
                         return res.status(200).json({late: timeInLog})
                     }
@@ -246,31 +248,35 @@ module.exports.loginuser_post = async (req, res) => {
 
                     if(hour > 6){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
                         log.save();
             
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
                         return res.status(200).json({late: timeInLog})
                     }
 
                     else if(hour == 6 && min > 0){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
                         log.save();
             
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
                         return res.status(200).json({late: timeInLog})
                     }
 
                     else{
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null"});
                         log.save();
         
                         const timeInLog = {
@@ -287,7 +293,7 @@ module.exports.loginuser_post = async (req, res) => {
                 if(ampm == 'PM'){
                     if(hour > 1 && hour < 9){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
                         log.save();
             
                         const timeInLog = {
@@ -301,7 +307,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else if(hour == 1 && min > 0){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
                         log.save();
             
                         const timeInLog = {
@@ -319,7 +325,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else if(hour == 1 && min == 0 || hour == 12){
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null"});
                         log.save();
         
                         const timeInLog = {
@@ -331,7 +337,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else{
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null"});
                         log.save();
         
                         const timeInLog = {
@@ -344,7 +350,7 @@ module.exports.loginuser_post = async (req, res) => {
                 
                 if(ampm == 'AM'){
                     console.log("On-time")
-                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no"});
+                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null"});
                     log.save();
     
                     const timeInLog = {
@@ -364,13 +370,15 @@ module.exports.loginuser_post = async (req, res) => {
                 if(ampm == 'PM'){
                     if(hour >= 0 && hour < 2){
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
 
                         return res.status(200).json({late: timeInLog})
@@ -378,13 +386,15 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else if (hour == 12){
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
 
                         return res.status(200).json({late: timeInLog})
@@ -398,13 +408,15 @@ module.exports.loginuser_post = async (req, res) => {
                 else if(ampm == 'AM'){
                     if(hour > 6){
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
 
                         return res.status(200).json({late: timeInLog})
@@ -412,13 +424,15 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else if(hour == 6 && min > 0){
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
 
                         return res.status(200).json({late: timeInLog})
@@ -426,7 +440,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else{
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
@@ -445,13 +459,15 @@ module.exports.loginuser_post = async (req, res) => {
                 if(ampm == 'PM'){
                     if(hour > 1 && hour < 9){
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
 
                         return res.status(200).json({late: timeInLog})
@@ -459,13 +475,15 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else if(hour == 1 && min > 0){
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
                         }
 
                         return res.status(200).json({late: timeInLog})
@@ -477,7 +495,7 @@ module.exports.loginuser_post = async (req, res) => {
                     
                     else if(hour == 1 && min == 0 || hour == 12){
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
@@ -491,7 +509,7 @@ module.exports.loginuser_post = async (req, res) => {
                     
                     else{
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
@@ -506,7 +524,7 @@ module.exports.loginuser_post = async (req, res) => {
                     
                     if(ampm == 'AM'){
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no"});
+                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no", late_reason: "null"});
 
                         console.log("Old User log has been updated and now active")
 
@@ -518,13 +536,28 @@ module.exports.loginuser_post = async (req, res) => {
                         return res.status(200).json({userFoundandRecord: timeInLog})
                     }
             }
-
         }
 
     } catch (err) {
         console.log(err);
         res.status(400).json({error: '400'});
     }
+}
+
+//  LATE REASON
+module.exports.late_post = async (req, res) => {
+    const {reason, idnumber, date} = req.body;
+
+    const logCheck = await Log.findOne({idnumber})
+
+    const id = logCheck._id;
+    console.log(id);
+
+    await Log.findByIdAndUpdate(id, {late_reason: reason}, {new: true});
+
+    console.log("Late Reason recorded")
+
+    return res.status(200).json({success: "Late reason has been submitted successfully."});
 }
 
 // GETTING ABSENT EMPLOYEES
@@ -666,9 +699,3 @@ module.exports.seeddrop_get = async (req, res) => {
     res.send(data);
 }
 
-// LATE REASON
-module.exports.late_post = async (req, res) => {
-    const {reason} = req.body;
-    console.log(reason);
-    res.status(200).json({success: "The Absent employees has been recorded."});
-}
