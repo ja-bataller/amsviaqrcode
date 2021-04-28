@@ -92,6 +92,7 @@ h6 span{
 
 
 .card-3d-wrap {
+  opacity: 90%;
   position: relative;
   width: 440px;
   max-width: 100%;
@@ -100,6 +101,7 @@ h6 span{
   transform-style: preserve-3d;
   perspective: 800px;
   margin-top: 60px;
+  
 }
 .card-3d-wrapper {
   width: 100%;
@@ -112,6 +114,7 @@ h6 span{
   transition: all 600ms ease-out; 
 }
 .card-front, .card-back {
+
   width: 100%;
   height: 100%;
   background-color: #2a2b38;

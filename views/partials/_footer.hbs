@@ -165,3 +165,68 @@
       });
 }
 </script>
+
+<script>
+   const recordLeave = document.querySelector("#recordLeave");
+   const selectLeave = document.querySelector("#selectLeave");   
+   const idNumber = document.querySelector(".idNumberRecord");   
+
+   if (recordLeave) {
+         recordLeave.addEventListener('click', async (e) => {
+         e.preventDefault();
+         
+         const leave = selectLeave.value;
+         const idNum = idNumber.innerHTML;
+         let date = getDate();
+
+         console.log(idNum);
+
+         try {
+
+            if (leave == "Choose leave") {
+               iziToast.error({
+                  title: "Please choose leave option.",
+                  position: "topCenter",
+                  timeout: 3000,  
+               });
+
+               return;
+            }
+
+            const res = await fetch('/leave', { 
+            method: 'POST', 
+            body: JSON.stringify({ leave, idNum, date }),
+            headers: {'Content-Type': 'application/json'}
+            });
+            
+            const data = await res.json();
+            console.log(data);
+
+            if (data.success) {
+               iziToast.success({
+               title: data.success,
+               position: "topCenter",
+               timeout: 3000,  
+               });
+
+               document.getElementById("selectLeave").selectedIndex = 0;
+               
+            }
+
+            if (data.error) {
+               iziToast.error({
+               title: data.error,
+               position: "topCenter",
+               timeout: 3000,  
+               });
+
+               document.getElementById("selectLeave").selectedIndex = 0;
+
+            }
+         } catch (e) {
+              Swal.fire('Error', 'Server Error!.', 'error')
+         }
+         
+      });
+   }
+</script>

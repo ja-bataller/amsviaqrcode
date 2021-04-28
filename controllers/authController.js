@@ -7,7 +7,6 @@ const bcrypt = require("bcrypt");
 const faker = require("faker");
 require('dotenv').config();
 
-
 // ERROR HANDLING / VALIDATION
 const handleErrors = (err) => {
     console.log(err.message, err.code);
@@ -190,13 +189,15 @@ module.exports.loginuser_post = async (req, res) => {
 
             const log =  await Log.findByIdAndUpdate(id, {status: "present", time_out: time}, {new: true});
 
+            let presentCount = log.total_days_present + 1;
+
             console.log("Uses log is now logged out")
 
-            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "present", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late, late_reason: log.late_reason});
+            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "present", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late, late_reason: log.late_reason, total_days_present: presentCount});
             record.save();
             console.log("User done log has been put to Record")
 
-            await Log.findByIdAndUpdate(id, {time_in: "null", time_out: "null", late: "null", late_reason: "null"});
+            await Log.findByIdAndUpdate(id, {time_in: "null", time_out: "null", late: "null", late_reason: "null", total_days_present: presentCount});
             console.log("User log time in and time out has been updated to blank")
 
             const timeOutLog = {
@@ -214,7 +215,7 @@ module.exports.loginuser_post = async (req, res) => {
                 if(ampm == 'PM'){
                     if(hour >= 0 && hour < 2){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
             
                         const timeInLog = {
@@ -227,7 +228,7 @@ module.exports.loginuser_post = async (req, res) => {
                     } 
                     else if (hour == 12){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
             
                         const timeInLog = {
@@ -248,7 +249,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     if(hour > 6){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
             
                         const timeInLog = {
@@ -262,7 +263,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else if(hour == 6 && min > 0){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
             
                         const timeInLog = {
@@ -276,7 +277,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else{
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
         
                         const timeInLog = {
@@ -293,7 +294,7 @@ module.exports.loginuser_post = async (req, res) => {
                 if(ampm == 'PM'){
                     if(hour > 1 && hour < 9){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
             
                         const timeInLog = {
@@ -307,7 +308,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else if(hour == 1 && min > 0){
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
             
                         const timeInLog = {
@@ -325,7 +326,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else if(hour == 1 && min == 0 || hour == 12){
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
         
                         const timeInLog = {
@@ -337,7 +338,7 @@ module.exports.loginuser_post = async (req, res) => {
 
                     else{
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null"});
+                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                         log.save();
         
                         const timeInLog = {
@@ -350,7 +351,7 @@ module.exports.loginuser_post = async (req, res) => {
                 
                 if(ampm == 'AM'){
                     console.log("On-time")
-                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null"});
+                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
                     log.save();
     
                     const timeInLog = {
@@ -541,6 +542,54 @@ module.exports.loginuser_post = async (req, res) => {
     } catch (err) {
         console.log(err);
         res.status(400).json({error: '400'});
+    }
+}
+
+
+// LEAVE
+module.exports.leave_post = async (req, res) => {
+    const { leave, idNum, date } = req.body;
+
+    const logCheck = await Log.findOne({idnumber: idNum})
+    const recordIdCheck = await Record.findOne({idnumber: idNum})
+    const recordDateCheck = await Record.findOne({date: date})
+
+    const id = logCheck._id;
+    
+    if (recordIdCheck.idnumber && date != recordDateCheck.date) {
+        if (leave == "Sick Leave") {
+            const leaveRemaining = logCheck.leave;
+            
+            if (leaveRemaining != 0 || leaveRemaining > 0) {
+                const leaveNewRemaining = leaveRemaining - 1;
+    
+                await Log.findByIdAndUpdate(id, {status: leave, leave: leaveNewRemaining, date: date}, {new: true});
+                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: logCheck.status, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: leaveNewRemaining, special_leave: logCheck.special_leave});
+                record.save();
+    
+                return res.status(200).json({success: "Employee Special leave has been recorded"});
+            } else {
+                return res.status(400).json({error: "This Employee has reached the maximum limit of Leave."});
+            }
+        } 
+        
+        if (leave == "Special Leave") {
+            const specialLeaveRemaining = logCheck.special_leave;
+            
+            if (specialLeaveRemaining != 0 || specialLeaveRemaining > 0) {
+                const specialLeaveNewRemaining = specialLeaveRemaining - 1;
+    
+                await Log.findByIdAndUpdate(id, {status: leave, special_leave: specialLeaveNewRemaining, date: date}, {new: true});
+                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: logCheck.status, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: logCheck.leave, special_leave: specialLeaveNewRemaining});
+                record.save();
+    
+                return res.status(200).json({success: "Employee Special leave has been recorded"});
+            } else {
+                return res.status(400).json({error: "This Employee has reached the maximum limit of Special Leave."});
+            }
+        }
+    } else {
+        return res.status(400).json({error: "This Employee has already been recorded today."});
     }
 }
 

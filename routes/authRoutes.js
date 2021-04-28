@@ -18,6 +18,7 @@ router.post("/login-admin", authController.loginadmin_post);
 router.post("/login-user", authController.loginuser_post);
 router.post("/register-qrcode", authController.register_post);
 router.post("/absents", requireAuth, authController.absents_post);
+router.post("/leave", requireAuth, authController.leave_post);
 router.post("/late", authController.late_post);
 
 // CHANGE ADMINISTRATOR ACCOUNT PASSWORD

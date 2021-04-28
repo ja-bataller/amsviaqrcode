@@ -71,10 +71,11 @@ module.exports.userrecords_get = async (req, res) => {
 
     const findUserRecord = await Record.find({user_id: id})
     const findUserName = await Record.findOne({user_id: id})
+    const logcheck = await Log.findOne({user_id: id})
 
     if(findUserRecord && findUserName){
         console.log(findUserRecord);
-            res.render("user_records", {user_records: findUserRecord, name: findUserName.name})
+            res.render("user_records", {user_records: findUserRecord, name: findUserName.name, leave: logcheck.leave, special_leave: logcheck.special_leave})
     } else {
         res.render("404page")
         console.log("Error");

@@ -1,3 +1,4 @@
+const { internet } = require("faker");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -32,6 +33,15 @@ const RecordSchema = new Schema({
     },
     late_reason: {
         type: String,
+    },
+    total_days_present: {
+        type: Number,
+    },
+    leave: {
+        type: Number,
+    },
+    special_leave: {
+        type: Number,
     },
 }, {
     timestamps: true

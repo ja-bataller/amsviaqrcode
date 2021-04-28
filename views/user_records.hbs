@@ -69,8 +69,25 @@
                <!-- Begin Page Content -->
                <div class="container-fluid">
                   <!-- Page Heading -->
-                  <h2> <i class="fas fa-file-alt"></i> {{name}} Records<a class="btn btn-secondary" href="/logs" role="button" style="float: right;"><i class="fas fa-arrow-left"></i></a></h2>
-                  <!-- DataTales Example -->
+                  <h2> <i class="fas fa-file-alt"></i> {{name}} Records
+                  <a class="btn btn-secondary" href="/logs" role="button" style="float: right;"><i class="fas fa-arrow-left"></i></a>
+                  <h5>Sick Leave: {{leave}}</h5>
+                  <h5>Special Leave: {{special_leave}}</h5>
+                  <div class="row">
+                     <div class="col-lg-3">
+                        <div class="input-group mt-3 mb-2">
+                        <select class="custom-select" id="selectLeave">
+                           <option value="Choose leave" selected>Choose leave</option>
+                           <option value="Sick Leave">Leave</option>
+                           <option value="Special Leave">Special leave</option>
+                        </select>
+                        <div class="input-group-append">
+                           <button id="recordLeave" class="btn btn-outline-info" type="button">RECORD</button>
+                        </div>
+                     </div>
+                     </div>
+                  </div>
+                  </h2>
                   <div class="card shadow mb-4">
                      <div class="card-body">
                         <div class="table-responsive">
@@ -105,7 +122,7 @@
                                  {{#if user_records}}
                                  {{#each user_records}}
                                  <tr>
-                                    <td>{{idnumber}}</td>
+                                    <td class="idNumberRecord">{{idnumber}}</td>
                                     <td class="uppercase">{{name}}</td>
                                     <td class="uppercase">{{shift}}</td>
                                     <td class="uppercase">{{status}}</td>
