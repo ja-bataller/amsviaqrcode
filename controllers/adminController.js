@@ -8,6 +8,7 @@ const User = require('../models/users');
 const Log = require('../models/logs');
 const Record = require('../models/records');
 
+
 // OPEN ADMIN PAGE AND SHOW DATA DASHBOARD FROM MONGO DB
 module.exports.admin_get = (req, res) => {
     User.countDocuments({}, function(err, count) {
