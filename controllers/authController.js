@@ -555,8 +555,41 @@ module.exports.leave_post = async (req, res) => {
     const recordDateCheck = await Record.findOne({date: date})
 
     const id = logCheck._id;
+    if (recordIdCheck.idnumber && !recordDateCheck ) {
+        if (leave == "Sick Leave") {
+            const leaveRemaining = logCheck.leave;
+            
+            if (leaveRemaining != 0 || leaveRemaining > 0) {
+                const leaveNewRemaining = leaveRemaining - 1;
     
-    if (recordIdCheck.idnumber && date != recordDateCheck.date) {
+                await Log.findByIdAndUpdate(id, {status: leave, leave: leaveNewRemaining, date: date}, {new: true});
+                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: logCheck.status, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: leaveNewRemaining, special_leave: logCheck.special_leave});
+                record.save();
+    
+                return res.status(200).json({success: "Employee Special leave has been recorded"});
+            } else {
+                return res.status(400).json({error: "This Employee has reached the maximum limit of Leave."});
+            }
+        } 
+        
+        if (leave == "Special Leave") {
+            const specialLeaveRemaining = logCheck.special_leave;
+            
+            if (specialLeaveRemaining != 0 || specialLeaveRemaining > 0) {
+                const specialLeaveNewRemaining = specialLeaveRemaining - 1;
+    
+                await Log.findByIdAndUpdate(id, {status: leave, special_leave: specialLeaveNewRemaining, date: date}, {new: true});
+                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: logCheck.status, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: logCheck.leave, special_leave: specialLeaveNewRemaining});
+                record.save();
+    
+                return res.status(200).json({success: "Employee Special leave has been recorded"});
+            } else {
+                return res.status(400).json({error: "This Employee has reached the maximum limit of Special Leave."});
+            }
+        }
+    }
+
+    else if (recordIdCheck.idnumber && date != recordDateCheck.date) {
         if (leave == "Sick Leave") {
             const leaveRemaining = logCheck.leave;
             
