@@ -84,6 +84,7 @@ module.exports.loginadmin_post = async (req, res) => {
     } = req.body;
 
     try {
+        console.log("Logged-in");
         const account = await Account.login(username, password);
         const token = createToken(account._id);
         res.cookie('jwt', token, {
@@ -115,9 +116,6 @@ module.exports.changePassword_put = async (req, res) => {
     const {currentPassword, newPassword} = req.body;
     const id = req.params.id;
 
-    console.log(id)
-    console.log(currentPassword);
-    console.log(newPassword);
 
     const account = await Account.findOne({_id: id});
 
@@ -561,19 +559,19 @@ module.exports.loginuser_post = async (req, res) => {
     }
 }
 
-
 // LEAVE
 module.exports.leave_post = async (req, res) => {
     const { leave, idNum, date } = req.body;
 
     const logCheck = await Log.findOne({idnumber: idNum})
-    const recordIdCheck = await Record.findOne({idnumber: idNum})
-    // const recordDateCheck = await Record.findOne({date: date})
+    const recordIdCheck = await Record.findOne({idnumber: idNum, date: date})
     const leaveReason = leave;
 
     const id = logCheck._id;
+
     console.log(recordIdCheck.date)
-    if (recordIdCheck.idnumber && recordIdCheck.date != date) {
+
+    if (!recordIdCheck) {
         if (leave == "Sick Leave") {
             const leaveRemaining = logCheck.leave;
             
@@ -581,7 +579,7 @@ module.exports.leave_post = async (req, res) => {
                 const leaveNewRemaining = leaveRemaining - 1;
     
                 await Log.findByIdAndUpdate(id, {status: leaveReason, leave: leaveNewRemaining, date: date}, {new: true});
-                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: logCheck.status, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: leaveNewRemaining, special_leave: logCheck.special_leave});
+                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: leaveNewRemaining, special_leave: logCheck.special_leave});
                 record.save();
 
                 const leave =  new Leave({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: leaveNewRemaining, special_leave: logCheck.special_leave});
@@ -600,7 +598,7 @@ module.exports.leave_post = async (req, res) => {
                 const specialLeaveNewRemaining = specialLeaveRemaining - 1;
     
                 await Log.findByIdAndUpdate(id, {status: leaveReason, special_leave: specialLeaveNewRemaining, date: date}, {new: true});
-                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: logCheck.status, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: logCheck.leave, special_leave: specialLeaveNewRemaining});
+                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: logCheck.leave, special_leave: specialLeaveNewRemaining});
                 record.save();
 
                 const leave =  new Leave({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: logCheck.leave, special_leave: specialLeaveNewRemaining});
@@ -642,52 +640,16 @@ module.exports.absents_post = async (req, res) => {
     const {date} = req.body;
 
     const log =  await Log.find({status: 'absent'})
-    const recordCheck = await Record.find({})
-    const recordDate = await Record.findOne({date: date})
+    const recordCheck = await Record.findOne({date:date, status: "absent"})
 
     try {
-        console.log("CHECK")
-        console.log(recordDate)
-    
-        if (recordCheck.length === 0) {
+        
+        if (!recordCheck) {
 
             if (log.length == 0){
                 console.log("no logs")
     
                 await Log.updateMany({time_in: "null", time_out: "null", late: "", status: "absent"});
-                console.log("User log time in and time out has been updated to blank")
-    
-                return res.status(400).json({success: "Great! No Absent for Today."});
-            }   
-            
-            else {
-                console.log("has logs")
-                
-                for(var i = 0; i < log.length; ++i){
-                    
-                    console.log(i)
-                    const record =  new Record({user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late});
-                    record.save();
-    
-                    const absent =  new Absent({user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date});
-                    absent.save();
-                
-                    }
-    
-                await Log.updateMany({time_in: "null", time_out: "null", late: "", status: "absent"});
-                console.log("User log time in and time out has been updated to blank")
-                return res.status(200).json({success: "The Absent employees has been recorded."});
-                }
-
-        } 
-
-        else if (recordDate.date != date) {
-
-            if (log.length == 0){
-                console.log("no logs")
-    
-                await Log.updateMany({time_in: "null", time_out: "null", late: "", status: "absent"});
-                console.log("User log time in and time out has been updated to blank")
     
                 return res.status(400).json({success: "Great! No Absent for Today."});
             }   
@@ -706,7 +668,7 @@ module.exports.absents_post = async (req, res) => {
                     }
     
                 await Log.updateMany({time_in: "null", time_out: "null", late: "", status: "absent"});
-                console.log("User log time in and time out has been updated to blank")
+               
                 return res.status(200).json({success: "The Absent employees has been recorded."});
                 }
 
@@ -761,7 +723,6 @@ module.exports.qrcode_get = async (req, res) => {
         })
 }
 
-
 // SEED FAKE USER / EMPLOYEE
 const random = {
     dept: [
@@ -773,7 +734,7 @@ const random = {
     ],
     gender: ['male','female'],
     shift: ['day', 'night'],
-    bday: ['1987-05-14', '1999-06-21','1995-12-08', '1991-03-17']
+    bday: ['1987-05-14', '1999-06-21','1995-12-08', '1991-03-17', '1996-06-26']
   };
 
 function generateRandom (choices) {
@@ -808,7 +769,7 @@ module.exports.seedusers_get = async (req, res) => {
       }
 
     let data = {
-        message: `Seeded Users total of ${count}`,
+        message: `Seeded Employees total of ${count}`,
         status: 'success'
     }
     res.send(data);
@@ -821,8 +782,8 @@ module.exports.seeddrop_get = async (req, res) => {
     await Record.deleteMany({})
 
     let data = {
-        message: "DELETED SUCCESSFULLY",
-        status: 'success'
+        message: "Users, Logs, and Records has been deleted successfully.",
+        status: 'Success'
     }
     res.send(data);
 }
