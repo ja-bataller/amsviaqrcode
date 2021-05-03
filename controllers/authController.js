@@ -569,8 +569,6 @@ module.exports.leave_post = async (req, res) => {
 
     const id = logCheck._id;
 
-    console.log(recordIdCheck.date)
-
     if (!recordIdCheck) {
         if (leave == "Sick Leave") {
             const leaveRemaining = logCheck.leave;
@@ -585,7 +583,7 @@ module.exports.leave_post = async (req, res) => {
                 const leave =  new Leave({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: leaveNewRemaining, special_leave: logCheck.special_leave});
                 leave.save();
     
-                return res.status(200).json({success: "Employee Special leave has been recorded"});
+                return res.status(200).json({success: "Employee Sick leave has been recorded"});
             } else {
                 return res.status(400).json({error: "This Employee has reached the maximum limit of Leave."});
             }
