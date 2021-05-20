@@ -1,139 +1,426 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      {{!-- partials header --}}
-      {{> _header}}
-   </head>
-   <body>
-      <!-- Page Wrapper -->
-      <div id="wrapper">
-         <!-- Sidebar -->
-         <ul class="navbar-nav sidebarCustom sidebar sidebar-dark accordion" id="accordionSidebar">
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center disableClick" href="/admin">
-               <img src="/img/logo.png" width="50px" alt="">
-               <div class="sidebar-brand-text mx-3"> COMPANY NAME</div>
-            </a>
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-               <a class="nav-link" href="/admin">
+
+<head>
+   {{!-- partials header --}}
+   {{> _header}}
+</head>
+
+<body>
+   <!-- Page Wrapper -->
+   <div id="wrapper">
+      <!-- Sidebar -->
+      <ul class="navbar-nav sidebarCustom sidebar sidebar-dark accordion" id="accordionSidebar">
+         <!-- Sidebar - Brand -->
+         <a class="sidebar-brand d-flex align-items-center justify-content-center disableClick" href="/admin">
+            <img src="/img/logo.png" width="50px" alt="">
+            <div class="sidebar-brand-text mx-3"> COMPANY NAME</div>
+         </a>
+         <!-- Divider -->
+         <hr class="sidebar-divider my-0">
+         <!-- Nav Item - Dashboard -->
+         <li class="nav-item active">
+            <a class="nav-link" href="/admin">
                <i class="fas fa-fw fa-home"></i>
                <span>Dashboard</span></a>
-            </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-            <!-- Nav Item - Logs -->
-            <li class="nav-item">   
-               <a class="nav-link" href="/logs">
+         </li>
+         <li class="nav-item">
+            <a class="nav-link" href="/statistics">
+               <i class="fas fa-fw fa-chart-bar"></i>
+               <span>Statistics</span></a>
+         </li>
+         <!-- Divider -->
+         <hr class="sidebar-divider">
+         <!-- Nav Item - Logs -->
+         <li class="nav-item">
+            <a class="nav-link" href="/logs">
                <i class="fas fa-fw fa-clipboard"></i>
                <span>Logs</span></a>
-            </li>
-            <!-- Nav Item - User -->
-            <li class="nav-item">   
-               <a class="nav-link" href="/users">
+         </li>
+         <!-- Nav Item - User -->
+         <li class="nav-item">
+            <a class="nav-link" href="/users">
                <i class="fas fa-fw fa-users"></i>
                <span>Users</span></a>
-            </li>
-            <!-- Nav Item - QR Code Test -->
-            <li class="nav-item">   
-               <a class="nav-link" href="/qrcode-tester">
+         </li>
+         <!-- Nav Item - QR Code Test -->
+         <li class="nav-item">
+            <a class="nav-link" href="/qrcode-tester">
                <i class="fas fa-fw fa-qrcode"></i>
                <span>QR Code Tester</span></a>
-            </li>
-            <!-- Nav Item - About -->
-            <li class="nav-item">   
-               <a class="nav-link" href="/about">
+         </li>
+         <!-- Nav Item - About -->
+         <li class="nav-item">
+            <a class="nav-link" href="/about">
                <i class="fas fa-fw fa-info-circle"></i>
                <span>About</span></a>
-            </li>
-            <!-- Nav Item - Contact Us -->
-            <li class="nav-item">   
-               <a class="nav-link" href="#" data-toggle="modal" data-target="#contactModal">
+         </li>
+         <!-- Nav Item - Contact Us -->
+         <li class="nav-item">
+            <a class="nav-link" href="#" data-toggle="modal" data-target="#contactModal">
                <i class="fas fa-envelope"></i>
                <span>Contact Us</span></a>
-            </li>
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-               <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-         </ul>
-         <!-- End of Sidebar -->
-         <!-- Content Wrapper -->
-         <div id="content-wrapper" class="d-flex flex-column">
-            <!-- Main Content -->
-            <div id="content">
-               {{!-- partials topbar --}}
-               {{> _topbar}}
-               <!-- Begin Page Content -->
-               <div class="container-fluid">
-                  <!-- Content Row -->
-                  <div class="row justify-content-center">
-                     <!-- Border Bottom Utilities -->
-                     <div class="col-lg-6">
-                        <div class="card mb-4 py-3 border-bottom-dark">
-                           <div class="card-body">
-                              <h2>Active</h2>
-                              <i class="fas fa-user-check fa-5x"> {{active}}</i>
-                           </div>
+         </li>
+         <!-- Sidebar Toggler (Sidebar) -->
+         <div class="text-center d-none d-md-inline">
+            <button class="rounded-circle border-0" id="sidebarToggle"></button>
+         </div>
+      </ul>
+      <!-- End of Sidebar -->
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+         <!-- Main Content -->
+         <div id="content">
+            {{!-- partials topbar --}}
+            {{> _topbar}}
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+               <!-- Content Row -->
+               <div class="row justify-content-center">
+                  <!-- Border Bottom Utilities -->
+
+                  <div class="col-lg-12 pb-3">
+                     <div class="row">
+
+                        <div class="col-lg-4">
+                           <label for="">Change: </label>
+                           <select id="lateChartOpt" class="custom-select" style="width: auto;">
+                              <option value="line">Line Chart</option>
+                              <option value="bar">Bar Chart</option>
+                              <option value="radar">Radar Chart</option>
+                              <option value="doughnut">Doughnut Chart</option>
+                              <option value="pie" selected>Pie Chart</option>
+                              <option value="bubble">Bubble Chart</option>
+                              <option value="polarArea">Polar Area Chart</option>
+                           </select>
                         </div>
-                        <div class="card mb-4 py-3 border-bottom-dark">
-                           <div class="card-body">
-                              <h2>InActive</h2>
-                              <i class="fas fa-user-times fa-5x"> {{done}}</i>
-                           </div>
+
+                        <div class="col-lg-4">
+                           <label for="">Change: </label>
+                           <select id="absentChartOpt" class="custom-select" style="width: auto;">
+                              <option value="line" selected>Line Chart</option>
+                              <option value="bar">Bar Chart</option>
+                              <option value="radar">Radar Chart</option>
+                              <option value="doughnut">Doughnut Chart</option>
+                              <option value="pie">Pie Chart</option>
+                              <option value="polarArea">Polar Area Chart</option>
+                           </select>
                         </div>
-                        <div class="card mb-4 py-3 border-bottom-dark">
-                           <div class="card-body">
-                              <h2>Late</h2>
-                              <i class="fas fa-bed fa-5x"> {{late}}</i>
-                           </div>
+
+                        <div class="col-lg-4">
+                           <label for="">Change: </label>
+                           <select id="leaveChartOpt" class="custom-select" style="width: auto;">
+                              <option value="line">Line Chart</option>
+                              <option value="bar" selected>Bar Chart</option>
+                              <option value="radar">Radar Chart</option>
+                              <option value="doughnut">Doughnut Chart</option>
+                              <option value="pie">Pie Chart</option>
+                              <option value="polarArea">Polar Area Chart</option>
+                           </select>
                         </div>
-                     </div>
-                     <!-- Border Bottom Utilities -->
-                     <div class="col-lg-6">
-                        <div class="card mb-4 py-3 border-bottom-dark">
-                           <div class="card-body">
-                              <h2>Employees</h2>
-                              <i class="fas fa-users fa-5x"> {{employees}}</i>
-                           </div>
-                        </div>
-                        <div class="card mb-4 py-3 border-bottom-dark">
-                           <div class="card-body">
-                              <h2>Day Shift <div style="float: right;"> <h6>6 AM - 2 PM</h6></div></h2> 
-                              <i class="fas fa-cloud-sun fa-5x"> {{day}}</i>
-                           </div>
-                        </div>
-                        <div class="card mb-4 py-3 border-bottom-dark">
-                           <div class="card-body">
-                               <h2>Night Shift <div style="float: right;"> <h6>1 PM - 9 PM</h6></div></h2>
-                              <i class="fas fa-cloud-moon fa-5x"> {{night}}</i>
-                           </div>
-                        </div>
-                        {{!-- 
-                        <div class="card mb-4 py-3 border-bottom-dark">
-                           <div class="card-body">
-                              <h2>Under Time</h2>
-                              <i class="fas fa-clock fa-5x">  </i>
-                           </div>
-                        </div>
-                        --}}
+
                      </div>
                   </div>
+
+                  <div class="col-lg-4 pb-4" id="lateContainer">
+                     <canvas class="border" id="firstChart"></canvas>
+                  </div>
+
+                  <div class="col-lg-4 pb-4">
+                     <canvas class="border" id="secondChart"></canvas>
+                  </div>
+
+                  <div class="col-lg-4 pb-4">
+                     <canvas class="border" id="thirdChart"></canvas>
+                  </div>
+
+                  <div class="col-lg-4">
+                     <div class="card mb-4 border-bottom-dark">
+                        <div class="card-body">
+                           <h2>Employees</h2>
+                           <i class="fas fa-users fa-5x"> {{employees}}</i>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                     <div class="card mb-4 border-bottom-dark">
+                        <div class="card-body">
+                           <h2>Day Shift <div style="float: right;">
+                                 <h6>6 AM - 2 PM</h6>
+                              </div>
+                           </h2>
+                           <i class="fas fa-cloud-sun fa-5x"> {{day}}</i>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                     <div class="card mb-4 border-bottom-dark">
+                        <div class="card-body">
+                           <h2>Night Shift <div style="float: right;">
+                                 <h6>1 PM - 9 PM</h6>
+                              </div>
+                           </h2>
+                           <i class="fas fa-cloud-moon fa-5x"> {{night}}</i>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                     <div class="card mb-4 border-bottom-dark">
+                        <div class="card-body">
+                           <h2>Active</h2>
+                           <i class="fas fa-user-check fa-5x"> {{active}}</i>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                     <div class="card mb-4 border-bottom-dark">
+                        <div class="card-body">
+                           <h2>InActive</h2>
+                           <i class="fas fa-user-times fa-5x"> {{done}}</i>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div class="col-lg-4">
+                     <div class="card mb-4 border-bottom-dark">
+                        <div class="card-body">
+                           <h2>Late</h2>
+                           <i class="fas fa-bed fa-5x"> {{late}}</i>
+                        </div>
+                     </div>
+                  </div>
+
                </div>
-               <!-- /.container-fluid -->
             </div>
-            <!-- End of Main Content -->
+            <!-- /.container-fluid -->
          </div>
-         <!-- End of Content Wrapper -->
+         <!-- End of Main Content -->
       </div>
-      <!-- End of Page Wrapper -->
-      <!-- Scroll to Top Button-->
-      <a class="scroll-to-top rounded" href="#page-top">
+      <!-- End of Content Wrapper -->
+   </div>
+   <!-- End of Page Wrapper -->
+   <!-- Scroll to Top Button-->
+   <a class="scroll-to-top rounded" href="#page-top">
       <i class="fas fa-angle-up"></i>
-      </a>
-      {{!-- partials footer --}}
-      {{> _footer}}
-   </body>
+   </a>
+   {{!-- partials footer --}}
+   {{> _footer}}
+
+   <script>
+      let firstChart = document.querySelector("#firstChart").getContext("2d");
+
+      let lateChart = new Chart(firstChart, {
+         type: "pie", // line, bar, radar, doughnut, pie,
+         data: {
+            labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+            datasets: [
+               {
+                  label: "Late Reasons",
+                  data: [
+                     4, 7, 5, 4, 5, 2
+                  ],
+
+                  backgroundColor: [
+                     "#98ddca",
+                     "#d5ecc2",
+                     "#ffd3b4",
+                     "#ffaaa7",
+                     "#fff5ab",
+                     "#d1d9d9"
+
+                  ]
+               }]
+         },
+         options: {
+            plugins: {
+               title: {
+                  display: true,
+                  text: 'Late Records'
+               }
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+               yAxes: [{
+                  ticks: {
+                     beginAtZero: true
+                  }
+               }]
+            }
+         }
+      })
+   </script>
+
+   <script>
+      let secondChart = document.querySelector("#secondChart").getContext("2d");
+
+      let absentChart = new Chart(secondChart, {
+         type: "line", // line, bar, radar, doughnut, pie,
+         data: {
+            labels: ["June", "July", "August", "September", "October", "November"],
+            datasets: [
+               {
+                  label: "Absent Employees",
+                  data: [
+                     4, 7, 5, 4, 5, 6
+                  ],
+
+                  backgroundColor: [
+                     "#98ddca",
+                     "#d5ecc2",
+                     "#ffd3b4",
+                     "#ffaaa7",
+                     "#fff5ab",
+                     "#d1d9d9"
+
+                  ]
+               }]
+         },
+         options: {
+            plugins: {
+               title: {
+                  display: true,
+                  text: 'Absent Records'
+               }
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+               yAxes: [{
+                  ticks: {
+                     beginAtZero: true
+                  }
+               }]
+            }
+
+         }
+      })
+   </script>
+
+   <script>
+      let thirdChart = document.querySelector("#thirdChart").getContext("2d");
+
+      let leaveChart = new Chart(thirdChart, {
+         type: "bar", // line, bar, radar, doughnut, pie,
+         data: {
+            labels: ["Sick leave", "Special Leave"],
+            datasets: [
+               {
+                  label: "Leave Records",
+                  data: [
+                     4, 7
+                  ],
+
+                  backgroundColor: [
+                     "#98ddca",
+                     "#d5ecc2",
+                     "#ffd3b4",
+                     "#ffaaa7",
+                     "#fff5ab",
+                     "#d1d9d9"
+
+                  ]
+               }]
+         },
+         options: {
+            plugins: {
+               title: {
+                  display: true,
+                  text: 'Leave Records'
+               }
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+               yAxes: [{
+                  ticks: {
+                     beginAtZero: true
+                  }
+               }]
+            }
+         }
+      })
+   </script>
+
+   <script>
+
+      var lateConfig = {
+             type: "pie", // line, bar, radar, doughnut, pie,
+         data: {
+            labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+            datasets: [
+               {
+                  label: "Late Reasons",
+                  data: [
+                     4, 7, 5, 4, 5, 2
+                  ],
+
+                  backgroundColor: [
+                     "#98ddca",
+                     "#d5ecc2",
+                     "#ffd3b4",
+                     "#ffaaa7",
+                     "#fff5ab",
+                     "#d1d9d9"
+
+                  ]
+               }]
+         },
+         options: {
+            plugins: {
+               title: {
+                  display: true,
+                  text: 'Late Records'
+               }
+            },
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+               yAxes: [{
+                  ticks: {
+                     beginAtZero: true
+                  }
+               }]
+            }
+         }
+      };
+
+
+      let lateChartOpt = document.querySelector("#lateChartOpt");
+      let myChart;
+
+      lateChartOpt.addEventListener("change", function () {
+
+         document.querySelector("#lateContainer").innerHTML = "";
+
+          document.querySelector("#lateContainer").innerHTML = `<canvas class="border" id="firstChart"></canvas>`;
+
+
+         let lateChosen = lateChartOpt.value;
+         change(lateChosen);
+         
+
+      });
+
+      function change(newType) {
+         var ctx = document.getElementById("firstChart").getContext("2d");
+
+         // Remove the old chart and all its event handles
+         if (myChart) {
+            myChart.destroy();
+         }
+
+         // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
+         var temp = jQuery.extend(true, {}, lateConfig);
+         temp.type = newType;
+         myChart = new Chart(ctx, temp);
+      };
+
+   </script>
+</body>
+
 </html>

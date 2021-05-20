@@ -51,6 +51,7 @@ module.exports.admin_get = (req, res) => {
     // })
 }
 
+
 // OPEN LOGS PAGE AND SHOW ALL LOGS TABLE FROM MONGO DB
 module.exports.logs_get = (req, res) => {
     Log.find().sort({createdAt: "desc"})
