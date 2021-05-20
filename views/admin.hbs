@@ -24,11 +24,6 @@
                <i class="fas fa-fw fa-home"></i>
                <span>Dashboard</span></a>
          </li>
-         <li class="nav-item">
-            <a class="nav-link" href="/statistics">
-               <i class="fas fa-fw fa-chart-bar"></i>
-               <span>Statistics</span></a>
-         </li>
          <!-- Divider -->
          <hr class="sidebar-divider">
          <!-- Nav Item - Logs -->
@@ -213,46 +208,80 @@
    <script>
       let firstChart = document.querySelector("#firstChart").getContext("2d");
 
-      let lateChart = new Chart(firstChart, {
-         type: "pie", // line, bar, radar, doughnut, pie,
-         data: {
-            labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
-            datasets: [
-               {
-                  label: "Late Reasons",
-                  data: [
-                     4, 7, 5, 4, 5, 2
-                  ],
+      async function loadLate() {
+         let firstChart = document.getElementById("firstChart").getContext("2d");
 
-                  backgroundColor: [
-                     "#98ddca",
-                     "#d5ecc2",
-                     "#ffd3b4",
-                     "#ffaaa7",
-                     "#fff5ab",
-                     "#d1d9d9"
+         try {
+            const res = await fetch('/chart', {
+               method: 'POST',
+               body: JSON.stringify({}),
+               headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            console.log(data);
 
-                  ]
-               }]
-         },
-         options: {
-            plugins: {
-               title: {
-                  display: true,
-                  text: 'Late Records'
-               }
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-               yAxes: [{
-                  ticks: {
-                     beginAtZero: true
+            // if the login inputs is incorrect this will trigger
+            if (data.success) {
+               // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
+
+               trafficCount = data.success.traffic;
+
+               let myChart = new Chart(firstChart, {
+                  type: "pie",
+                  data: {
+                     labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+                     datasets: [
+                        {
+                           label: "Late Reasons",
+                           data: [
+                              trafficCount
+                           ],
+
+                           backgroundColor: [
+                              "#98ddca",
+                              "#d5ecc2",
+                              "#ffd3b4",
+                              "#ffaaa7",
+                              "#fff5ab",
+                              "#d1d9d9"
+
+                           ]
+                        }]
+                  },
+                  options: {
+                     plugins: {
+                        title: {
+                           display: true,
+                           text: 'Late Records'
+                        }
+                     },
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     scales: {
+                        yAxes: [{
+                           ticks: {
+                              beginAtZero: true
+                           }
+                        }]
+                     }
                   }
-               }]
+               });
+            }
+            else {
+               iziToast.info({
+                  title: data.error,
+                  position: "topCenter",
+                  timeout: 3000,
+               });
+
             }
          }
-      })
+         catch (err) {
+            console.log(err);
+         }
+      };
+
+      loadLate();
    </script>
 
    <script>
@@ -349,7 +378,7 @@
    <script>
 
       var lateConfig = {
-             type: "pie", // line, bar, radar, doughnut, pie,
+         type: "pie", // line, bar, radar, doughnut, pie,
          data: {
             labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
             datasets: [
@@ -391,33 +420,85 @@
 
 
       let lateChartOpt = document.querySelector("#lateChartOpt");
-      let myChart;
 
       lateChartOpt.addEventListener("change", function () {
 
          document.querySelector("#lateContainer").innerHTML = "";
 
-          document.querySelector("#lateContainer").innerHTML = `<canvas class="border" id="firstChart"></canvas>`;
+         document.querySelector("#lateContainer").innerHTML = `<canvas class="border" id="firstChart"></canvas>`;
 
 
          let lateChosen = lateChartOpt.value;
-         change(lateChosen);
-         
+         changeLate(lateChosen);
+
 
       });
 
-      function change(newType) {
-         var ctx = document.getElementById("firstChart").getContext("2d");
+      async function changeLate(newType) {
+         let firstChart = document.getElementById("firstChart").getContext("2d");
 
-         // Remove the old chart and all its event handles
-         if (myChart) {
-            myChart.destroy();
+         try {
+            const res = await fetch('/chart', {
+               method: 'POST',
+               body: JSON.stringify({}),
+               headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            console.log(data);
+
+            // if the login inputs is incorrect this will trigger
+            if (data.success) {
+               // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
+               let temp = jQuery.extend(true, {}, lateConfig);
+               chartType = newType;
+
+               trafficCount = data.success.traffic;
+               console.log(trafficCount)
+               let myChart = new Chart(firstChart, {
+                  type: chartType,
+                  data: {
+                     labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+                     datasets: [
+                        {
+                           label: "Late Reasons",
+                           data: [
+                              trafficCount
+                           ],
+
+                           backgroundColor: [
+                              "#98ddca",
+                              "#d5ecc2",
+                              "#ffd3b4",
+                              "#ffaaa7",
+                              "#fff5ab",
+                              "#d1d9d9"
+
+                           ]
+                        }]
+                  },
+                  options: {
+                     plugins: {
+                        title: {
+                           display: true,
+                           text: 'Late Records'
+                        }
+                     },
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     scales: {
+                        yAxes: [{
+                           ticks: {
+                              beginAtZero: true
+                           }
+                        }]
+                     }
+                  }
+               });
+            }
          }
-
-         // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
-         var temp = jQuery.extend(true, {}, lateConfig);
-         temp.type = newType;
-         myChart = new Chart(ctx, temp);
+         catch (err) {
+            console.log(err);
+         }
       };
 
    </script>

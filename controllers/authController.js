@@ -113,11 +113,11 @@ module.exports.logout_get = (req, res) => {
 
 // CHANGING PASSWORD OF ADMINISTRATOR ACCOUNT
 module.exports.changePassword_put = async (req, res) => {
-    const {currentPassword, newPassword} = req.body;
+    const { currentPassword, newPassword } = req.body;
     const id = req.params.id;
 
 
-    const account = await Account.findOne({_id: id});
+    const account = await Account.findOne({ _id: id });
 
     if (account) {
         const auth = await bcrypt.compare(currentPassword, account.password)
@@ -126,16 +126,16 @@ module.exports.changePassword_put = async (req, res) => {
             const salt = await bcrypt.genSalt();
             encryptedPassword = await bcrypt.hash(newPassword, salt)
 
-            await Account.findByIdAndUpdate(id, {password: encryptedPassword});
+            await Account.findByIdAndUpdate(id, { password: encryptedPassword });
 
             console.log("Updated Account Password");
-            return res.status(200).json({success: "Your Password has been updated sucessfully. Please log in again."});
+            return res.status(200).json({ success: "Your Password has been updated sucessfully. Please log in again." });
 
-        } else{
-             return res.status(404).json({error: "The current password you enter is incorrect"});
+        } else {
+            return res.status(404).json({ error: "The current password you enter is incorrect" });
         }
     } else {
-        return res.status(404).json({error: "404"});
+        return res.status(404).json({ error: "404" });
     }
     // if (findUsername) {
     //     res.status(400).json({
@@ -152,7 +152,7 @@ module.exports.changePassword_put = async (req, res) => {
 
 // LOGGING IN AND LOGGING OUT OF USERS / EMPLOYEE
 module.exports.loginuser_post = async (req, res) => {
-    const {idnumber,time, date} = req.body;
+    const { idnumber, time, date } = req.body;
     console.log(`Scanned user ID number: ${idnumber}`);
     console.log(`Time today: ${time}`);
     console.log(`Date today: ${date}`);
@@ -162,242 +162,224 @@ module.exports.loginuser_post = async (req, res) => {
     let ampm = time.substr(time.length - 2);
 
     try {
-        const userCheck = await User.findOne({idnumber})
-        const logCheck = await Log.findOne({idnumber})
-        
+        const userCheck = await User.findOne({ idnumber })
+        const logCheck = await Log.findOne({ idnumber })
+
         // If USER is NOT registered
-        if(userCheck == null)
-        {
-            return res.status(404).json({error: "This user is not registered"})
+        if (userCheck == null) {
+            return res.status(404).json({ error: "This user is not registered" })
         }
 
         // If USER is registered and USER did not logged out last session then USER cannot enter again
-        if (userCheck && logCheck && logCheck.date != date && logCheck.time_in != "" && logCheck.time_out == ""){
-            return res.status(400).json({warning: "You did not logout last session. Please contact your Administrator."})
+        if (userCheck && logCheck && logCheck.date != date && logCheck.time_in != "" && logCheck.time_out == "") {
+            return res.status(400).json({ warning: "You did not logout last session. Please contact your Administrator." })
         }
 
         // If USER is registered and USER has logged out today's date then USER cannot enter again
-        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "present" && logCheck.time_in != "" && logCheck.time_out != ""){
-            return res.status(400).json({warning: "You cannot login twice a day. Please contact your Administrator."})
+        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "present" && logCheck.time_in != "" && logCheck.time_out != "") {
+            return res.status(400).json({ warning: "You cannot login twice a day. Please contact your Administrator." })
         }
 
-        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "absent" && logCheck.time_in != "" && logCheck.time_out != ""){
-            return res.status(400).json({warning: "You cannot login twice a day. Please contact your Administrator."})
+        if (userCheck && logCheck && logCheck.date == date && logCheck.status == "absent" && logCheck.time_in != "" && logCheck.time_out != "") {
+            return res.status(400).json({ warning: "You cannot login twice a day. Please contact your Administrator." })
         }
 
         // If USER is registered and USER has logged in then update log status to logged out and time out
-        if (userCheck && logCheck && logCheck.date == date && logCheck.time_in != "" && logCheck.time_out == ""){
+        if (userCheck && logCheck && logCheck.date == date && logCheck.time_in != "" && logCheck.time_out == "") {
             const id = logCheck._id;
             console.log(id);
 
-            const log =  await Log.findByIdAndUpdate(id, {status: "present", time_out: time}, {new: true});
+            const log = await Log.findByIdAndUpdate(id, { status: "present", time_out: time }, { new: true });
 
             let presentCount = log.total_days_present + 1;
 
             console.log("Uses log is now logged out")
 
-            const record =  new Record({user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "present", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late, late_reason: log.late_reason, total_days_present: presentCount});
+            const record = new Record({ user_id: log.user_id, idnumber: log.idnumber, name: log.name, shift: log.shift, status: "present", date: log.date, time_in: log.time_in, time_out: log.time_out, late: log.late, late_reason: log.late_reason, total_days_present: presentCount });
             record.save();
             console.log("User done log has been put to Record")
 
-            await Log.findByIdAndUpdate(id, {time_in: "null", time_out: "null", late: "null", late_reason: "null", total_days_present: presentCount});
+            await Log.findByIdAndUpdate(id, { time_in: "null", time_out: "null", late: "null", late_reason: "null", total_days_present: presentCount });
             console.log("User log time in and time out has been updated to blank")
 
             const timeOutLog = {
                 userName: `${userCheck.firstname} ${userCheck.lastname}`,
                 time_out: log.time_out,
             }
-            
-            return res.status(200).json({userOut: timeOutLog})
+
+            return res.status(200).json({ userOut: timeOutLog })
         }
 
         // If USER is registered and USER doesn't have logs yet
-        if (userCheck && logCheck == null){
+        if (userCheck && logCheck == null) {
             // NEW USER DAY SHIFT
-            if (userCheck.shift == "day"){
-                if(ampm == 'PM'){
-                    if(hour >= 0 && hour < 2){
+            if (userCheck.shift == "day") {
+                if (ampm == 'PM') {
+                    if (hour >= 0 && hour < 2) {
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                         log.save();
 
-            
+
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
                             idnumber: userCheck.idnumber,
                             date: date,
                         }
-                        return res.status(200).json({late: timeInLog})
-                    } 
-                    else if (hour == 12){
-                        console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
-                        log.save();
-
-            
-                        const timeInLog = {
-                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                            time_in: time,
-                            idnumber: userCheck.idnumber,
-                            date: date,
-                        }
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
-                    
-                    else{
-                        return res.status(400).json({warning: "You cannot enter the building your shift is already done. Please contact your Administrator."})
+                    else if (hour == 12) {
+                        console.log("Late")
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
+                        log.save();
+
+
+                        const timeInLog = {
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
+                        }
+                        return res.status(200).json({ late: timeInLog })
+                    }
+
+                    else {
+                        return res.status(400).json({ warning: "You cannot enter the building your shift is already done. Please contact your Administrator." })
                     }
                 }
 
-                else if(ampm == 'AM'){
+                else if (ampm == 'AM') {
 
-                    if(hour > 6){
+                    if (hour > 6) {
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                         log.save();
 
-            
+
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
                             idnumber: userCheck.idnumber,
                             date: date,
                         }
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else if(hour == 6 && min > 0){
+                    else if (hour == 6 && min > 0) {
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                         log.save();
 
-            
+
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
                             idnumber: userCheck.idnumber,
                             date: date,
                         }
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else{
+                    else {
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                         log.save();
-        
+
                         const timeInLog = {
-                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                        time_in: time,
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
                         }
-                        return res.status(200).json({userFoundandRecord: timeInLog})
+                        return res.status(200).json({ userFoundandRecord: timeInLog })
                     }
                 }
             }
 
             // NEW USER NIGHT SHIFT
-            if (userCheck.shift == "night"){
-                if(ampm == 'PM'){
-                    if(hour > 1 && hour < 9){
+            if (userCheck.shift == "night") {
+                if (ampm == 'PM') {
+                    if (hour > 1 && hour < 9) {
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                         log.save();
 
-            
+
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
                             idnumber: userCheck.idnumber,
                             date: date,
                         }
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else if(hour == 1 && min > 0){
+                    else if (hour == 1 && min > 0) {
                         console.log("Late")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                         log.save();
 
-            
+
                         const timeInLog = {
                             userName: `${userCheck.firstname} ${userCheck.lastname}`,
                             time_in: time,
                             idnumber: userCheck.idnumber,
                             date: date,
                         }
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else if((hour == 9 && min > 0) || (hour == 9 && min == 0) || (hour > 9 && hour < 12)){
-                        return res.status(400).json({warning: "You cannot enter the building your shift is already done. Please contact your Administrator."})
+                    else if ((hour == 9 && min > 0) || (hour == 9 && min == 0) || (hour > 9 && hour < 12)) {
+                        return res.status(400).json({ warning: "You cannot enter the building your shift is already done. Please contact your Administrator." })
                     }
 
-                    else if(hour == 1 && min == 0 || hour == 12){
+                    else if (hour == 1 && min == 0 || hour == 12) {
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                         log.save();
-        
+
                         const timeInLog = {
-                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                        time_in: time,
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
                         }
-                        return res.status(200).json({userFoundandRecord: timeInLog})
+                        return res.status(200).json({ userFoundandRecord: timeInLog })
                     }
 
-                    else{
+                    else {
                         console.log("On-time")
-                        const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                        const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                         log.save();
-        
+
                         const timeInLog = {
-                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                        time_in: time,
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
                         }
-                        return res.status(200).json({userFoundandRecord: timeInLog})
+                        return res.status(200).json({ userFoundandRecord: timeInLog })
                     }
                 }
-                
-                if(ampm == 'AM'){
+
+                if (ampm == 'AM') {
                     console.log("On-time")
-                    const log = new Log({user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3});
+                    const log = new Log({ user_id: userCheck._id, idnumber: userCheck.idnumber, name: `${userCheck.firstname} ${userCheck.lastname}`, shift: userCheck.shift, status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null", total_days_present: "", leave: 15, special_leave: 3 });
                     log.save();
-    
+
                     const timeInLog = {
-                    userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                    time_in: time,
+                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                        time_in: time,
                     }
-                    return res.status(200).json({userFoundandRecord: timeInLog})
-                }  
+                    return res.status(200).json({ userFoundandRecord: timeInLog })
+                }
             }
 
         }
 
         // If USER is registered and USER has logs and then create another log (different date)
-        if (userCheck && logCheck &&  logCheck.date != date && logCheck.time_in != "" && logCheck.time_out != ""){
+        if (userCheck && logCheck && logCheck.date != date && logCheck.time_in != "" && logCheck.time_out != "") {
             //EXISTING USER DAY SHIFT
-            if(userCheck.shift == "day"){
-                if(ampm == 'PM'){
-                    if(hour >= 0 && hour < 2){
+            if (userCheck.shift == "day") {
+                if (ampm == 'PM') {
+                    if (hour >= 0 && hour < 2) {
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
-                        
-
-                        console.log("Old User log has been updated and now active")
-
-                        const timeInLog = {
-                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                            time_in: time,
-                            idnumber: userCheck.idnumber,
-                            date: date,
-                        }
-
-                        return res.status(200).json({late: timeInLog})
-                    }
-
-                    else if (hour == 12){
-                        const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null" });
 
 
                         console.log("Old User log has been updated and now active")
@@ -409,19 +391,36 @@ module.exports.loginuser_post = async (req, res) => {
                             date: date,
                         }
 
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else{
-                        return res.status(400).json({warning: "You cannot enter the building your shift is already done. Please contact your Administrator."})
+                    else if (hour == 12) {
+                        const id = logCheck._id;
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null" });
+
+
+                        console.log("Old User log has been updated and now active")
+
+                        const timeInLog = {
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
+                            idnumber: userCheck.idnumber,
+                            date: date,
+                        }
+
+                        return res.status(200).json({ late: timeInLog })
+                    }
+
+                    else {
+                        return res.status(400).json({ warning: "You cannot enter the building your shift is already done. Please contact your Administrator." })
                     }
                 }
 
-                else if(ampm == 'AM'){
-                    if(hour > 6){
+                else if (ampm == 'AM') {
+                    if (hour > 6) {
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
-                        
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null" });
+
 
                         console.log("Old User log has been updated and now active")
 
@@ -432,13 +431,13 @@ module.exports.loginuser_post = async (req, res) => {
                             date: date,
                         }
 
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else if(hour == 6 && min > 0){
+                    else if (hour == 6 && min > 0) {
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
-                        
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null" });
+
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
@@ -448,12 +447,12 @@ module.exports.loginuser_post = async (req, res) => {
                             date: date,
                         }
 
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else{
+                    else {
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no", late_reason: "null"});
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null" });
 
                         console.log("Old User log has been updated and now active")
 
@@ -462,17 +461,17 @@ module.exports.loginuser_post = async (req, res) => {
                             time_in: time,
                         }
 
-                        return res.status(200).json({userFoundandRecord: timeInLog})
+                        return res.status(200).json({ userFoundandRecord: timeInLog })
                     }
                 }
             }
 
             //EXISTING USER NIGHT SHIFT
-            if(userCheck.shift == "night"){
-                if(ampm == 'PM'){
-                    if(hour > 1 && hour < 9){
+            if (userCheck.shift == "night") {
+                if (ampm == 'PM') {
+                    if (hour > 1 && hour < 9) {
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null" });
 
 
                         console.log("Old User log has been updated and now active")
@@ -484,12 +483,12 @@ module.exports.loginuser_post = async (req, res) => {
                             date: date,
                         }
 
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else if(hour == 1 && min > 0){
+                    else if (hour == 1 && min > 0) {
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"yes", late_reason: "null"});
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "yes", late_reason: "null" });
 
 
                         console.log("Old User log has been updated and now active")
@@ -501,61 +500,61 @@ module.exports.loginuser_post = async (req, res) => {
                             date: date,
                         }
 
-                        return res.status(200).json({late: timeInLog})
+                        return res.status(200).json({ late: timeInLog })
                     }
 
-                    else if((hour == 9 && min > 0) || (hour == 9 && min == 0) || (hour > 9 && hour < 12)){
-                        return res.status(400).json({warning: "You cannot enter the building your shift is already done. Please contact your Administrator."})
+                    else if ((hour == 9 && min > 0) || (hour == 9 && min == 0) || (hour > 9 && hour < 12)) {
+                        return res.status(400).json({ warning: "You cannot enter the building your shift is already done. Please contact your Administrator." })
                     }
-                    
-                    else if(hour == 1 && min == 0 || hour == 12){
+
+                    else if (hour == 1 && min == 0 || hour == 12) {
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no", late_reason: "null"});
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null" });
 
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
-                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                        time_in: time,
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
                         }
 
-                        return res.status(200).json({userFoundandRecord: timeInLog})
+                        return res.status(200).json({ userFoundandRecord: timeInLog })
                     }
-                    
-                    else{
+
+                    else {
                         const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no", late_reason: "null"});
+                        await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null" });
 
                         console.log("Old User log has been updated and now active")
 
                         const timeInLog = {
-                        userName: `${userCheck.firstname} ${userCheck.lastname}`,
-                        time_in: time,
+                            userName: `${userCheck.firstname} ${userCheck.lastname}`,
+                            time_in: time,
                         }
 
-                        return res.status(200).json({userFoundandRecord: timeInLog})
+                        return res.status(200).json({ userFoundandRecord: timeInLog })
                     }
                 }
-                    
-                    if(ampm == 'AM'){
-                        const id = logCheck._id;
-                        await Log.findByIdAndUpdate(id, {status: "active", date: date, time_in: time, time_out: "", late:"no", late_reason: "null"});
 
-                        console.log("Old User log has been updated and now active")
+                if (ampm == 'AM') {
+                    const id = logCheck._id;
+                    await Log.findByIdAndUpdate(id, { status: "active", date: date, time_in: time, time_out: "", late: "no", late_reason: "null" });
 
-                        const timeInLog = {
+                    console.log("Old User log has been updated and now active")
+
+                    const timeInLog = {
                         userName: `${userCheck.firstname} ${userCheck.lastname}`,
                         time_in: time,
-                        }
-
-                        return res.status(200).json({userFoundandRecord: timeInLog})
                     }
+
+                    return res.status(200).json({ userFoundandRecord: timeInLog })
+                }
             }
         }
 
     } catch (err) {
         console.log(err);
-        res.status(400).json({error: '400'});
+        res.status(400).json({ error: '400' });
     }
 }
 
@@ -563,8 +562,8 @@ module.exports.loginuser_post = async (req, res) => {
 module.exports.leave_post = async (req, res) => {
     const { leave, idNum, date } = req.body;
 
-    const logCheck = await Log.findOne({idnumber: idNum})
-    const recordIdCheck = await Record.findOne({idnumber: idNum, date: date})
+    const logCheck = await Log.findOne({ idnumber: idNum })
+    const recordIdCheck = await Record.findOne({ idnumber: idNum, date: date })
     const leaveReason = leave;
 
     const id = logCheck._id;
@@ -572,113 +571,113 @@ module.exports.leave_post = async (req, res) => {
     if (!recordIdCheck) {
         if (leave == "Sick Leave") {
             const leaveRemaining = logCheck.leave;
-            
+
             if (leaveRemaining != 0 || leaveRemaining > 0) {
                 const leaveNewRemaining = leaveRemaining - 1;
-    
-                await Log.findByIdAndUpdate(id, {status: leaveReason, leave: leaveNewRemaining, date: date}, {new: true});
-                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: leaveNewRemaining, special_leave: logCheck.special_leave});
+
+                await Log.findByIdAndUpdate(id, { status: leaveReason, leave: leaveNewRemaining, date: date }, { new: true });
+                const record = new Record({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: leaveNewRemaining, special_leave: logCheck.special_leave });
                 record.save();
 
-                const leave =  new Leave({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: leaveNewRemaining, special_leave: logCheck.special_leave});
+                const leave = new Leave({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: leaveNewRemaining, special_leave: logCheck.special_leave });
                 leave.save();
-    
-                return res.status(200).json({success: "Employee Sick leave has been recorded"});
+
+                return res.status(200).json({ success: "Employee Sick leave has been recorded" });
             } else {
-                return res.status(400).json({error: "This Employee has reached the maximum limit of Leave."});
+                return res.status(400).json({ error: "This Employee has reached the maximum limit of Leave." });
             }
-        } 
-        
+        }
+
         if (leave == "Special Leave") {
             const specialLeaveRemaining = logCheck.special_leave;
-            
+
             if (specialLeaveRemaining != 0 || specialLeaveRemaining > 0) {
                 const specialLeaveNewRemaining = specialLeaveRemaining - 1;
-    
-                await Log.findByIdAndUpdate(id, {status: leaveReason, special_leave: specialLeaveNewRemaining, date: date}, {new: true});
-                const record =  new Record({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: logCheck.leave, special_leave: specialLeaveNewRemaining});
+
+                await Log.findByIdAndUpdate(id, { status: leaveReason, special_leave: specialLeaveNewRemaining, date: date }, { new: true });
+                const record = new Record({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: logCheck.leave, special_leave: specialLeaveNewRemaining });
                 record.save();
 
-                const leave =  new Leave({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: logCheck.leave, special_leave: specialLeaveNewRemaining});
+                const leave = new Leave({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: logCheck.leave, special_leave: specialLeaveNewRemaining });
                 leave.save();
-    
-                return res.status(200).json({success: "Employee Special leave has been recorded"});
+
+                return res.status(200).json({ success: "Employee Special leave has been recorded" });
             } else {
-                return res.status(400).json({error: "This Employee has reached the maximum limit of Special Leave."});
+                return res.status(400).json({ error: "This Employee has reached the maximum limit of Special Leave." });
             }
         }
     }
 
     else {
-            return res.status(400).json({error: "This Employee has already been recorded today."});
-        }
+        return res.status(400).json({ error: "This Employee has already been recorded today." });
+    }
 }
 
 //  LATE REASON
 module.exports.late_post = async (req, res) => {
-    const {reason, idnumber, date} = req.body;
+    const { reason, idnumber, date } = req.body;
 
-    const logCheck = await Log.findOne({idnumber})
+    const logCheck = await Log.findOne({ idnumber })
 
     const id = logCheck._id;
     console.log(id);
 
-    await Log.findByIdAndUpdate(id, {late_reason: reason}, {new: true});
+    await Log.findByIdAndUpdate(id, { late_reason: reason }, { new: true });
 
-    const late =  new Late({user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, late_reason: reason, date: date});
+    const late = new Late({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, late_reason: reason, date: date });
     late.save();
 
     console.log("Late Reason recorded")
 
-    return res.status(200).json({success: "Late reason has been submitted successfully."});
+    return res.status(200).json({ success: "Late reason has been submitted successfully." });
 }
 
 // GETTING ABSENT EMPLOYEES
 module.exports.absents_post = async (req, res) => {
-    const {date} = req.body;
+    const { date } = req.body;
 
-    const log =  await Log.find({status: 'absent'})
-    const recordCheck = await Record.findOne({date:date, status: "absent"})
+    const log = await Log.find({ status: 'absent' })
+    const recordCheck = await Record.findOne({ date: date, status: "absent" })
 
     try {
-        
+
         if (!recordCheck) {
 
-            if (log.length == 0){
+            if (log.length == 0) {
                 console.log("no logs")
-    
-                await Log.updateMany({time_in: "null", time_out: "null", late: "", status: "absent"});
-    
-                return res.status(400).json({success: "Great! No Absent for Today."});
-            }   
-            
+
+                await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent" });
+
+                return res.status(400).json({ success: "Great! No Absent for Today." });
+            }
+
             else {
-                
-                for(var i = 0; i < log.length; ++i){
-                    
+
+                for (var i = 0; i < log.length; ++i) {
+
                     console.log(i)
-                    const record =  new Record({user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late});
+                    const record = new Record({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late });
                     record.save();
-    
-                    const absent =  new Absent({user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date});
+
+                    const absent = new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date });
                     absent.save();
-                
-                    }
-    
-                await Log.updateMany({time_in: "null", time_out: "null", late: "", status: "absent"});
-               
-                return res.status(200).json({success: "The Absent employees has been recorded."});
+
                 }
 
-        } 
-        
-        else {
-            return res.status(400).json({error: "All Employees has already been recorded today."});
+                await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent" });
+
+                return res.status(200).json({ success: "The Absent employees has been recorded." });
+            }
+
         }
-        
+
+        else {
+            return res.status(400).json({ error: "All Employees has already been recorded today." });
+        }
+
     } catch (err) {
         console.log(err);
-        res.status(400).json({error: '400'});
+        res.status(400).json({ error: '400' });
     }
 }
 
@@ -690,7 +689,7 @@ module.exports.register_post = async (req, res) => {
     const newUserID = newUser.idnumber;
     console.log(newUserID);
 
-    const findID = await User.findOne({idnumber: newUserID})
+    const findID = await User.findOne({ idnumber: newUserID })
 
     if (findID) {
         res.status(400).json({
@@ -724,47 +723,47 @@ module.exports.qrcode_get = async (req, res) => {
 // SEED FAKE USER / EMPLOYEE
 const random = {
     dept: [
-        "Industrial Technology", 
-        "Industrial Education", 
+        "Industrial Technology",
+        "Industrial Education",
         "Electrical Engineering Technolgy",
-        "Civil Engineering Technology", 
+        "Civil Engineering Technology",
         "Computer Science"
     ],
-    gender: ['male','female'],
+    gender: ['male', 'female'],
     shift: ['day', 'night'],
-    bday: ['1987-05-14', '1999-06-21','1995-12-08', '1991-03-17', '1996-06-26']
-  };
+    bday: ['1987-05-14', '1999-06-21', '1995-12-08', '1991-03-17', '1996-06-26']
+};
 
-function generateRandom (choices) {
+function generateRandom(choices) {
     const random = Math.floor(Math.random() * choices.length);
     return choices[random];
 }
 
 // SEED FAKE USER / EMPLOYEE
 module.exports.seedusers_get = async (req, res) => {
- 
-      let count = req.params.count;
-        
-      for(let i=0; i<count; i++){  
-      
-          let formParams = {  
-              firstname: faker.name.firstName(),  
-              middlename: faker.name.lastName(),  
-              lastname: faker.name.lastName(),  
-              gender: generateRandom(random['gender']),  
-              age: faker.random.number({'min': 18,'max': 60 }),  
-              birthdate: generateRandom(random['bday']), 
-              contact_number: "09" + faker.random.number({'max': 10000000}),
-              email_address: faker.internet.email(), 
-              home_address: faker.address.streetAddress(), 
-              department: generateRandom(random['dept']),
-              shift: generateRandom(random['shift']),
-              idnumber: faker.unique(faker.random.number),
-          };
-      
-          let users = new User(formParams);  
-          await users.save();
-      }
+
+    let count = req.params.count;
+
+    for (let i = 0; i < count; i++) {
+
+        let formParams = {
+            firstname: faker.name.firstName(),
+            middlename: faker.name.lastName(),
+            lastname: faker.name.lastName(),
+            gender: generateRandom(random['gender']),
+            age: faker.random.number({ 'min': 18, 'max': 60 }),
+            birthdate: generateRandom(random['bday']),
+            contact_number: "09" + faker.random.number({ 'max': 10000000 }),
+            email_address: faker.internet.email(),
+            home_address: faker.address.streetAddress(),
+            department: generateRandom(random['dept']),
+            shift: generateRandom(random['shift']),
+            idnumber: faker.unique(faker.random.number),
+        };
+
+        let users = new User(formParams);
+        await users.save();
+    }
 
     let data = {
         message: `Seeded Employees total of ${count}`,
@@ -784,5 +783,32 @@ module.exports.seeddrop_get = async (req, res) => {
         status: 'Success'
     }
     res.send(data);
+}
+
+module.exports.chart_post = async (req, res) => {
+
+    const late = await Late.find({ late_reason: 'traffic' })
+
+    try {
+
+        if (late.length == 0) {
+            console.log("NO TRAFFIC FOUND")
+            console.log(late.length)
+
+            return res.status(200).json({ error: "No traffic reason found." });
+        }
+
+        else {
+            let traffic = late.length
+            console.log(late.length)
+
+            return res.status(200).json({ success: {traffic} });
+        }
+
+
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ error: '400' });
+    }
 }
 
