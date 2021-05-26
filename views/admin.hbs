@@ -77,21 +77,20 @@
                   <div class="col-lg-12 pb-3">
                      <div class="row">
 
-                        <div class="col-lg-4">
-                           <label for="">Change: </label>
+                        <div class="col-lg-4 mb-2">
+                           <label for="">Late: </label>
                            <select id="lateChartOpt" class="custom-select" style="width: auto;">
                               <option value="line">Line Chart</option>
                               <option value="bar">Bar Chart</option>
                               <option value="radar">Radar Chart</option>
                               <option value="doughnut">Doughnut Chart</option>
                               <option value="pie" selected>Pie Chart</option>
-                              <option value="bubble">Bubble Chart</option>
                               <option value="polarArea">Polar Area Chart</option>
                            </select>
                         </div>
 
-                        <div class="col-lg-4">
-                           <label for="">Change: </label>
+                        <div class="col-lg-4 mb-2">
+                           <label for="">Absent: </label>
                            <select id="absentChartOpt" class="custom-select" style="width: auto;">
                               <option value="line" selected>Line Chart</option>
                               <option value="bar">Bar Chart</option>
@@ -102,8 +101,8 @@
                            </select>
                         </div>
 
-                        <div class="col-lg-4">
-                           <label for="">Change: </label>
+                        <div class="col-lg-4 mb-2">
+                           <label for="">Leave: </label>
                            <select id="leaveChartOpt" class="custom-select" style="width: auto;">
                               <option value="line">Line Chart</option>
                               <option value="bar" selected>Bar Chart</option>
@@ -232,7 +231,7 @@
                      labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
                      datasets: [
                         {
-                           label: "Late Reasons",
+                           label: "Traffic",
                            data: [
                               trafficCount
                            ],
@@ -385,7 +384,7 @@
                {
                   label: "Late Reasons",
                   data: [
-                     4, 7, 5, 4, 5, 2
+      
                   ],
 
                   backgroundColor: [
@@ -446,13 +445,13 @@
             const data = await res.json();
             console.log(data);
 
-            // if the login inputs is incorrect this will trigger
             if (data.success) {
                // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
                let temp = jQuery.extend(true, {}, lateConfig);
                chartType = newType;
 
                trafficCount = data.success.traffic;
+               oversleptCount = data.success.overslept;
                console.log(trafficCount)
                let myChart = new Chart(firstChart, {
                   type: chartType,
@@ -460,9 +459,9 @@
                      labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
                      datasets: [
                         {
-                           label: "Late Reasons",
+                           label: "count",
                            data: [
-                              trafficCount
+                              trafficCount, 0, 0, 0, oversleptCount, 0
                            ],
 
                            backgroundColor: [

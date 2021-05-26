@@ -787,22 +787,25 @@ module.exports.seeddrop_get = async (req, res) => {
 
 module.exports.chart_post = async (req, res) => {
 
-    const late = await Late.find({ late_reason: 'traffic' })
+    const late_traffic = await Late.find({ late_reason: 'Traffic' })
+    const late_overslept = await Late.find({ late_reason: 'Overslept' })
 
     try {
 
-        if (late.length == 0) {
+        if (late_traffic.length == 0) {
             console.log("NO TRAFFIC FOUND")
-            console.log(late.length)
+            console.log(late_traffic.length)
 
             return res.status(200).json({ error: "No traffic reason found." });
         }
 
         else {
-            let traffic = late.length
-            console.log(late.length)
+            let traffic = late_traffic.length
+            let overslept = late_overslept.length
 
-            return res.status(200).json({ success: {traffic} });
+            console.log(late_traffic.length)
+
+            return res.status(200).json({ success: {traffic, overslept} });
         }
 
 
