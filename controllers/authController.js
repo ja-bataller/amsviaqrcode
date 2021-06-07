@@ -618,16 +618,15 @@ module.exports.leave_post = async (req, res) => {
 
 //  LATE REASON
 module.exports.late_post = async (req, res) => {
-    const { reason, idnumber, date } = req.body;
+    const { otherReason, reason, idnumber, date } = req.body;
 
     const logCheck = await Log.findOne({ idnumber })
 
     const id = logCheck._id;
-    console.log(id);
 
-    await Log.findByIdAndUpdate(id, { late_reason: reason }, { new: true });
+    await Log.findByIdAndUpdate(id, { late_reason: reason, late: otherReason }, { new: true });
 
-    const late = new Late({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, late_reason: reason, date: date });
+    const late = new Late({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, late_reason: reason, late: otherReason, date: date });
     late.save();
 
     console.log("Late Reason recorded")
@@ -643,7 +642,7 @@ module.exports.absents_post = async (req, res) => {
     let month = dateToday.getMonth();
 
     const log = await Log.find({ status: 'absent' })
-    const recordCheck = await Record.findOne({ date: date, status: "absent" })
+    const recordCheck = await Record.findOne({ date: date})
 
     try {
 
@@ -752,19 +751,21 @@ module.exports.seedusers_get = async (req, res) => {
 
     for (let i = 0; i < count; i++) {
 
+        let randomNum = faker.datatype.number({ 'min': 1000000000 });
+
         let formParams = {
             firstname: faker.name.firstName(),
             middlename: faker.name.lastName(),
             lastname: faker.name.lastName(),
             gender: generateRandom(random['gender']),
-            age: faker.random.number({ 'min': 18, 'max': 60 }),
+            age: faker.datatype.number({ 'min': 18, 'max': 60 }),
             birthdate: generateRandom(random['bday']),
-            contact_number: "09" + faker.random.number({ 'max': 10000000 }),
+            contact_number: `09${randomNum}`,
             email_address: faker.internet.email(),
             home_address: faker.address.streetAddress(),
             department: generateRandom(random['dept']),
             shift: generateRandom(random['shift']),
-            idnumber: faker.unique(faker.random.number),
+            idnumber: faker.unique(faker.datatype.number),
         };
 
         let users = new User(formParams);

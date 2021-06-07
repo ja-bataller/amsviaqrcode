@@ -15,6 +15,9 @@ const LateSchema = new Schema({
     shift: {
         type: String,
     },
+    late: {
+        type: String,
+    },
     late_reason: {
         type: String,
     },

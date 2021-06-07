@@ -87,6 +87,7 @@
 
    const submitLateReason = document.querySelector("#submitLateReason");
    const lateReasonOpt = document.querySelector("#lateReasonOpt");
+   const late_reason = document.querySelector("#late_reason");
 
    async function setResult(label, result) {
 
@@ -203,6 +204,7 @@
                const reason = lateReasonOpt.value;
                const idnumber = data.late.idnumber;
                const date = data.late.date;
+               const otherReason = late_reason.value;
 
 
                try {
@@ -217,7 +219,7 @@
 
                   const response = await fetch('/late', {
                      method: 'POST',
-                     body: JSON.stringify({ reason, idnumber, date }),
+                     body: JSON.stringify({ otherReason, reason, idnumber, date }),
                      headers: { 'Content-Type': 'application/json' }
                   });
 

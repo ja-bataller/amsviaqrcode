@@ -32,7 +32,7 @@ const userSchema = new Schema({
         required: true
     },
     contact_number: {
-        type: Number,
+        type: String,
         required: true
     },
     email_address: {
