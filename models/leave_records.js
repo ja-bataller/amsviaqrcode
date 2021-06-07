@@ -27,6 +27,9 @@ const LeaveSchema = new Schema({
     date: {
         type: String,
     },
+    month: {
+        type: String,
+    },
 }, {
     timestamps: true
 });

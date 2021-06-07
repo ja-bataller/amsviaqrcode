@@ -120,11 +120,11 @@
                      <canvas class="border" id="firstChart"></canvas>
                   </div>
 
-                  <div class="col-lg-4 pb-4">
+                  <div class="col-lg-4 pb-4" id="absentContainer">
                      <canvas class="border" id="secondChart"></canvas>
                   </div>
 
-                  <div class="col-lg-4 pb-4">
+                  <div class="col-lg-4 pb-4" id="leaveContainer">
                      <canvas class="border" id="thirdChart"></canvas>
                   </div>
 
@@ -211,7 +211,7 @@
          let firstChart = document.getElementById("firstChart").getContext("2d");
 
          try {
-            const res = await fetch('/chart', {
+            const res = await fetch('/late-chart', {
                method: 'POST',
                body: JSON.stringify({}),
                headers: { 'Content-Type': 'application/json' }
@@ -219,21 +219,24 @@
             const data = await res.json();
             console.log(data);
 
-            // if the login inputs is incorrect this will trigger
             if (data.success) {
-               // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
 
                trafficCount = data.success.traffic;
+               dmtCount = data.success.delayedMassTransit;
+               badweatherCount = data.success.badWeather;
+               familyillnessCount = data.success.familyIllness;
+               oversleptCount = data.success.overslept;
+               othersCount = data.success.others;
 
-               let myChart = new Chart(firstChart, {
+               let lateChart = new Chart(firstChart, {
                   type: "pie",
                   data: {
-                     labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+                     labels: ["Traffic", "Delayed Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
                      datasets: [
                         {
                            label: "Traffic",
                            data: [
-                              trafficCount
+                              trafficCount, dmtCount, badweatherCount, familyillnessCount, oversleptCount, othersCount
                            ],
 
                            backgroundColor: [
@@ -243,9 +246,9 @@
                               "#ffaaa7",
                               "#fff5ab",
                               "#d1d9d9"
-
                            ]
-                        }]
+                        }
+                     ]
                   },
                   options: {
                      plugins: {
@@ -286,158 +289,11 @@
    <script>
       let secondChart = document.querySelector("#secondChart").getContext("2d");
 
-      let absentChart = new Chart(secondChart, {
-         type: "line", // line, bar, radar, doughnut, pie,
-         data: {
-            labels: ["June", "July", "August", "September", "October", "November"],
-            datasets: [
-               {
-                  label: "Absent Employees",
-                  data: [
-                     4, 7, 5, 4, 5, 6
-                  ],
-
-                  backgroundColor: [
-                     "#98ddca",
-                     "#d5ecc2",
-                     "#ffd3b4",
-                     "#ffaaa7",
-                     "#fff5ab",
-                     "#d1d9d9"
-
-                  ]
-               }]
-         },
-         options: {
-            plugins: {
-               title: {
-                  display: true,
-                  text: 'Absent Records'
-               }
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-               yAxes: [{
-                  ticks: {
-                     beginAtZero: true
-                  }
-               }]
-            }
-
-         }
-      })
-   </script>
-
-   <script>
-      let thirdChart = document.querySelector("#thirdChart").getContext("2d");
-
-      let leaveChart = new Chart(thirdChart, {
-         type: "bar", // line, bar, radar, doughnut, pie,
-         data: {
-            labels: ["Sick leave", "Special Leave"],
-            datasets: [
-               {
-                  label: "Leave Records",
-                  data: [
-                     4, 7
-                  ],
-
-                  backgroundColor: [
-                     "#98ddca",
-                     "#d5ecc2",
-                     "#ffd3b4",
-                     "#ffaaa7",
-                     "#fff5ab",
-                     "#d1d9d9"
-
-                  ]
-               }]
-         },
-         options: {
-            plugins: {
-               title: {
-                  display: true,
-                  text: 'Leave Records'
-               }
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-               yAxes: [{
-                  ticks: {
-                     beginAtZero: true
-                  }
-               }]
-            }
-         }
-      })
-   </script>
-
-   <script>
-
-      var lateConfig = {
-         type: "pie", // line, bar, radar, doughnut, pie,
-         data: {
-            labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
-            datasets: [
-               {
-                  label: "Late Reasons",
-                  data: [
-      
-                  ],
-
-                  backgroundColor: [
-                     "#98ddca",
-                     "#d5ecc2",
-                     "#ffd3b4",
-                     "#ffaaa7",
-                     "#fff5ab",
-                     "#d1d9d9"
-
-                  ]
-               }]
-         },
-         options: {
-            plugins: {
-               title: {
-                  display: true,
-                  text: 'Late Records'
-               }
-            },
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-               yAxes: [{
-                  ticks: {
-                     beginAtZero: true
-                  }
-               }]
-            }
-         }
-      };
-
-
-      let lateChartOpt = document.querySelector("#lateChartOpt");
-
-      lateChartOpt.addEventListener("change", function () {
-
-         document.querySelector("#lateContainer").innerHTML = "";
-
-         document.querySelector("#lateContainer").innerHTML = `<canvas class="border" id="firstChart"></canvas>`;
-
-
-         let lateChosen = lateChartOpt.value;
-         changeLate(lateChosen);
-
-
-      });
-
-      async function changeLate(newType) {
-         let firstChart = document.getElementById("firstChart").getContext("2d");
+      async function loadAbsent() {
+         let secondChart = document.getElementById("secondChart").getContext("2d");
 
          try {
-            const res = await fetch('/chart', {
+            const res = await fetch('/absent-chart', {
                method: 'POST',
                body: JSON.stringify({}),
                headers: { 'Content-Type': 'application/json' }
@@ -445,23 +301,30 @@
             const data = await res.json();
             console.log(data);
 
-            if (data.success) {
-               // Chart.js modifies the object you pass in. Pass a copy of the object so we can use the original object later
-               let temp = jQuery.extend(true, {}, lateConfig);
-               chartType = newType;
+            jan = data.success.jan;
+            feb = data.success.feb;
+            mar = data.success.mar;
+            apr = data.success.apr;
+            may = data.success.ma;
+            jun = data.success.jun;
+            jul = data.success.jul;
+            aug = data.success.aug;
+            sep = data.success.sep;
+            oct = data.success.oct;
+            nov = data.success.nov;
+            dec = data.success.dec;
 
-               trafficCount = data.success.traffic;
-               oversleptCount = data.success.overslept;
-               console.log(trafficCount)
-               let myChart = new Chart(firstChart, {
-                  type: chartType,
+            if (data.success) {
+
+               let absentChart = new Chart(secondChart, {
+                  type: "line",
                   data: {
-                     labels: ["Traffic", "Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+                     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
                      datasets: [
                         {
-                           label: "count",
+                           label: "Absent Employees",
                            data: [
-                              trafficCount, 0, 0, 0, oversleptCount, 0
+                              jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec,
                            ],
 
                            backgroundColor: [
@@ -470,10 +333,206 @@
                               "#ffd3b4",
                               "#ffaaa7",
                               "#fff5ab",
-                              "#d1d9d9"
-
+                              "#00ead3",
+                              "#867ae9",
+                              "#47597e",
+                              "#5e8b7e",
+                              "#bf1363",
+                              "#185adb",
+                              "#5e454b",
                            ]
+                        }
+                     ]
+                  },
+                  options: {
+                     plugins: {
+                        title: {
+                           display: true,
+                           text: 'Absent Records'
+                        }
+                     },
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     scales: {
+                        yAxes: [{
+                           ticks: {
+                              beginAtZero: true
+                           }
                         }]
+                     }
+
+                  }
+               })
+            }
+            else {
+               iziToast.info({
+                  title: data.error,
+                  position: "topCenter",
+                  timeout: 3000,
+               });
+
+            }
+         }
+         catch (err) {
+            console.log(err);
+         }
+      };
+      loadAbsent();
+   </script>
+
+   <script>
+      let thirdChart = document.querySelector("#thirdChart").getContext("2d");
+
+      async function loadLeave() {
+         let thirdChart = document.getElementById("thirdChart").getContext("2d");
+
+         try {
+            const res = await fetch('/leave-chart', {
+               method: 'POST',
+               body: JSON.stringify({}),
+               headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            console.log(data);
+
+            jan = data.success.jan;
+            feb = data.success.feb;
+            mar = data.success.mar;
+            apr = data.success.apr;
+            may = data.success.ma;
+            jun = data.success.jun;
+            jul = data.success.jul;
+            aug = data.success.aug;
+            sep = data.success.sep;
+            oct = data.success.oct;
+            nov = data.success.nov;
+            dec = data.success.dec;
+
+            if (data.success) {
+
+               let leaveChart = new Chart(thirdChart, {
+                  type: "bar",
+                  data: {
+                     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+                     datasets: [
+                        {
+                           label: "Leave Records",
+                           data: [
+                              jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec,
+                           ],
+
+                           backgroundColor: [
+                              "#98ddca",
+                              "#d5ecc2",
+                              "#ffd3b4",
+                              "#ffaaa7",
+                              "#fff5ab",
+                              "#00ead3",
+                              "#867ae9",
+                              "#47597e",
+                              "#5e8b7e",
+                              "#bf1363",
+                              "#185adb",
+                              "#5e454b",
+                           ]
+                        }
+                     ]
+                  },
+                  options: {
+                     plugins: {
+                        title: {
+                           display: true,
+                           text: 'Leave Records'
+                        }
+                     },
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     scales: {
+                        yAxes: [{
+                           ticks: {
+                              beginAtZero: true
+                           }
+                        }]
+                     }
+
+                  }
+               })
+            }
+            else {
+               iziToast.info({
+                  title: data.error,
+                  position: "topCenter",
+                  timeout: 3000,
+               });
+
+            }
+         }
+         catch (err) {
+            console.log(err);
+         }
+      };
+      loadLeave();
+   </script>
+
+
+   <script>
+
+      let lateChartOpt = document.querySelector("#lateChartOpt");
+
+      // FUNCTION FOR THHE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
+      lateChartOpt.addEventListener("change", function () {
+         document.querySelector("#lateContainer").innerHTML = "";
+         document.querySelector("#lateContainer").innerHTML = `<canvas class="border" id="firstChart"></canvas>`;
+
+         let lateChosen = lateChartOpt.value;
+
+         changeLate(lateChosen);
+
+      });
+
+      async function changeLate(newType) {
+         let firstChart = document.getElementById("firstChart").getContext("2d");
+
+         try {
+            const res = await fetch('/late-chart', {
+               method: 'POST',
+               body: JSON.stringify({}),
+               headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            console.log(data);
+
+            if (data.success) {
+
+               chartType = newType;
+
+               trafficCount = data.success.traffic;
+               dmtCount = data.success.delayedMassTransit;
+               badweatherCount = data.success.badWeather;
+               familyillnessCount = data.success.familyIllness;
+               oversleptCount = data.success.overslept;
+               othersCount = data.success.others;
+
+               let lateChart = new Chart(firstChart, {
+                  type: chartType,
+                  data: {
+                     labels: ["Traffic", "Delayed Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+                     datasets: [
+                        {
+                           label: "count",
+                           data: [
+                              trafficCount, dmtCount, badweatherCount, familyillnessCount, oversleptCount, othersCount
+                           ],
+                           backgroundColor: [
+                              "#98ddca",
+                              "#d5ecc2",
+                              "#ffd3b4",
+                              "#ffaaa7",
+                              "#fff5ab",
+                              "#d1d9d9"
+                           ]
+                        }
+                     ]
                   },
                   options: {
                      plugins: {
@@ -499,8 +558,224 @@
             console.log(err);
          }
       };
-
    </script>
+
+   <script>
+      let absentChartOpt = document.querySelector("#absentChartOpt");
+
+      // FUNCTION FOR THHE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
+      absentChartOpt.addEventListener("change", function () {
+         document.querySelector("#absentContainer").innerHTML = "";
+         document.querySelector("#absentContainer").innerHTML = `<canvas class="border" id="secondChart"></canvas>`;
+
+         let absentChosen = absentChartOpt.value;
+
+         changeAbsent(absentChosen);
+
+      });
+
+      async function changeAbsent(newType) {
+
+         chartType = newType;
+
+         let secondChart = document.getElementById("secondChart").getContext("2d");
+
+         try {
+            const res = await fetch('/absent-chart', {
+               method: 'POST',
+               body: JSON.stringify({}),
+               headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            console.log(data);
+
+            jan = data.success.jan;
+            feb = data.success.feb;
+            mar = data.success.mar;
+            apr = data.success.apr;
+            may = data.success.ma;
+            jun = data.success.jun;
+            jul = data.success.jul;
+            aug = data.success.aug;
+            sep = data.success.sep;
+            oct = data.success.oct;
+            nov = data.success.nov;
+            dec = data.success.dec;
+
+            if (data.success) {
+
+               let absentChart = new Chart(secondChart, {
+                  type: chartType,
+                  data: {
+                     labels: ["Jan", "Feb", "Mar", "Apr", "May","Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+                     datasets: [
+                        {
+                           label: "Absent Employees",
+                           data: [
+                              jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec
+                           ],
+
+                           backgroundColor: [
+                              "#98ddca",
+                              "#d5ecc2",
+                              "#ffd3b4",
+                              "#ffaaa7",
+                              "#fff5ab",
+                              "#00ead3",
+                              "#867ae9",
+                              "#47597e",
+                              "#5e8b7e",
+                              "#bf1363",
+                              "#185adb",
+                              "#5e454b",
+                           ]
+                        }
+                     ]
+                  },
+                  options: {
+                     plugins: {
+                        title: {
+                           display: true,
+                           text: 'Absent Records'
+                        }
+                     },
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     scales: {
+                        yAxes: [{
+                           ticks: {
+                              beginAtZero: true
+                           }
+                        }]
+                     }
+
+                  }
+               })
+            }
+            else {
+               iziToast.info({
+                  title: data.error,
+                  position: "topCenter",
+                  timeout: 3000,
+               });
+
+            }
+         }
+         catch (err) {
+            console.log(err);
+         }
+
+
+      };
+   </script>
+
+   <script>
+      let leaveChartOpt = document.querySelector("#leaveChartOpt");
+
+      // FUNCTION FOR THHE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
+      leaveChartOpt.addEventListener("change", function () {
+         document.querySelector("#leaveContainer").innerHTML = "";
+         document.querySelector("#leaveContainer").innerHTML = `<canvas class="border" id="thirdChart"></canvas>`;
+
+         let leaveChosen = leaveChartOpt.value;
+
+         changeLeave(leaveChosen);
+
+      });
+
+      async function changeLeave(newType) {
+
+         chartType = newType;
+
+         let thirdChart = document.getElementById("thirdChart").getContext("2d");
+
+         try {
+            const res = await fetch('/leave-chart', {
+               method: 'POST',
+               body: JSON.stringify({}),
+               headers: { 'Content-Type': 'application/json' }
+            });
+            const data = await res.json();
+            console.log(data);
+
+            jan = data.success.jan;
+            feb = data.success.feb;
+            mar = data.success.mar;
+            apr = data.success.apr;
+            may = data.success.ma;
+            jun = data.success.jun;
+            jul = data.success.jul;
+            aug = data.success.aug;
+            sep = data.success.sep;
+            oct = data.success.oct;
+            nov = data.success.nov;
+            dec = data.success.dec;
+
+            if (data.success) {
+
+               let leaveChart = new Chart(thirdChart, {
+                  type: chartType,
+                  data: {
+                     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+                     datasets: [
+                        {
+                           label: "Leave Records",
+                           data: [
+                              jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec,
+                           ],
+
+                           backgroundColor: [
+                              "#98ddca",
+                              "#d5ecc2",
+                              "#ffd3b4",
+                              "#ffaaa7",
+                              "#fff5ab",
+                              "#00ead3",
+                              "#867ae9",
+                              "#47597e",
+                              "#5e8b7e",
+                              "#bf1363",
+                              "#185adb",
+                              "#5e454b",
+                           ]
+                        }
+                     ]
+                  },
+                  options: {
+                     plugins: {
+                        title: {
+                           display: true,
+                           text: 'Leave Records'
+                        }
+                     },
+                     responsive: true,
+                     maintainAspectRatio: false,
+                     scales: {
+                        yAxes: [{
+                           ticks: {
+                              beginAtZero: true
+                           }
+                        }]
+                     }
+
+                  }
+               })
+            }
+            else {
+               iziToast.info({
+                  title: data.error,
+                  position: "topCenter",
+                  timeout: 3000,
+               });
+
+            }
+         }
+         catch (err) {
+            console.log(err);
+         }
+      };
+   </script>
+
 </body>
 
 </html>

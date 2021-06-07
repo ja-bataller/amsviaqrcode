@@ -15,7 +15,9 @@ router.get("/qrcode/:id", requireAuth, authController.qrcode_get);
 
 // GET DATA
 router.post("/login-admin", authController.loginadmin_post);
-router.post("/chart", authController.chart_post);
+router.post("/late-chart", authController.late_chart_post);
+router.post("/absent-chart", authController.absent_chart_post);
+router.post("/leave-chart", authController.leave_chart_post);
 router.post("/login-user", authController.loginuser_post);
 router.post("/register-qrcode", authController.register_post);
 router.post("/absents", requireAuth, authController.absents_post);

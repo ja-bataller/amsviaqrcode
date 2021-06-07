@@ -562,6 +562,9 @@ module.exports.loginuser_post = async (req, res) => {
 module.exports.leave_post = async (req, res) => {
     const { leave, idNum, date } = req.body;
 
+    let dateToday = new Date();
+    let month = dateToday.getMonth();
+
     const logCheck = await Log.findOne({ idnumber: idNum })
     const recordIdCheck = await Record.findOne({ idnumber: idNum, date: date })
     const leaveReason = leave;
@@ -579,7 +582,7 @@ module.exports.leave_post = async (req, res) => {
                 const record = new Record({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: leaveNewRemaining, special_leave: logCheck.special_leave });
                 record.save();
 
-                const leave = new Leave({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: leaveNewRemaining, special_leave: logCheck.special_leave });
+                const leave = new Leave({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: leaveNewRemaining, special_leave: logCheck.special_leave, month: month });
                 leave.save();
 
                 return res.status(200).json({ success: "Employee Sick leave has been recorded" });
@@ -598,7 +601,7 @@ module.exports.leave_post = async (req, res) => {
                 const record = new Record({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, time_in: logCheck.time_in, time_out: logCheck.time_out, late: logCheck.late, late_reason: logCheck.late_reason, total_days_present: logCheck.total_days_present, leave: logCheck.leave, special_leave: specialLeaveNewRemaining });
                 record.save();
 
-                const leave = new Leave({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: logCheck.leave, special_leave: specialLeaveNewRemaining });
+                const leave = new Leave({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, status: leaveReason, date: date, leave: logCheck.leave, special_leave: specialLeaveNewRemaining, month: month });
                 leave.save();
 
                 return res.status(200).json({ success: "Employee Special leave has been recorded" });
@@ -636,6 +639,9 @@ module.exports.late_post = async (req, res) => {
 module.exports.absents_post = async (req, res) => {
     const { date } = req.body;
 
+    let dateToday = new Date();
+    let month = dateToday.getMonth();
+
     const log = await Log.find({ status: 'absent' })
     const recordCheck = await Record.findOne({ date: date, status: "absent" })
 
@@ -659,7 +665,7 @@ module.exports.absents_post = async (req, res) => {
                     const record = new Record({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late });
                     record.save();
 
-                    const absent = new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date });
+                    const absent = new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, month: month });
                     absent.save();
 
                 }
@@ -785,28 +791,33 @@ module.exports.seeddrop_get = async (req, res) => {
     res.send(data);
 }
 
-module.exports.chart_post = async (req, res) => {
+module.exports.late_chart_post = async (req, res) => {
 
     const late_traffic = await Late.find({ late_reason: 'Traffic' })
+    const late_delayedMassTransit = await Late.find({ late_reason: 'Delayed Mass Transit' })
+    const late_badWeather = await Late.find({ late_reason: 'Bad Weather' })
+    const late_familyIllness = await Late.find({ late_reason: 'Family Illness' })
     const late_overslept = await Late.find({ late_reason: 'Overslept' })
+    const late_others = await Late.find({ late_reason: 'Others' })
 
     try {
 
-        if (late_traffic.length == 0) {
-            console.log("NO TRAFFIC FOUND")
-            console.log(late_traffic.length)
+        let traffic = late_traffic.length
+        let delayedMassTransit = late_delayedMassTransit.length
+        let badWeather = late_badWeather.length
+        let familyIllness = late_familyIllness.length
+        let overslept = late_overslept.length
+        let others = late_others.length
 
-            return res.status(200).json({ error: "No traffic reason found." });
-        }
+        console.log("TRAFFIC RECORDS")
+        console.log(`traffic: ${traffic}`)
+        console.log(`delayedMassTransit: ${delayedMassTransit}`)
+        console.log(`badWeather: ${badWeather}`)
+        console.log(`familyIllness: ${familyIllness}`)
+        console.log(`overslept: ${overslept}`)
+        console.log(`others: ${others}`)
 
-        else {
-            let traffic = late_traffic.length
-            let overslept = late_overslept.length
-
-            console.log(late_traffic.length)
-
-            return res.status(200).json({ success: {traffic, overslept} });
-        }
+        return res.status(200).json({ success: { traffic, delayedMassTransit, badWeather, familyIllness, overslept, others } });
 
 
     } catch (err) {
@@ -815,3 +826,108 @@ module.exports.chart_post = async (req, res) => {
     }
 }
 
+module.exports.absent_chart_post = async (req, res) => {
+
+    const january = await Absent.find({ month: '0' })
+    const february = await Absent.find({ month: '1' })
+    const march = await Absent.find({ month: '2' })
+    const april = await Absent.find({ month: '3' })
+    const may = await Absent.find({ month: '4' })
+    const june = await Absent.find({ month: '5' })
+    const july = await Absent.find({ month: '6' })
+    const august = await Absent.find({ month: '7' })
+    const september = await Absent.find({ month: '8' })
+    const october = await Absent.find({ month: '9' })
+    const november = await Absent.find({ month: '10' })
+    const december = await Absent.find({ month: '11' })
+
+
+    try {
+
+        let jan = january.length
+        let feb = february.length
+        let mar = march.length
+        let apr = april.length
+        let ma = may.length
+        let jun = june.length
+        let jul = july.length
+        let aug = august.length
+        let sep = september.length
+        let oct = october.length
+        let nov = november.length
+        let dec = december.length
+
+        console.log("ABSENT RECORDS")
+        console.log(`january: ${jan}`)
+        console.log(`february: ${feb}`)
+        console.log(`march: ${mar}`)
+        console.log(`april: ${apr}`)
+        console.log(`may: ${ma}`)
+        console.log(`june: ${jun}`)
+        console.log(`july: ${jul}`)
+        console.log(`august: ${aug}`)
+        console.log(`september: ${sep}`)
+        console.log(`october: ${oct}`)
+        console.log(`november: ${nov}`)
+        console.log(`december: ${dec}`)
+
+        return res.status(200).json({ success: { jan, feb, mar, apr, ma, jun, jul, aug, sep, oct, nov, dec } });
+
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ error: '400' });
+    }
+}
+
+module.exports.leave_chart_post = async (req, res) => {
+
+    const january = await Leave.find({ month: '0' })
+    const february = await Leave.find({ month: '1' })
+    const march = await Leave.find({ month: '2' })
+    const april = await Leave.find({ month: '3' })
+    const may = await Leave.find({ month: '4' })
+    const june = await Leave.find({ month: '5' })
+    const july = await Leave.find({ month: '6' })
+    const august = await Leave.find({ month: '7' })
+    const september = await Leave.find({ month: '8' })
+    const october = await Leave.find({ month: '9' })
+    const november = await Leave.find({ month: '10' })
+    const december = await Leave.find({ month: '11' })
+
+
+    try {
+
+        let jan = january.length
+        let feb = february.length
+        let mar = march.length
+        let apr = april.length
+        let ma = may.length
+        let jun = june.length
+        let jul = july.length
+        let aug = august.length
+        let sep = september.length
+        let oct = october.length
+        let nov = november.length
+        let dec = december.length
+
+        console.log("LEAVE RECORDS")
+        console.log(`january: ${jan}`)
+        console.log(`february: ${feb}`)
+        console.log(`march: ${mar}`)
+        console.log(`april: ${apr}`)
+        console.log(`may: ${ma}`)
+        console.log(`june: ${jun}`)
+        console.log(`july: ${jul}`)
+        console.log(`august: ${aug}`)
+        console.log(`september: ${sep}`)
+        console.log(`october: ${oct}`)
+        console.log(`november: ${nov}`)
+        console.log(`december: ${dec}`)
+
+        return res.status(200).json({ success: { jan, feb, mar, apr, ma, jun, jul, aug, sep, oct, nov, dec } });
+
+    } catch (err) {
+        console.log(err);
+        res.status(400).json({ error: '400' });
+    }
+}
