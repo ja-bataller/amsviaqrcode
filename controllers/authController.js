@@ -642,42 +642,37 @@ module.exports.absents_post = async (req, res) => {
     let month = dateToday.getMonth();
 
     const log = await Log.find({ status: 'absent' })
-    const recordCheck = await Record.findOne({ date: date})
 
     try {
 
-        if (!recordCheck) {
+        if (log.length == 0) {
+            console.log("No Absents for Today")
 
-            if (log.length == 0) {
-                console.log("no logs")
+            await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent" });
 
-                await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent" });
+            return res.status(400).json({ success: "Great! No Absent for Today." });
+        }
 
-                return res.status(400).json({ success: "Great! No Absent for Today." });
-            }
-
-            else {
-
-                for (var i = 0; i < log.length; ++i) {
-
-                    console.log(i)
-                    const record = new Record({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late });
-                    record.save();
-
-                    const absent = new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, month: month });
-                    absent.save();
-
-                }
-
-                await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent" });
-
-                return res.status(200).json({ success: "The Absent employees has been recorded." });
-            }
-
+        else if (log[1].date == date) {
+            return res.status(400).json({ error: "All Employees has already been recorded today." });
         }
 
         else {
-            return res.status(400).json({ error: "All Employees has already been recorded today." });
+
+            for (var i = 0; i <= log.length; ++i) {
+
+                console.log(i)
+                const record = new Record({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late });
+                record.save();
+
+                const absent = new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, month: month });
+                absent.save();
+
+            }
+
+            await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent" });
+
+            return res.status(200).json({ success: "The Absent employees has been recorded." });
         }
 
     } catch (err) {
@@ -781,12 +776,15 @@ module.exports.seedusers_get = async (req, res) => {
 
 // DELETE / DROP USERS AND LOGS COLLECTION IN MONGO DB
 module.exports.seeddrop_get = async (req, res) => {
-    await User.deleteMany({})
-    await Log.deleteMany({})
-    await Record.deleteMany({})
+    // await User.deleteMany({})
+    // await Log.deleteMany({})
+    // await Record.deleteMany({})
+
+    //await Record.deleteMany({ status : "absent" })
+    await Log.updateMany({ status: "present" })
 
     let data = {
-        message: "Users, Logs, and Records has been deleted successfully.",
+        message: "Success",
         status: 'Success'
     }
     res.send(data);

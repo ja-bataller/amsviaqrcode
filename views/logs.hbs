@@ -164,6 +164,8 @@
                   timeout: 3000,  
                   });
 
+                  setTimeout(function(){ window.location.reload(); }, 3000);
+                  
                }
                if (data.error) {
                   iziToast.warning({
