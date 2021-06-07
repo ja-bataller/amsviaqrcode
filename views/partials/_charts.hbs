@@ -1,0 +1,622 @@
+{{!-- LATE CHART --}}
+<script>
+    let firstChart = document.querySelector("#firstChart").getContext("2d");
+
+    // Asynchronous Function - Getting the Data from the Database
+    async function loadLate() {
+        let firstChart = document.getElementById("firstChart").getContext("2d");
+
+        try {
+            // Go to Routes to fetch the data 
+            const res = await fetch('/late-chart', {
+                method: 'POST',
+                body: JSON.stringify({}),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            // Received data from Database
+            const data = await res.json();
+
+            // Here are the Data one by one which came from the Database
+            trafficCount = data.success.traffic;
+            dmtCount = data.success.delayedMassTransit;
+            badweatherCount = data.success.badWeather;
+            familyillnessCount = data.success.familyIllness;
+            oversleptCount = data.success.overslept;
+            othersCount = data.success.others;
+
+            // if the getting of data from Database is success
+            if (data.success) {
+
+                // Creating a Chart with Dynamic data came from the Database
+                let lateChart = new Chart(firstChart, {
+                    type: "pie",
+                    data: {
+                        labels: ["Traffic", "Delayed Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+                        datasets: [
+                            {
+                                label: "Late Employees",
+                                data: [
+                                    // Here are the Data to show in the Charts
+                                    trafficCount, dmtCount, badweatherCount, familyillnessCount, oversleptCount, othersCount
+                                ],
+
+                                backgroundColor: [
+                                    "#caf7e3",
+                                    "#d5ecc2",
+                                    "#ffd3b4",
+                                    "#ffaaa7",
+                                    "#fff5ab",
+                                    "#d1d9d9"
+                                ]
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Late Records'
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+            else {
+                iziToast.info({
+                    title: data.error,
+                    position: "topCenter",
+                    timeout: 3000,
+                });
+
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+    loadLate();
+</script>
+
+{{!-- ABSENT CHART --}}
+<script>
+    let secondChart = document.querySelector("#secondChart").getContext("2d");
+
+    // Asynchronous Function - Getting the Data from the Database
+    async function loadAbsent() {
+        let secondChart = document.getElementById("secondChart").getContext("2d");
+
+        try {
+            // Go to Routes to fetch the data 
+            const res = await fetch('/absent-chart', {
+                method: 'POST',
+                body: JSON.stringify({}),
+                headers: { 'Content-Type': 'application/json' }
+            })
+
+            // Received data from Database
+            const data = await res.json();
+
+            // Here are the Data one by one which came from the Database
+            jan = data.success.jan;
+            feb = data.success.feb;
+            mar = data.success.mar;
+            apr = data.success.apr;
+            may = data.success.ma;
+            jun = data.success.jun;
+            jul = data.success.jul;
+            aug = data.success.aug;
+            sep = data.success.sep;
+            oct = data.success.oct;
+            nov = data.success.nov;
+            dec = data.success.dec;
+
+            // if the getting of data from Database is success
+            if (data.success) {
+
+                // Creating a Chart with Dynamic data came from the Database
+                let absentChart = new Chart(secondChart, {
+                    type: "line",
+                    data: {
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+                        datasets: [
+                            {
+                                label: "Absent Employees",
+                                data: [
+                                    // Here are the Data to show in the Charts
+                                    jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec,
+                                ],
+
+                                backgroundColor: [
+                                    "#caf7e3",
+                                    "#d5ecc2",
+                                    "#ffd3b4",
+                                    "#ffaaa7",
+                                    "#fff5ab",
+                                    "#00ead3",
+                                    "#867ae9",
+                                    "#47597e",
+                                    "#5e8b7e",
+                                    "#bf1363",
+                                    "#185adb",
+                                    "#5e454b",
+                                ]
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Absent Records'
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+
+                    }
+                })
+            }
+            else {
+                iziToast.info({
+                    title: data.error,
+                    position: "topCenter",
+                    timeout: 3000,
+                });
+
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+    loadAbsent();
+</script>
+
+{{!-- LEAVE CHART --}}
+<script>
+    let thirdChart = document.querySelector("#thirdChart").getContext("2d");
+
+    // Asynchronous Function - Getting the Data from the Database
+    async function loadLeave() {
+        let thirdChart = document.getElementById("thirdChart").getContext("2d");
+
+        try {
+            // Go to Routes to fetch the data 
+            const res = await fetch('/leave-chart', {
+                method: 'POST',
+                body: JSON.stringify({}),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            // Received data from Database
+            const data = await res.json();
+
+            // Here are the Data one by one which came from the Database
+            jan = data.success.jan;
+            feb = data.success.feb;
+            mar = data.success.mar;
+            apr = data.success.apr;
+            may = data.success.ma;
+            jun = data.success.jun;
+            jul = data.success.jul;
+            aug = data.success.aug;
+            sep = data.success.sep;
+            oct = data.success.oct;
+            nov = data.success.nov;
+            dec = data.success.dec;
+
+            // if the getting of data from Database is success
+            if (data.success) {
+
+                // Creating a Chart with Dynamic data came from the Database
+                let leaveChart = new Chart(thirdChart, {
+                    type: "bar",
+                    data: {
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+                        datasets: [
+                            {
+                                label: "On Leave Employees",
+                                data: [
+                                    // Here are the Data to show in the Charts
+                                    jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec,
+                                ],
+
+                                backgroundColor: [
+                                    "#caf7e3",
+                                    "#d5ecc2",
+                                    "#ffd3b4",
+                                    "#ffaaa7",
+                                    "#fff5ab",
+                                    "#00ead3",
+                                    "#867ae9",
+                                    "#47597e",
+                                    "#5e8b7e",
+                                    "#bf1363",
+                                    "#185adb",
+                                    "#5e454b",
+                                ]
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Leave Records'
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+
+                    }
+                })
+            }
+            else {
+                iziToast.info({
+                    title: data.error,
+                    position: "topCenter",
+                    timeout: 3000,
+                });
+
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+    loadLeave();
+</script>
+
+{{!-- LATE OPTION CHART --}}
+<script>
+
+    let lateChartOpt = document.querySelector("#lateChartOpt");
+
+    // FUNCTION FOR THE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
+    lateChartOpt.addEventListener("change", function () {
+        document.querySelector("#lateContainer").innerHTML = "";
+        document.querySelector("#lateContainer").innerHTML = `<canvas class="border" id="firstChart"></canvas>`;
+
+        let lateChosen = lateChartOpt.value;
+
+        // Pass the selected value to the Function
+        changeLate(lateChosen);
+
+    });
+
+    // Asynchronous Function - Getting the Data from the Database
+    async function changeLate(newType) {
+        let firstChart = document.getElementById("firstChart").getContext("2d");
+
+        try {
+            // Go to Routes to fetch the data 
+            const res = await fetch('/late-chart', {
+                method: 'POST',
+                body: JSON.stringify({}),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            // Received data from Database
+            const data = await res.json();
+
+            // if the getting of data from Database is success
+            if (data.success) {
+                // Value came from the Selected Dropdown Text
+                chartType = newType;
+
+                // Here are the Data one by one which came from the Database
+                trafficCount = data.success.traffic;
+                dmtCount = data.success.delayedMassTransit;
+                badweatherCount = data.success.badWeather;
+                familyillnessCount = data.success.familyIllness;
+                oversleptCount = data.success.overslept;
+                othersCount = data.success.others;
+
+                // Creating a Chart with Dynamic data came from the Database
+                let lateChart = new Chart(firstChart, {
+                    type: chartType,
+                    data: {
+                        labels: ["Traffic", "Delayed Mass Transit", "Bad Weather", "Family sickness", "Overslept", "Others"],
+                        datasets: [
+                            {
+                                label: "Late Employees",
+                                data: [
+                                    // Here are the Data to show in the Charts
+                                    trafficCount, dmtCount, badweatherCount, familyillnessCount, oversleptCount, othersCount
+                                ],
+                                backgroundColor: [
+                                    "#caf7e3",
+                                    "#d5ecc2",
+                                    "#ffd3b4",
+                                    "#ffaaa7",
+                                    "#fff5ab",
+                                    "#d1d9d9"
+                                ]
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Late Records'
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+</script>
+
+{{!-- ABSENT OPTION CHART --}}
+<script>
+    let absentChartOpt = document.querySelector("#absentChartOpt");
+
+    // FUNCTION FOR THE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
+    absentChartOpt.addEventListener("change", function () {
+        document.querySelector("#absentContainer").innerHTML = "";
+        document.querySelector("#absentContainer").innerHTML = `<canvas class="border" id="secondChart"></canvas>`;
+
+        let absentChosen = absentChartOpt.value;
+
+        // Pass the selected value to the Function
+        changeAbsent(absentChosen);
+
+    });
+
+    // Asynchronous Function - Getting the Data from the Database
+    async function changeAbsent(newType) {
+
+        // Value came from the Selected Dropdown Text
+        chartType = newType;
+
+        let secondChart = document.getElementById("secondChart").getContext("2d");
+
+        try {
+            // Go to Routes to fetch the data 
+            const res = await fetch('/absent-chart', {
+                method: 'POST',
+                body: JSON.stringify({}),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            // Received data from Database
+            const data = await res.json();
+
+            // Here are the Data one by one which came from the Database
+            jan = data.success.jan;
+            feb = data.success.feb;
+            mar = data.success.mar;
+            apr = data.success.apr;
+            may = data.success.ma;
+            jun = data.success.jun;
+            jul = data.success.jul;
+            aug = data.success.aug;
+            sep = data.success.sep;
+            oct = data.success.oct;
+            nov = data.success.nov;
+            dec = data.success.dec;
+
+            // if the getting of data from Database is success
+            if (data.success) {
+
+                // Creating a Chart with Dynamic data came from the Database
+                let absentChart = new Chart(secondChart, {
+                    type: chartType,
+                    data: {
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+                        datasets: [
+                            {
+                                label: "Absent Employees",
+                                data: [
+                                    // Here are the Data to show in the Charts
+                                    jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec
+                                ],
+
+                                backgroundColor: [
+                                    "#caf7e3",
+                                    "#d5ecc2",
+                                    "#ffd3b4",
+                                    "#ffaaa7",
+                                    "#fff5ab",
+                                    "#00ead3",
+                                    "#867ae9",
+                                    "#47597e",
+                                    "#5e8b7e",
+                                    "#bf1363",
+                                    "#185adb",
+                                    "#5e454b",
+                                ]
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Absent Records'
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+
+                    }
+                })
+            }
+            else {
+                iziToast.info({
+                    title: data.error,
+                    position: "topCenter",
+                    timeout: 3000,
+                });
+
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+
+
+    };
+</script>
+
+{{!-- LEAVE OPTION CHART --}}
+<script>
+    let leaveChartOpt = document.querySelector("#leaveChartOpt");
+
+    // FUNCTION FOR THE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
+    leaveChartOpt.addEventListener("change", function () {
+        document.querySelector("#leaveContainer").innerHTML = "";
+        document.querySelector("#leaveContainer").innerHTML = `<canvas class="border" id="thirdChart"></canvas>`;
+
+        let leaveChosen = leaveChartOpt.value;
+
+        // Pass the selected value to the Function
+        changeLeave(leaveChosen);
+
+    });
+
+    // Asynchronous Function - Getting the Data from the Database
+    async function changeLeave(newType) {
+
+        // Value came from the Selected Dropdown Text
+        chartType = newType;
+
+        let thirdChart = document.getElementById("thirdChart").getContext("2d");
+
+        try {
+            // Go to Routes to fetch the data 
+            const res = await fetch('/leave-chart', {
+                method: 'POST',
+                body: JSON.stringify({}),
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            // Received data from Database
+            const data = await res.json();
+
+            // Here are the Data one by one which came from the Database
+            jan = data.success.jan;
+            feb = data.success.feb;
+            mar = data.success.mar;
+            apr = data.success.apr;
+            may = data.success.ma;
+            jun = data.success.jun;
+            jul = data.success.jul;
+            aug = data.success.aug;
+            sep = data.success.sep;
+            oct = data.success.oct;
+            nov = data.success.nov;
+            dec = data.success.dec;
+
+            // if the getting of data from Database is success
+            if (data.success) {
+
+                // Creating a Chart with Dynamic data came from the Database
+                let leaveChart = new Chart(thirdChart, {
+                    type: chartType,
+                    data: {
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+                        datasets: [
+                            {
+                                label: "On Leave Employees",
+                                data: [
+                                    // Here are the Data to show in the Charts
+                                    jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec,
+                                ],
+
+                                backgroundColor: [
+                                    "#caf7e3",
+                                    "#d5ecc2",
+                                    "#ffd3b4",
+                                    "#ffaaa7",
+                                    "#fff5ab",
+                                    "#00ead3",
+                                    "#867ae9",
+                                    "#47597e",
+                                    "#5e8b7e",
+                                    "#bf1363",
+                                    "#185adb",
+                                    "#5e454b",
+                                ]
+                            }
+                        ]
+                    },
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Leave Records'
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+
+                    }
+                })
+            }
+            else {
+                iziToast.info({
+                    title: data.error,
+                    position: "topCenter",
+                    timeout: 3000,
+                });
+
+            }
+        }
+        catch (err) {
+            console.log(err);
+        }
+    };
+</script>
