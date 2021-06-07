@@ -659,25 +659,23 @@ module.exports.absents_post = async (req, res) => {
 
         else {
 
-            for (var i = 0; i <= log.length; ++i) {
+            for (var i = 0; i <= log.length; i++) {
 
-                console.log(i)
-                const record = new Record({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late });
+                const record =  new Record({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late });
                 record.save();
 
-                const absent = new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, month: month });
+                const absent =  new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, month: month });
                 absent.save();
 
-            }
+                await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent", date: date });
+                
+            } 
 
-            await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent" });
-
-            return res.status(200).json({ success: "The Absent employees has been recorded." });
         }
 
     } catch (err) {
         console.log(err);
-        res.status(400).json({ error: '400' });
+        res.status(200).json({ success: "The Absent employees has been recorded." });
     }
 }
 
@@ -780,8 +778,9 @@ module.exports.seeddrop_get = async (req, res) => {
     // await Log.deleteMany({})
     // await Record.deleteMany({})
 
-    //await Record.deleteMany({ status : "absent" })
-    await Log.updateMany({ status: "present" })
+    await Record.deleteMany({ status: "absent" })
+    //await Log.updateMany({ date: "06-08-2021" })
+    //await Log.updateMany({ status: "present" })
 
     let data = {
         message: "Success",
