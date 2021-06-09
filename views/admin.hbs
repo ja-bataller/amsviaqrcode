@@ -116,16 +116,31 @@
                      </div>
                   </div>
 
-                  <div class="col-lg-4 pb-4" id="lateContainer">
-                     <canvas class="border" id="firstChart"></canvas>
+                  <div class="col-lg-4 pb-4 " id="lateContainer">
+                     <div class="spinner container" id="lateSpinner" style="display: block;">
+                        <div class="inner one"></div>
+                        <div class="inner two"></div>
+                        <div class="inner three"></div>
+                     </div>
+                     <canvas class="border" id="firstChart" style="display: none;"></canvas>
                   </div>
 
                   <div class="col-lg-4 pb-4" id="absentContainer">
-                     <canvas class="border" id="secondChart"></canvas>
+                     <div class="spinner container" id="absentSpinner" style="display: block;">
+                        <div class="inner one"></div>
+                        <div class="inner two"></div>
+                        <div class="inner three"></div>
+                     </div>
+                     <canvas class="border" id="secondChart" style="display: none;"></canvas>
                   </div>
 
                   <div class="col-lg-4 pb-4" id="leaveContainer">
-                     <canvas class="border" id="thirdChart"></canvas>
+                     <div class="spinner container" id="leaveSpinner" style="display: block;">
+                        <div class="inner one"></div>
+                        <div class="inner two"></div>
+                        <div class="inner three"></div>
+                     </div>
+                     <canvas class="border" id="thirdChart" style="display: none;"></canvas>
                   </div>
 
                   <div class="col-lg-4">
@@ -205,4 +220,5 @@
    {{> _footer}}
    {{> _charts}}
 </body>
+
 </html>

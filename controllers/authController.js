@@ -668,7 +668,6 @@ module.exports.absents_post = async (req, res) => {
                 absent.save();
 
                 await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent", date: date });
-                
             } 
 
         }

@@ -27,6 +27,8 @@
 
             // if the getting of data from Database is success
             if (data.success) {
+                document.querySelector("#lateSpinner").style.display = "none";
+                document.querySelector("#firstChart").style.display = "block";
 
                 // Creating a Chart with Dynamic data came from the Database
                 let lateChart = new Chart(firstChart, {
@@ -122,6 +124,8 @@
 
             // if the getting of data from Database is success
             if (data.success) {
+                document.querySelector("#absentSpinner").style.display = "none";
+                document.querySelector("#secondChart").style.display = "block";
 
                 // Creating a Chart with Dynamic data came from the Database
                 let absentChart = new Chart(secondChart, {
@@ -224,6 +228,8 @@
 
             // if the getting of data from Database is success
             if (data.success) {
+                document.querySelector("#leaveSpinner").style.display = "none";
+                document.querySelector("#thirdChart").style.display = "block";
 
                 // Creating a Chart with Dynamic data came from the Database
                 let leaveChart = new Chart(thirdChart, {
@@ -297,11 +303,18 @@
     let lateChartOpt = document.querySelector("#lateChartOpt");
 
     // FUNCTION FOR THE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
-    lateChartOpt.addEventListener("change", function () {
+    lateChartOpt.addEventListener("change", function ()  {
         document.querySelector("#lateContainer").innerHTML = "";
-        document.querySelector("#lateContainer").innerHTML = `<canvas class="border" id="firstChart"></canvas>`;
+        document.querySelector("#lateContainer").innerHTML = `
+        <div class="spinner container" id="lateSpinner" style="display: block;">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+        </div>
+        <canvas class="border" id="firstChart"></canvas>`;
 
         let lateChosen = lateChartOpt.value;
+        document.querySelector("#firstChart").style.display = "none";
 
         // Pass the selected value to the Function
         changeLate(lateChosen);
@@ -310,8 +323,7 @@
 
     // Asynchronous Function - Getting the Data from the Database
     async function changeLate(newType) {
-        let firstChart = document.getElementById("firstChart").getContext("2d");
-
+    
         try {
             // Go to Routes to fetch the data 
             const res = await fetch('/late-chart', {
@@ -325,6 +337,13 @@
 
             // if the getting of data from Database is success
             if (data.success) {
+
+                document.querySelector("#lateSpinner").style.display = "none";
+                document.querySelector("#firstChart").style.display = "block";
+                
+
+                let firstChart = document.getElementById("firstChart").getContext("2d");
+
                 // Value came from the Selected Dropdown Text
                 chartType = newType;
 
@@ -392,9 +411,16 @@
     // FUNCTION FOR THE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
     absentChartOpt.addEventListener("change", function () {
         document.querySelector("#absentContainer").innerHTML = "";
-        document.querySelector("#absentContainer").innerHTML = `<canvas class="border" id="secondChart"></canvas>`;
+        document.querySelector("#absentContainer").innerHTML = `
+        <div class="spinner container" id="absentSpinner" style="display: block;">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+        </div>
+        <canvas class="border" id="secondChart"></canvas>`;
 
         let absentChosen = absentChartOpt.value;
+        document.querySelector("#secondChart").style.display = "none";
 
         // Pass the selected value to the Function
         changeAbsent(absentChosen);
@@ -436,6 +462,9 @@
 
             // if the getting of data from Database is success
             if (data.success) {
+
+                document.querySelector("#absentSpinner").style.display = "none";
+                document.querySelector("#secondChart").style.display = "block";
 
                 // Creating a Chart with Dynamic data came from the Database
                 let absentChart = new Chart(secondChart, {
@@ -511,9 +540,17 @@
     // FUNCTION FOR THE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
     leaveChartOpt.addEventListener("change", function () {
         document.querySelector("#leaveContainer").innerHTML = "";
-        document.querySelector("#leaveContainer").innerHTML = `<canvas class="border" id="thirdChart"></canvas>`;
+        document.querySelector("#leaveContainer").innerHTML = `
+        <div class="spinner container" id="leaveSpinner" style="display: block;">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+        </div>
+        <canvas class="border" id="thirdChart"></canvas>
+        `;
 
         let leaveChosen = leaveChartOpt.value;
+        document.querySelector("#thirdChart").style.display = "none";
 
         // Pass the selected value to the Function
         changeLeave(leaveChosen);
@@ -555,6 +592,9 @@
 
             // if the getting of data from Database is success
             if (data.success) {
+
+                document.querySelector("#leaveSpinner").style.display = "none";
+                document.querySelector("#thirdChart").style.display = "block";
 
                 // Creating a Chart with Dynamic data came from the Database
                 let leaveChart = new Chart(thirdChart, {
