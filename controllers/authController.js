@@ -825,6 +825,7 @@ module.exports.late_chart_post = async (req, res) => {
 
 module.exports.absent_chart_post = async (req, res) => {
 
+    // TOTAL
     const january = await Absent.find({ month: '0' })
     const february = await Absent.find({ month: '1' })
     const march = await Absent.find({ month: '2' })
@@ -837,6 +838,35 @@ module.exports.absent_chart_post = async (req, res) => {
     const october = await Absent.find({ month: '9' })
     const november = await Absent.find({ month: '10' })
     const december = await Absent.find({ month: '11' })
+
+    // DAY TOTAl
+    const januaryAM = await Absent.find({ month: '0', shift: "day" })
+    const februaryAM = await Absent.find({ month: '1', shift: "day" })
+    const marchAM = await Absent.find({ month: '2', shift: "day" })
+    const aprilAM = await Absent.find({ month: '3', shift: "day" })
+    const mayAM = await Absent.find({ month: '4', shift: "day" })
+    const juneAM = await Absent.find({ month: '5', shift: "day" })
+    const julyAM = await Absent.find({ month: '6', shift: "day" })
+    const augustAM = await Absent.find({ month: '7', shift: "day" })
+    const septemberAM = await Absent.find({ month: '8', shift: "day" })
+    const octoberAM = await Absent.find({ month: '9', shift: "day" })
+    const novemberAM = await Absent.find({ month: '10', shift: "day" })
+    const decemberAM = await Absent.find({ month: '11', shift: "day" })
+
+    // NIGHT TOTAl
+    const januaryPM = await Absent.find({ month: '0', shift: "night" })
+    const februaryPM = await Absent.find({ month: '1', shift: "night" })
+    const marchPM = await Absent.find({ month: '2', shift: "night" })
+    const aprilPM = await Absent.find({ month: '3', shift: "night" })
+    const mayPM = await Absent.find({ month: '4', shift: "night" })
+    const junePM = await Absent.find({ month: '5', shift: "night" })
+    const julyPM = await Absent.find({ month: '6', shift: "night" })
+    const augustPM = await Absent.find({ month: '7', shift: "night" })
+    const septemberPM = await Absent.find({ month: '8', shift: "night" })
+    const octoberPM = await Absent.find({ month: '9', shift: "night" })
+    const novemberPM = await Absent.find({ month: '10', shift: "night" })
+    const decemberPM = await Absent.find({ month: '11', shift: "night" })
+
 
 
     try {
@@ -854,21 +884,79 @@ module.exports.absent_chart_post = async (req, res) => {
         let nov = november.length
         let dec = december.length
 
-        console.log("ABSENT RECORDS")
-        console.log(`january: ${jan}`)
-        console.log(`february: ${feb}`)
-        console.log(`march: ${mar}`)
-        console.log(`april: ${apr}`)
-        console.log(`may: ${ma}`)
-        console.log(`june: ${jun}`)
-        console.log(`july: ${jul}`)
-        console.log(`august: ${aug}`)
-        console.log(`september: ${sep}`)
-        console.log(`october: ${oct}`)
-        console.log(`november: ${nov}`)
-        console.log(`december: ${dec}`)
+        // console.log("ABSENT RECORDS")
+        // console.log(`january: ${jan}`)
+        // console.log(`february: ${feb}`)
+        // console.log(`march: ${mar}`)
+        // console.log(`april: ${apr}`)
+        // console.log(`may: ${ma}`)
+        // console.log(`june: ${jun}`)
+        // console.log(`july: ${jul}`)
+        // console.log(`august: ${aug}`)
+        // console.log(`september: ${sep}`)
+        // console.log(`october: ${oct}`)
+        // console.log(`november: ${nov}`)
+        // console.log(`december: ${dec}`)
 
-        return res.status(200).json({ success: { jan, feb, mar, apr, ma, jun, jul, aug, sep, oct, nov, dec } });
+        let janAM = januaryAM.length
+        let febAM = februaryAM.length
+        let marAM = marchAM.length
+        let aprAM = aprilAM.length
+        let maAM = mayAM.length
+        let junAM = juneAM.length
+        let julAM = julyAM.length
+        let augAM = augustAM.length
+        let sepAM = septemberAM.length
+        let octAM = octoberAM.length
+        let novAM = novemberAM.length
+        let decAM = decemberAM.length
+
+        console.log("ABSENT DAY RECORDS")
+        console.log(`january: ${janAM}`)
+        console.log(`february: ${febAM}`)
+        console.log(`march: ${marAM}`)
+        console.log(`april: ${aprAM}`)
+        console.log(`may: ${maAM}`)
+        console.log(`june: ${junAM}`)
+        console.log(`july: ${julAM}`)
+        console.log(`august: ${augAM}`)
+        console.log(`september: ${sepAM}`)
+        console.log(`october: ${octAM}`)
+        console.log(`november: ${novAM}`)
+        console.log(`december: ${decAM}`)
+
+        let janPM = januaryPM.length
+        let febPM = februaryPM.length
+        let marPM = marchPM.length
+        let aprPM = aprilPM.length
+        let maPM = mayPM.length
+        let junPM = junePM.length
+        let julPM = julyPM.length
+        let augPM = augustPM.length
+        let sepPM = septemberPM.length
+        let octPM = octoberPM.length
+        let novPM = novemberPM.length
+        let decPM = decemberPM.length
+
+        console.log("ABSENT NIGHT RECORDS")
+        console.log(`january: ${janPM}`)
+        console.log(`february: ${febPM}`)
+        console.log(`march: ${marPM}`)
+        console.log(`april: ${aprPM}`)
+        console.log(`may: ${maPM}`)
+        console.log(`june: ${junPM}`)
+        console.log(`july: ${julPM}`)
+        console.log(`august: ${augPM}`)
+        console.log(`september: ${sepPM}`)
+        console.log(`october: ${octPM}`)
+        console.log(`november: ${novPM}`)
+        console.log(`december: ${decPM}`)
+
+        return res.status(200).json({ success: { 
+            jan, feb, mar, apr, ma, jun, jul, aug, sep, oct, nov, dec, 
+            janAM, febAM, marAM, aprAM, maAM, junAM, julAM, augAM, sepAM, octAM, novAM, decAM,
+            janPM, febPM, marPM, aprPM, maPM, junPM, julPM, augPM, sepPM, octPM, novPM, decPM,
+        } });
 
     } catch (err) {
         console.log(err);
@@ -891,6 +979,33 @@ module.exports.leave_chart_post = async (req, res) => {
     const november = await Leave.find({ month: '10' })
     const december = await Leave.find({ month: '11' })
 
+       // DAY TOTAl
+       const januaryAM = await Leave.find({ month: '0', shift: "day" })
+       const februaryAM = await Leave.find({ month: '1', shift: "day" })
+       const marchAM = await Leave.find({ month: '2', shift: "day" })
+       const aprilAM = await Leave.find({ month: '3', shift: "day" })
+       const mayAM = await Leave.find({ month: '4', shift: "day" })
+       const juneAM = await Leave.find({ month: '5', shift: "day" })
+       const julyAM = await Leave.find({ month: '6', shift: "day" })
+       const augustAM = await Leave.find({ month: '7', shift: "day" })
+       const septemberAM = await Leave.find({ month: '8', shift: "day" })
+       const octoberAM = await Leave.find({ month: '9', shift: "day" })
+       const novemberAM = await Leave.find({ month: '10', shift: "day" })
+       const decemberAM = await Leave.find({ month: '11', shift: "day" })
+   
+       // NIGHT TOTAl
+       const januaryPM = await Leave.find({ month: '0', shift: "night" })
+       const februaryPM = await Leave.find({ month: '1', shift: "night" })
+       const marchPM = await Leave.find({ month: '2', shift: "night" })
+       const aprilPM = await Leave.find({ month: '3', shift: "night" })
+       const mayPM = await Leave.find({ month: '4', shift: "night" })
+       const junePM = await Leave.find({ month: '5', shift: "night" })
+       const julyPM = await Leave.find({ month: '6', shift: "night" })
+       const augustPM = await Leave.find({ month: '7', shift: "night" })
+       const septemberPM = await Leave.find({ month: '8', shift: "night" })
+       const octoberPM = await Leave.find({ month: '9', shift: "night" })
+       const novemberPM = await Leave.find({ month: '10', shift: "night" })
+       const decemberPM = await Leave.find({ month: '11', shift: "night" })
 
     try {
 
@@ -921,10 +1036,69 @@ module.exports.leave_chart_post = async (req, res) => {
         console.log(`november: ${nov}`)
         console.log(`december: ${dec}`)
 
-        return res.status(200).json({ success: { jan, feb, mar, apr, ma, jun, jul, aug, sep, oct, nov, dec } });
+        
+        let janAM = januaryAM.length
+        let febAM = februaryAM.length
+        let marAM = marchAM.length
+        let aprAM = aprilAM.length
+        let maAM = mayAM.length
+        let junAM = juneAM.length
+        let julAM = julyAM.length
+        let augAM = augustAM.length
+        let sepAM = septemberAM.length
+        let octAM = octoberAM.length
+        let novAM = novemberAM.length
+        let decAM = decemberAM.length
+
+        console.log("LEAVE DAY RECORDS")
+        console.log(`january: ${janAM}`)
+        console.log(`february: ${febAM}`)
+        console.log(`march: ${marAM}`)
+        console.log(`april: ${aprAM}`)
+        console.log(`may: ${maAM}`)
+        console.log(`june: ${junAM}`)
+        console.log(`july: ${julAM}`)
+        console.log(`august: ${augAM}`)
+        console.log(`september: ${sepAM}`)
+        console.log(`october: ${octAM}`)
+        console.log(`november: ${novAM}`)
+        console.log(`december: ${decAM}`)
+
+        let janPM = januaryPM.length
+        let febPM = februaryPM.length
+        let marPM = marchPM.length
+        let aprPM = aprilPM.length
+        let maPM = mayPM.length
+        let junPM = junePM.length
+        let julPM = julyPM.length
+        let augPM = augustPM.length
+        let sepPM = septemberPM.length
+        let octPM = octoberPM.length
+        let novPM = novemberPM.length
+        let decPM = decemberPM.length
+
+        console.log("LEAVE NIGHT RECORDS")
+        console.log(`january: ${janPM}`)
+        console.log(`february: ${febPM}`)
+        console.log(`march: ${marPM}`)
+        console.log(`april: ${aprPM}`)
+        console.log(`may: ${maPM}`)
+        console.log(`june: ${junPM}`)
+        console.log(`july: ${julPM}`)
+        console.log(`august: ${augPM}`)
+        console.log(`september: ${sepPM}`)
+        console.log(`october: ${octPM}`)
+        console.log(`november: ${novPM}`)
+        console.log(`december: ${decPM}`)
+
+        return res.status(200).json({ success: { 
+            jan, feb, mar, apr, ma, jun, jul, aug, sep, oct, nov, dec, 
+            janAM, febAM, marAM, aprAM, maAM, junAM, julAM, augAM, sepAM, octAM, novAM, decAM,
+            janPM, febPM, marPM, aprPM, maPM, junPM, julPM, augPM, sepPM, octPM, novPM, decPM,
+        } });
 
     } catch (err) {
         console.log(err);
-        res.status(400).json({ error: '400' });
+        res.status(400).json({ error: 'SERVER ERROR' });
     }
 }

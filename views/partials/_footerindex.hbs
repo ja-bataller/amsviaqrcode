@@ -27,6 +27,9 @@
       const username = form.username.value;
       const password = form.password.value;
 
+      document.getElementById("logInBtn").style.display = "none";
+      document.getElementById("logInSpinner").style.display = "block";
+
       try {
          const res = await fetch('/login-admin', {
             method: 'POST',
@@ -72,6 +75,8 @@
       }
       catch (err) {
          console.log(err);
+         document.getElementById("logInBtn").style.display = "block";
+         document.getElementById("logInSpinner").style.display = "none";
       }
    });
 </script>

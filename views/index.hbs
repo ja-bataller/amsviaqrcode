@@ -52,7 +52,12 @@
                                           placeholder="Your Password" autocomplete="off" required>
                                        <i class="input-icon uil uil-lock-alt"></i>
                                     </div>
-                                    <input class="btn mt-4" type="submit" value="log in">
+                                    <input class="btn mt-4" id="logInBtn" type="submit" value="log in">
+                                    <div class="d-flex justify-content-center">
+                                       <button class="btn mt-4" id="logInSpinner" style="display: none;" disabled>
+                                       <div class="spinner-border" role="status"></div> 
+                                       </button>
+                                    </div>
                                  </form>
                               </div>
                            </div>
