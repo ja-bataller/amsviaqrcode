@@ -24,6 +24,9 @@ const AbsentSchema = new Schema({
     month: {
         type: String,
     },
+    absent_count: {
+        type: Number,
+    },
     
 }, {
     timestamps: true

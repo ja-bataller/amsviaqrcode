@@ -36,6 +36,12 @@ const LogSchema = new Schema({
     total_days_present: {
         type: Number,
     },
+    absent_count: {
+        type: Number,
+    },
+    late_count: {
+        type: Number,
+    },
     leave: {
         type: Number,
     },

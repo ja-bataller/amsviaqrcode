@@ -25,7 +25,6 @@ router.post("/late-chart", requireAuth, authController.late_chart_post);
 router.post("/absent-chart", requireAuth, authController.absent_chart_post);
 router.post("/leave-chart", requireAuth, authController.leave_chart_post);
 
-
 // CHANGE ADMINISTRATOR ACCOUNT PASSWORD
 router.put("/change-password/:id", authController.changePassword_put);
 
@@ -34,5 +33,7 @@ router.get("/seed/:count", requireAuth, authController.seedusers_get);
 
 // DELETE USERS, LOGS, RECORDS DATA IN MONGO DB
 router.get("/drop/collection", requireAuth, authController.seeddrop_get);
+
+router.get("/algorithm", requireAuth, authController.algorithm_post);
 
 module.exports = router;

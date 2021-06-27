@@ -24,6 +24,13 @@ const LateSchema = new Schema({
     date: {
         type: String,
     },
+    month: {
+        type: Number,
+    },
+    late_count: {
+        type: Number,
+    },
+    
 }, {
     timestamps: true
 });

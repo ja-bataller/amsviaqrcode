@@ -626,7 +626,7 @@ module.exports.late_post = async (req, res) => {
 
     await Log.findByIdAndUpdate(id, { late_reason: reason, late: otherReason }, { new: true });
 
-    const late = new Late({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, late_reason: reason, late: otherReason, date: date });
+    const late = new Late({ user_id: logCheck.user_id, idnumber: logCheck.idnumber, name: logCheck.name, shift: logCheck.shift, late_reason: reason, late: otherReason, date: date, late_count: logCheck.late_count + 1 });
     late.save();
 
     console.log("Late Reason recorded")
@@ -664,7 +664,7 @@ module.exports.absents_post = async (req, res) => {
                 const record =  new Record({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, time_in: log[i].time_in, time_out: log[i].time_out, late: log[i].late });
                 record.save();
 
-                const absent =  new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, month: month });
+                const absent =  new Absent({ user_id: log[i].user_id, idnumber: log[i].idnumber, name: log[i].name, shift: log[i].shift, status: "absent", date: date, month: month, absent_count: log[i].absent_count + 1 });
                 absent.save();
 
                 await Log.updateMany({ time_in: "null", time_out: "null", late: "", status: "absent", date: date });
@@ -797,6 +797,35 @@ module.exports.late_chart_post = async (req, res) => {
     const late_overslept = await Late.find({ late_reason: 'Overslept' })
     const late_others = await Late.find({ late_reason: 'Others' })
 
+    // DAY TOTAl
+    const januaryAM = await Late.find({ month: '0', shift: "day", late_count: 5 })
+    const februaryAM = await Late.find({ month: '1', shift: "day", late_count: 5 })
+    const marchAM = await Late.find({ month: '2', shift: "day", late_count: 5 })
+    const aprilAM = await Late.find({ month: '3', shift: "day", late_count: 5 })
+    const mayAM = await Late.find({ month: '4', shift: "day", late_count: 5 })
+    const juneAM = await Late.find({ month: '5', shift: "day", late_count: 5 })
+    const julyAM = await Late.find({ month: '6', shift: "day", late_count: 5 })
+    const augustAM = await Late.find({ month: '7', shift: "day", late_count: 5 })
+    const septemberAM = await Late.find({ month: '8', shift: "day", late_count: 5 })
+    const octoberAM = await Late.find({ month: '9', shift: "day", late_count: 5 })
+    const novemberAM = await Late.find({ month: '10', shift: "day", late_count: 5 })
+    const decemberAM = await Late.find({ month: '11', shift: "day", late_count: 5 })
+
+    // NIGHT TOTAl
+    const januaryPM = await Late.find({ month: '0', shift: "night", late_count: 5 })
+    const februaryPM = await Late.find({ month: '1', shift: "night", late_count: 5 })
+    const marchPM = await Late.find({ month: '2', shift: "night", late_count: 5 })
+    const aprilPM = await Late.find({ month: '3', shift: "night", late_count: 5 })
+    const mayPM = await Late.find({ month: '4', shift: "night", late_count: 5 })
+    const junePM = await Late.find({ month: '5', shift: "night", late_count: 5 })
+    const julyPM = await Late.find({ month: '6', shift: "night", late_count: 5 })
+    const augustPM = await Late.find({ month: '7', shift: "night", late_count: 5 })
+    const septemberPM = await Late.find({ month: '8', shift: "night", late_count: 5 })
+    const octoberPM = await Late.find({ month: '9', shift: "night", late_count: 5 })
+    const novemberPM = await Late.find({ month: '10', shift: "night", late_count: 5 })
+    const decemberPM = await Late.find({ month: '11', shift: "night", late_count: 5 })
+
+
     try {
 
         let traffic = late_traffic.length
@@ -814,7 +843,51 @@ module.exports.late_chart_post = async (req, res) => {
         console.log(`overslept: ${overslept}`)
         console.log(`others: ${others}`)
 
-        return res.status(200).json({ success: { traffic, delayedMassTransit, badWeather, familyIllness, overslept, others } });
+        let janAM = januaryAM.length
+        let febAM = februaryAM.length
+        let marAM = marchAM.length
+        let aprAM = aprilAM.length
+        let maAM = mayAM.length
+        let junAM = juneAM.length
+        let julAM = julyAM.length
+        let augAM = augustAM.length
+        let sepAM = septemberAM.length
+        let octAM = octoberAM.length
+        let novAM = novemberAM.length
+        let decAM = decemberAM.length
+
+        console.log("ABSENT DAY RECORDS")
+        console.log(`january: ${janAM}`)
+        console.log(`february: ${febAM}`)
+        console.log(`march: ${marAM}`)
+        console.log(`april: ${aprAM}`)
+        console.log(`may: ${maAM}`)
+        console.log(`june: ${junAM}`)
+        console.log(`july: ${julAM}`)
+        console.log(`august: ${augAM}`)
+        console.log(`september: ${sepAM}`)
+        console.log(`october: ${octAM}`)
+        console.log(`november: ${novAM}`)
+        console.log(`december: ${decAM}`)
+
+        let janPM = januaryPM.length
+        let febPM = februaryPM.length
+        let marPM = marchPM.length
+        let aprPM = aprilPM.length
+        let maPM = mayPM.length
+        let junPM = junePM.length
+        let julPM = julyPM.length
+        let augPM = augustPM.length
+        let sepPM = septemberPM.length
+        let octPM = octoberPM.length
+        let novPM = novemberPM.length
+        let decPM = decemberPM.length
+
+        return res.status(200).json({ success: { 
+            traffic, delayedMassTransit, badWeather, familyIllness, overslept, others,
+            janAM, febAM, marAM, aprAM, maAM, junAM, julAM, augAM, sepAM, octAM, novAM, decAM,
+            janPM, febPM, marPM, aprPM, maPM, junPM, julPM, augPM, sepPM, octPM, novPM, decPM,
+        } });
 
 
     } catch (err) {
@@ -840,32 +913,32 @@ module.exports.absent_chart_post = async (req, res) => {
     const december = await Absent.find({ month: '11' })
 
     // DAY TOTAl
-    const januaryAM = await Absent.find({ month: '0', shift: "day" })
-    const februaryAM = await Absent.find({ month: '1', shift: "day" })
-    const marchAM = await Absent.find({ month: '2', shift: "day" })
-    const aprilAM = await Absent.find({ month: '3', shift: "day" })
-    const mayAM = await Absent.find({ month: '4', shift: "day" })
-    const juneAM = await Absent.find({ month: '5', shift: "day" })
-    const julyAM = await Absent.find({ month: '6', shift: "day" })
-    const augustAM = await Absent.find({ month: '7', shift: "day" })
-    const septemberAM = await Absent.find({ month: '8', shift: "day" })
-    const octoberAM = await Absent.find({ month: '9', shift: "day" })
-    const novemberAM = await Absent.find({ month: '10', shift: "day" })
-    const decemberAM = await Absent.find({ month: '11', shift: "day" })
+    const januaryAM = await Absent.find({ month: '0', shift: "day", absent_count: 5 })
+    const februaryAM = await Absent.find({ month: '1', shift: "day", absent_count: 5 })
+    const marchAM = await Absent.find({ month: '2', shift: "day", absent_count: 5 })
+    const aprilAM = await Absent.find({ month: '3', shift: "day", absent_count: 5 })
+    const mayAM = await Absent.find({ month: '4', shift: "day", absent_count: 5 })
+    const juneAM = await Absent.find({ month: '5', shift: "day", absent_count: 5 })
+    const julyAM = await Absent.find({ month: '6', shift: "day", absent_count: 5 })
+    const augustAM = await Absent.find({ month: '7', shift: "day", absent_count: 5 })
+    const septemberAM = await Absent.find({ month: '8', shift: "day", absent_count: 5 })
+    const octoberAM = await Absent.find({ month: '9', shift: "day", absent_count: 5 })
+    const novemberAM = await Absent.find({ month: '10', shift: "day", absent_count: 5 })
+    const decemberAM = await Absent.find({ month: '11', shift: "day", absent_count: 5 })
 
     // NIGHT TOTAl
-    const januaryPM = await Absent.find({ month: '0', shift: "night" })
-    const februaryPM = await Absent.find({ month: '1', shift: "night" })
-    const marchPM = await Absent.find({ month: '2', shift: "night" })
-    const aprilPM = await Absent.find({ month: '3', shift: "night" })
-    const mayPM = await Absent.find({ month: '4', shift: "night" })
-    const junePM = await Absent.find({ month: '5', shift: "night" })
-    const julyPM = await Absent.find({ month: '6', shift: "night" })
-    const augustPM = await Absent.find({ month: '7', shift: "night" })
-    const septemberPM = await Absent.find({ month: '8', shift: "night" })
-    const octoberPM = await Absent.find({ month: '9', shift: "night" })
-    const novemberPM = await Absent.find({ month: '10', shift: "night" })
-    const decemberPM = await Absent.find({ month: '11', shift: "night" })
+    const januaryPM = await Absent.find({ month: '0', shift: "night", absent_count: 5 })
+    const februaryPM = await Absent.find({ month: '1', shift: "night", absent_count: 5 })
+    const marchPM = await Absent.find({ month: '2', shift: "night", absent_count: 5 })
+    const aprilPM = await Absent.find({ month: '3', shift: "night", absent_count: 5 })
+    const mayPM = await Absent.find({ month: '4', shift: "night", absent_count: 5 })
+    const junePM = await Absent.find({ month: '5', shift: "night", absent_count: 5 })
+    const julyPM = await Absent.find({ month: '6', shift: "night", absent_count: 5 })
+    const augustPM = await Absent.find({ month: '7', shift: "night", absent_count: 5 })
+    const septemberPM = await Absent.find({ month: '8', shift: "night", absent_count: 5 })
+    const octoberPM = await Absent.find({ month: '9', shift: "night", absent_count: 5 })
+    const novemberPM = await Absent.find({ month: '10', shift: "night", absent_count: 5 })
+    const decemberPM = await Absent.find({ month: '11', shift: "night", absent_count: 5 })
 
 
 
@@ -1101,4 +1174,39 @@ module.exports.leave_chart_post = async (req, res) => {
         console.log(err);
         res.status(400).json({ error: 'SERVER ERROR' });
     }
+}
+
+module.exports.algorithm_post = async (req, res) => {
+    // const record =  new Record({ 
+    //     user_id: log[i].user_id, 
+    //     idnumber: log[i].idnumber, 
+    //     name: log[i].name, 
+    //     shift: log[i].shift, 
+    //     status: "absent", 
+    //     date: date, 
+    //     time_in: log[i].time_in, 
+    //     time_out: log[i].time_out, 
+    //     late: log[i].late });
+
+    // record.save();
+
+    // const absent =  new Absent({ 
+    //     user_id: log[i].user_id, 
+    //     idnumber: log[i].idnumber, 
+    //     name: log[i].name, 
+    //     shift: log[i].shift, 
+    //     status: "absent", 
+    //     date: date, 
+    //     month: month });
+
+    // absent.save();
+
+    // await Log.updateMany({status: "absent"}, {absent_count: 1});
+    // await Log.updateMany({late_count: 5});
+    
+    let data = {
+        message: `ALGORITHM INITIATED`,
+        status: 'SUCCESS'
+    }
+    res.send(data);
 }

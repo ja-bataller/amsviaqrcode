@@ -303,7 +303,7 @@
     let lateChartOpt = document.querySelector("#lateChartOpt");
 
     // FUNCTION FOR THE DROPDOWN SELECT - WHEN DROPDOWN CHANGES, GET THE SELECTED VALUE
-    lateChartOpt.addEventListener("change", function ()  {
+    lateChartOpt.addEventListener("change", async function ()  {
         document.querySelector("#lateContainer").innerHTML = "";
         document.querySelector("#lateContainer").innerHTML = `
         <div class="spinner container" id="lateSpinner" style="display: block;">
@@ -316,9 +316,126 @@
         let lateChosen = lateChartOpt.value;
         document.querySelector("#firstChart").style.display = "none";
 
-        // Pass the selected value to the Function
-        changeLate(lateChosen);
+        if (lateChosen == "timeSeries") {
+            let firstChart = document.getElementById("firstChart").getContext("2d");
 
+            try {
+                // Go to Routes to fetch the data 
+                const res = await fetch('/late-chart', {
+                    method: 'POST',
+                    body: JSON.stringify({}),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                // Received data from Database
+                const data = await res.json();
+
+                // Here are the Data one by one which came from the Database
+                janAM = data.success.janAM;
+                febAM = data.success.febAM;
+                marAM = data.success.marAM;
+                aprAM = data.success.aprAM;
+                mayAM = data.success.maAM;
+                junAM = data.success.junAM;
+                julAM = data.success.julAM;
+                augAM = data.success.augAM;
+                sepAM = data.success.sepAM;
+                octAM = data.success.octAM;
+                novAM = data.success.novAM;
+                decAM = data.success.decAM;
+
+                janPM = data.success.janPM;
+                febPM = data.success.febPM;
+                marPM = data.success.marPM;
+                aprPM = data.success.aprPM;
+                mayPM = data.success.maPM;
+                junPM = data.success.junPM;
+                julPM = data.success.julPM;
+                augPM = data.success.augPM;
+                sepPM = data.success.sepPM;
+                octPM = data.success.octPM;
+                novPM = data.success.novPM;
+                decPM = data.success.decPM;
+
+                // if the getting of data from Database is success
+                if (data.success) {
+
+                    document.querySelector("#lateSpinner").style.display = "none";
+                    document.querySelector("#firstChart").style.display = "block";
+
+                    // Creating a Chart with Dynamic data came from the Database
+                    let lateChart = new Chart(firstChart, {
+                        type: "line",
+                        data: {
+                            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec"],
+                            datasets: [
+                                {
+                                    label: "Day Shift",
+                                    data: [
+                                        janAM, febAM, marAM, aprAM, mayAM, junAM, julAM, augAM, sepAM, octAM, novAM, decAM
+                                    ],
+                                    borderColor: "#E6DD3B",
+                                    tension: 0.4,
+                                    backgroundColor: [
+                                    "#F4F5D7"
+                                    ]
+                                },
+                                {
+                                    label: "Night Shift",
+                                    data: [
+                                        janPM, febPM, marPM, aprPM, mayPM, junPM, julPM, augPM, sepPM, octPM, novPM, decPM
+                                    ],
+                                    fill: false,
+                                    borderColor: "#435560",
+                                    tension: 0.4,
+                                    backgroundColor: [
+                                    "#698495"
+                                    ]
+                                }
+                            ]
+                        },
+                        options: {
+                            scales: {
+                                x: {
+                                    type: 'timeseries',
+                                }
+                            },
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Employees to change schedule'
+                                }
+                            },
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                            }
+
+                        }
+                    })
+                }
+                else {
+                    iziToast.info({
+                        title: data.error,
+                        position: "topCenter",
+                        timeout: 3000,
+                    });
+
+                }
+            }
+            catch (err) {
+                console.log(err);
+            }
+
+        } else {
+             // Pass the selected value to the Function
+            changeLate(lateChosen);
+        }
     });
 
     // Asynchronous Function - Getting the Data from the Database
@@ -509,7 +626,7 @@
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Absent Records'
+                                    text: 'Employees to be Terminated'
                                 }
                             },
                             responsive: true,
@@ -757,7 +874,7 @@
                             plugins: {
                                 title: {
                                     display: true,
-                                    text: 'Leave Records'
+                                    text: 'Employees Needed'
                                 }
                             },
                             responsive: true,
